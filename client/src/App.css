@@ -1,0 +1,25 @@
+html, body{
+    padding: 0px;
+    margin: 0px;
+    height:94%;
+}
+
+.container{
+    height:85%;
+}
+
+.row{
+    margin-top: 1rem;
+}
+
+.fade {
+    opacity: 1;
+    -webkit-transition: opacity .15s linear;
+    transition: opacity .15s linear;
+}
+
+.table td.fit, 
+.table th.fit {
+    white-space: nowrap;
+    width: 1%;
+}
