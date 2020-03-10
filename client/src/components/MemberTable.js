@@ -1,0 +1,29 @@
+import React from 'react';
+import MemberTableItem from './MemberTableItem';
+
+const MemberTable = props => {
+  return (
+    <table className="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">ID</th>
+          <th scope="col">暱稱</th>
+          <th scope="col">加入日期</th>
+          <th scope="col">退出日期</th>
+          <th scope="col">踢除原因</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {(props.members && props.members.length > 0) ? (
+          props.members.map((member, index) => <MemberTableItem key={member._id} member={member} patchMember={props.patchMember} index={index + 1}></MemberTableItem>)
+        ) : (
+            <tr><td>查無成員</td></tr>
+          )}
+      </tbody>
+    </table>
+  );
+}
+
+export default MemberTable;

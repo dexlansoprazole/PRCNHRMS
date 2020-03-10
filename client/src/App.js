@@ -2,10 +2,15 @@ import React, {Component} from 'react';
 import {BrowserRouter, Switch, Route, NavLink} from 'react-router-dom';
 import './App.css';
 import Home from './components/Home';
-import MemberManagement from './components/MemberManagement';
+import SignIn from './containers/SignIn';
+import MemberManagement from './containers/MemberManagement';
+import userService from './services/userService';
 
 class App extends Component {
   render() {
+    function signOut() {
+      
+    }
     return (
       <div className="app">
         <BrowserRouter>
@@ -15,11 +20,12 @@ class App extends Component {
                 aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
               </button>
-              <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div className="navbar-collapse collapse justify-content-between" id="navbarNavAltMarkup">
                 <div className="navbar-nav">
-                    <NavLink className="nav-item nav-link" to="home">Home</NavLink>
-                    <NavLink className="nav-item nav-link" to="member_management">成員管理</NavLink>
+                  <NavLink className="nav-item nav-link" to="home">Home</NavLink>
+                  <NavLink className="nav-item nav-link" to="member_management">成員管理</NavLink>
                 </div>
+                <SignIn></SignIn>
               </div>
             </div>
           </nav>

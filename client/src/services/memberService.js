@@ -1,24 +1,44 @@
 import axios from 'axios';
 
 export default {
-  getAll: async () => {
-    let res = await axios.get(`/api/member`);
-    return res.data || [];
+  getAll: () => {
+    return axios.get(`/api/member`).then(
+      res => handleResponse(res),
+      err => handleResponse(err.response)
+    );
   },
-  query: async (query) => {
-    let res = await axios.post(`/api/member/query`, query);
-    return res.data || [];
+  query: (query) => {
+    return axios.post(`/api/member/query`, query).then(
+      res => handleResponse(res),
+      err => handleResponse(err.response)
+    );
   },
-  add: async (newMember) => {
-    let res = await axios.post(`/api/member`, newMember);
-    return res.data || null;
+  add: (newMember) => {
+    return axios.post(`/api/member`, newMember).then(
+      res => handleResponse(res),
+      err => handleResponse(err.response)
+    );
   },
-  patch: async (id, data) => {
-    let res = await axios.patch(`/api/member/` + id, data);
-    return res.data || null;
+  patch: (id, data) => {
+    return axios.patch(`/api/member/` + id, data).then(
+      res => handleResponse(res),
+      err => handleResponse(err.response)
+    );
   },
-  delete: async (id) => {
-    let res = await axios.delete(`/api/member/` + id);
-    return res.data || null;
+  delete: (id) => {
+    return axios.delete(`/api/member/` + id).then(
+      res => handleResponse(res),
+      err => handleResponse(err.response)
+    );
   }
+}
+
+function handleResponse(response) {
+  const data = response.data;
+  if (response.status !== 200) {
+    console.error("Error (code: " + response.status + "): " +　data.name + ': ' + data.message);
+    return Promise.reject(data);
+  }
+
+  return data;
 }
