@@ -62,6 +62,8 @@ const initGapi = () => {
       })
       dispatch(success());
     } catch (error) {
+      console.error(error);
+      
       dispatch(failure());
     }
   }
