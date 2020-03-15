@@ -2,15 +2,11 @@ import React, {Component} from 'react';
 import {BrowserRouter, Switch, Route, NavLink} from 'react-router-dom';
 import './App.css';
 import Home from './components/Home';
-import SignIn from './containers/SignIn';
-import MemberManagement from './containers/MemberManagement';
-import userService from './services/userService';
+import SignIn from './components/SignIn';
+import MemberManagement from './components/MemberManagement';
 
 class App extends Component {
   render() {
-    function signOut() {
-      
-    }
     return (
       <div className="app">
         <BrowserRouter>
@@ -25,7 +21,7 @@ class App extends Component {
                   <NavLink className="nav-item nav-link" to="home">Home</NavLink>
                   <NavLink className="nav-item nav-link" to="member_management">成員管理</NavLink>
                 </div>
-                <SignIn></SignIn>
+                  <SignIn></SignIn>
               </div>
             </div>
           </nav>

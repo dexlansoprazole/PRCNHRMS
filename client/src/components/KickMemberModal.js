@@ -1,8 +1,13 @@
 import React, {useState} from 'react';
+import {useDispatch} from 'react-redux';
+import memberActions from '../actions/member';
 
 var moment = require('moment');
 
-const KickMemberModal = (props) => {
+const KickMemberModal = props => {
+  const dispatch = useDispatch();
+  const patchMember = (id, data) => dispatch(memberActions.patchMember(id, data));
+
   const [kickData, setKickData] = useState({
     kick_reason: "",
     leave_date: moment().format('YYYY/MM/DD')
@@ -22,7 +27,7 @@ const KickMemberModal = (props) => {
   const handleSubmit = (evt) => {
     evt.preventDefault();
     if (evt.target.checkValidity() === true) {
-      props.patchMember(props.member._id, kickData);
+      patchMember(props.member._id, kickData);
       window.$('#kickMemberModal' + props.member._id).modal('hide');
     }
     else

@@ -17,10 +17,10 @@ const MemberTable = props => {
       </thead>
       <tbody>
         {(props.members && props.members.length > 0) ? (
-          props.members.map((member, index) => <MemberTableItem key={member._id} member={member} patchMember={props.patchMember} index={index + 1}></MemberTableItem>)
+          props.members.map((member, index) => <MemberTableItem key={member._id} member={member} index={index + 1}></MemberTableItem>)
         ) : (
-            <tr><td>查無成員</td></tr>
-          )}
+          <tr><td>查無成員：3</td></tr>
+        )}
       </tbody>
     </table>
   );

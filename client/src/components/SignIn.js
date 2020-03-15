@@ -1,29 +1,29 @@
-import React, {Component} from 'react';
+import React, {useEffect} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
+import signInActions from '../actions/signIn';
 
-export default class SignIn extends Component {
-  componentDidMount() {
+const SignIn = () => {
+  const dispatch = useDispatch();
+  const isSignedIn = useSelector(state => state.signIn.isSignedIn);
+  const initGapi = () => dispatch(signInActions.initGapi());
+  const logout = () => dispatch(signInActions.logout());
+
+  useEffect(() => {
     window.gapi.load('auth2', () => {
-      window.gapi.auth2.init({
-        client_id: "299319725687-0588ko5dcuivlgdpqjfm5sanp7ngbg28.apps.googleusercontent.com"
-      }).then(() => {
-        window.gapi.signin2.render('signIn', {
-          'scope': 'profile email',
-          'longtitle': false,
-          'theme': 'dark',
-          'onsuccess': this.props.login,
-          'onfailure': this.onFailure
-        })
-      })
-    })
-  }
+      initGapi();
+    });
+  });
 
-  render() {
-    return (
-      <div className="navbar-nav">
+  return (
+    <div className="navbar-nav">
+      {(!isSignedIn) ? (
         <div id="signIn" className="nav-item nav-link"></div>
-        <a href="#" className="nav-item text-light d-flex align-items-center nav-link" onClick={this.props.logout}><span className="align-middle">Sign out</span></a>
-      </div>
-    );
-  }
+      ) : (
+          <button className="nav-item text-light d-flex align-items-center nav-link" onClick={logout} style={{backgroundColor: "#ff000000", border: 0}}><span className="align-middle">Sign out</span></button>
+      )}
+    </div>
+  );
 }
+ 
+export default SignIn;
 

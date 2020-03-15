@@ -22,27 +22,26 @@ async function verify(token) {
 
 module.exports = (app) => {
   app.post(`/api/user/query`, async (req, res) => {
-    let users = await Users.find(req.body).catch(err => {
+    let user = await Users.find(req.body).catch(err => {
       return handleError(res, err)
     });
-    return res.status(200).send(users);
+    return res.status(200).send(user);
   });
 
-  app.post(`/api/user/login`, async (req, res) => {
+  app.post(`/api/user/auth`, async (req, res) => {
     let user = await verify(req.body.token).catch(console.error);
-    await Users.findOneAndUpdate({id: user.id}, {}, {upsert: true}).catch(err => {
+    user = await Users.findOneAndUpdate({id: user.id}, user, {upsert: true}).catch(err => {
       return handleError(res, err)
     });
     return res.status(200).send(user)
   })
 
-  app.put(`/api/user/:id`, async (req, res) => {
+  app.patch(`/api/user/:id`, async (req, res) => {
     const {id} = req.params;
-    await Users.findByIdAndUpdate(id, req.body).catch(err => {
+    let user = await Users.findByIdAndUpdate(id, req.body, {new: true}).catch(err => {
       return handleError(res, err)
     });
-    let users = await Users.find();
-    return res.status(200).send(users)
+    return res.status(200).send(user)
   });
 
   app.delete(`/api/user/:id`, async (req, res) => {

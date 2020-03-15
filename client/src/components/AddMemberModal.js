@@ -1,10 +1,11 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 var moment = require('moment');
 
 const AddMemberModal = (props) => {
   const [newMember, setNewMember] = useState({
     id: "",
     name: "",
+    team: props.team_id,
     join_date: moment().format("YYYY/MM/DD")
   });
 
@@ -29,14 +30,17 @@ const AddMemberModal = (props) => {
       evt.target.classList.add('was-validated');
   }
 
-  window.$('#addMemberModal').on('hidden.bs.modal', function(e) {
-    setNewMember({
-      id: "",
-      name: "",
-      join_date: moment().format("YYYY/MM/DD")
+  useEffect(() => {
+    window.$('#addMemberModal').on('hidden.bs.modal', function(e) {
+      setNewMember({
+        id: "",
+        name: "",
+        team: props.team_id,
+        join_date: moment().format("YYYY/MM/DD")
+      })
+      window.$(this).find('form').removeClass('was-validated');
     })
-    window.$(this).find('form').removeClass('was-validated');
-  })
+  });
 
   return (
     <div className="modal fade" id="addMemberModal">

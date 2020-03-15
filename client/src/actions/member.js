@@ -8,16 +8,14 @@ export const MemberFilters = {
 }
 
 const getMembers = (query = null) => {
-  return dispatch => {
+  return async dispatch => {
     dispatch(request());
-    memberService.query(query).then(
-      members => {
-        dispatch(success(members));
-      },
-      error => {
-        dispatch(failure());
-      }
-    );
+    try {
+      const members = await memberService.query(query);
+      dispatch(success(members));
+    } catch (error) {
+      dispatch(failure());
+    }
   }
   
   function request() {return {type: actionTypes.GET_MEMBERS_REQUEST}}
@@ -26,16 +24,14 @@ const getMembers = (query = null) => {
 }
 
 const addMember = (newMember) => {
-  return dispatch => {
+  return async dispatch => {
     dispatch(request());
-    memberService.add(newMember).then(
-      members => {
-        dispatch(success(members));
-      },
-      error => {
-        dispatch(failure());
-      }
-    );
+    try {
+      const members = await memberService.add(newMember);
+      dispatch(success(members));
+    } catch (error) {
+      dispatch(failure());
+    }
   }
 
   function request() {return {type: actionTypes.ADD_MEMBER_REQUEST}}
@@ -44,16 +40,14 @@ const addMember = (newMember) => {
 }
 
 const deleteMember = (id) => {
-  return dispatch => {
+  return async dispatch => {
     dispatch(request());
-    memberService.delete(id).then(
-      members => {
-        dispatch(success(members));
-      },
-      error => {
-        dispatch(failure());
-      }
-    );
+    try {
+      const members = await memberService.delete(id);
+      dispatch(success(members));
+    } catch (error) {
+      dispatch(failure());
+    }
   }
 
   function request() {return {type: actionTypes.DELETE_MEMBER_REQUEST}}
@@ -62,16 +56,14 @@ const deleteMember = (id) => {
 }
 
 const patchMember = (id, data) => {
-  return dispatch => {
+  return async dispatch => {
     dispatch(request());
-    memberService.patch(id, data).then(
-      members => {
-        dispatch(success(members));
-      },
-      error => {
-        dispatch(failure());
-      }
-    );
+    try {
+      const members = await memberService.patch(id, data);
+      dispatch(success(members));
+    } catch (error) {
+      dispatch(failure());
+    }
   }
 
   function request() {return {type: actionTypes.PATCH_MEMBER_REQUEST}}
@@ -83,7 +75,7 @@ const setMemberFilter = (filter) => {
   return {type: actionTypes.SET_MEMBER_FILTER, filter};
 }
 
-export const memberManagementActions = {
+export default {
   getMembers,
   addMember,
   deleteMember,

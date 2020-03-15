@@ -1,44 +1,50 @@
 import axios from 'axios';
+import handleResponse from './resHandler';
 
 export default {
-  getAll: () => {
-    return axios.get(`/api/member`).then(
-      res => handleResponse(res),
-      err => handleResponse(err.response)
-    );
+  getAll: async () => {
+    try {
+      const res = await axios.get(`/api/member`);
+      return handleResponse(res);
+    }
+    catch (err) {
+      return handleResponse(err.response);
+    }
   },
-  query: (query) => {
-    return axios.post(`/api/member/query`, query).then(
-      res => handleResponse(res),
-      err => handleResponse(err.response)
-    );
+  query: async (query) => {
+    try {
+      const res = await axios.post(`/api/member/query`, query);
+      return handleResponse(res);
+    }
+    catch (err) {
+      return handleResponse(err.response);
+    }
   },
-  add: (newMember) => {
-    return axios.post(`/api/member`, newMember).then(
-      res => handleResponse(res),
-      err => handleResponse(err.response)
-    );
+  add: async (newMember) => {
+    try {
+      const res = await axios.post(`/api/member`, newMember);
+      return handleResponse(res);
+    }
+    catch (err) {
+      return handleResponse(err.response);
+    }
   },
-  patch: (id, data) => {
-    return axios.patch(`/api/member/` + id, data).then(
-      res => handleResponse(res),
-      err => handleResponse(err.response)
-    );
+  patch: async (id, data) => {
+    try {
+      const res = await axios.patch(`/api/member/` + id, data);
+      return handleResponse(res);
+    }
+    catch (err) {
+      return handleResponse(err.response);
+    }
   },
-  delete: (id) => {
-    return axios.delete(`/api/member/` + id).then(
-      res => handleResponse(res),
-      err => handleResponse(err.response)
-    );
+  delete: async (id) => {
+    try {
+      const res = await axios.delete(`/api/member/` + id);
+      return handleResponse(res);
+    }
+    catch (err) {
+      return handleResponse(err.response);
+    }
   }
-}
-
-function handleResponse(response) {
-  const data = response.data;
-  if (response.status !== 200) {
-    console.error("Error (code: " + response.status + "): " +　data.name + ': ' + data.message);
-    return Promise.reject(data);
-  }
-
-  return data;
 }

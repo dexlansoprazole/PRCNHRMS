@@ -1,10 +1,14 @@
 import {combineReducers} from 'redux';
-import memberManagement from './memberManagement';
+import member from './member';
 import user from './user';
+import team from './team';
+import signIn from './signIn';
 
 const rootReducer = combineReducers({
-  memberManagement,
-  user
+  signIn,
+  member,
+  user,
+  team
 });
 
 export default rootReducer;

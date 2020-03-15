@@ -1,26 +1,14 @@
 import axios from 'axios';
+import handleResponse from './resHandler';
 
 export default {
-  login: (token) => {
-    return axios.post(`/api/user/login`, {token: token}).then(
-      res => {
-        localStorage.setItem('user', JSON.stringify({...res.data, id_token: token}));
-        return res.data;
-      },
-      err => handleResponse(err.response)
-    );
-  },
-  logout() {
-    localStorage.removeItem('user');
+  patch: async (id, data) => {
+    try {
+      const res = await axios.patch(`/api/user/` + id, data);
+      return handleResponse(res);
+    }
+    catch (err) {
+      return handleResponse(err.response);
+    }
   }
-}
-
-function handleResponse(response) {
-  const data = response.data;
-  if (response.status !== 200) {
-    console.error("Error (code: " + response.status + "): " + data.name + ': ' + data.message);
-    return Promise.reject(data);
-  }
-
-  return data;
 }

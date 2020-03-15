@@ -2,28 +2,26 @@ import actionTypes from '../actionTypes';
 
 const initialState = {
   _id: null,
-  id: null,
-  name: null,
-  team: null
+  name: null
 }
 
-function user(state = initialState, action) {
+function team(state = initialState, action) {
   switch (action.type) {
-    case actionTypes.LOGIN_SUCCESS:
+    case actionTypes.GET_TEAM_SUCCESS:
       return Object.assign({}, state, 
-        action.user
+        action.team
+      );
+    case actionTypes.ADD_TEAM_SUCCESS:
+      return Object.assign({}, state, 
+        action.team
       );
     case actionTypes.LOGOUT_SUCCESS:
-      return Object.assign({}, state, 
-        initialState
-      );
-    case actionTypes.PATCH_USER_SUCCESS:
       return Object.assign({}, state,
-        action.user
+        initialState
       );
     default:
       return state;
   }
 }
 
-export default user;
+export default team;

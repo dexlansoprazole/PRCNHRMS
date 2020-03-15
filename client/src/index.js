@@ -3,20 +3,15 @@ import {render} from 'react-dom'
 import {Provider} from 'react-redux'
 import {createStore, applyMiddleware} from 'redux'
 import thunkMiddleware from 'redux-thunk'
-import logger from 'redux-logger'
 import './index.css';
 import rootReducer from './reducers'
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {composeWithDevTools} from 'redux-devtools-extension';
-import {memberManagementActions} from './actions/memberManagement'
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(
-  thunkMiddleware,
-  logger
+  thunkMiddleware
 )))
-
-store.dispatch(memberManagementActions.getMembers());
 
 render(
   <Provider store={store}>

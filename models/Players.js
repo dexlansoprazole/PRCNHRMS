@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 const {Schema} = mongoose;
 
-const memberSchema = new Schema({
+const playerSchema = new Schema({
   id: Number,
   name: String,
+  team: Schema.Types.ObjectId,
   join_date: Date,
   leave_date: Date,
   kick_reason: String
 })
 
-mongoose.model('members', memberSchema);
+mongoose.model('players', playerSchema);

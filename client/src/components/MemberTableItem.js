@@ -5,6 +5,7 @@ var moment = require('moment');
 
 const MemberTableItem = props => {
   const [isHovered, setIsHovered] = useState(false);
+
   const deleteButtonStyle = {
     opacity: isHovered ? 1 : 0,
     transition: "opacity .2s"
@@ -24,7 +25,7 @@ const MemberTableItem = props => {
           ""
       }
       </td>
-      <td><KickMemberModal patchMember={props.patchMember} member={props.member}></KickMemberModal></td>
+      <td><KickMemberModal member={props.member}></KickMemberModal></td>
     </tr>
   );
 };
