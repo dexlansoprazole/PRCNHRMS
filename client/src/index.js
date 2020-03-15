@@ -7,7 +7,7 @@ import './index.css';
 import rootReducer from './reducers'
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import {composeWithDevTools} from 'redux-devtools-extension';
+import {composeWithDevTools} from 'redux-devtools-extension/developmentOnly';
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(
   thunkMiddleware
