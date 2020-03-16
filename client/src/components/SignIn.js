@@ -13,7 +13,7 @@ const SignIn = () => {
     window.gapi.load('auth2', () => {
       initGapi();
     });
-  });
+  }, []);
 
   return (
     <div className="navbar-nav">

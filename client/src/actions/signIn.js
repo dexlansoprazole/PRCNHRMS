@@ -58,6 +58,8 @@ const initGapi = () => {
         (error) => {
           dispatch(failure());
         });
+      if (auth2.isSignedIn.get() === true)
+        dispatch(login(auth2.currentUser.get()))
       dispatch(success());
     } catch (error) {
       console.error(error);
