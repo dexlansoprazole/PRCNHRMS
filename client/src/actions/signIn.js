@@ -50,16 +50,14 @@ const initGapi = () => {
   return async dispatch => {
     dispatch(request());
     try {
-      await window.gapi.auth2.init({client_id: process.env.REACT_APP_CLIENT_ID});
-      window.gapi.signin2.render('signIn', {
-        'scope': 'profile email',
-        'height': 24,
-        'width': 80,
-        'longtitle': false,
-        'theme': 'dark',
-        'onsuccess': (googleUser) => dispatch(login(googleUser)),
-        // 'onfailure': this.onFailure
-      })
+      const auth2 = await window.gapi.auth2.init({client_id: process.env.REACT_APP_CLIENT_ID});
+      auth2.attachClickHandler(window.$('#signIn').get(0), {},
+        (googleUser) => {
+          dispatch(login(googleUser));
+        },
+        (error) => {
+          dispatch(failure());
+        });
       dispatch(success());
     } catch (error) {
       console.error(error);

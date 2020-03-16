@@ -16,11 +16,10 @@ const SignIn = () => {
 
   return (
     <div className="navbar-nav">
-      {(!isSignedIn) ? (
-        <div id="signIn" className="nav-item nav-link"></div>
-      ) : (
-          <button className="nav-item text-light d-flex align-items-center nav-link" onClick={logout} style={{backgroundColor: "#ff000000", border: 0}}><span className="align-middle">Sign out</span></button>
-      )}
+      <div className={"nav-item nav-link align-items-center" + (isSignedIn ? " d-none" : " d-flex")} style={{width: "80px", height: "40px", padding: "4px"}}>
+        <button id="signIn" className="btn btn-sm btn-light text-dark text-center align-text-top w-100 h-100 d-inline">登入</button>
+      </div>
+      <button className={"nav-item text-light align-items-center nav-link" + (isSignedIn ? "d-flex" : " d-none")} onClick={logout} style={{backgroundColor: "#ff000000", border: 0}}><span className="align-middle">登出</span></button>
     </div>
   );
 }
