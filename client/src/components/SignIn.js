@@ -5,6 +5,7 @@ import signInActions from '../actions/signIn';
 const SignIn = () => {
   const dispatch = useDispatch();
   const isSignedIn = useSelector(state => state.signIn.isSignedIn);
+  const user = useSelector(state => state.user);
   const initGapi = () => dispatch(signInActions.initGapi());
   const logout = () => dispatch(signInActions.logout());
 
@@ -16,10 +17,13 @@ const SignIn = () => {
 
   return (
     <div className="navbar-nav">
-      <div className={"nav-item nav-link align-items-center" + (isSignedIn ? " d-none" : " d-flex")} style={{width: "80px", height: "40px", padding: "4px"}}>
+      <div className={"nav-item align-items-center" + (isSignedIn ? " d-none" : " d-flex")} style={{width: "80px", height: "40px", padding: "4px"}}>
         <button id="signIn" className="btn btn-sm btn-light text-dark text-center align-text-top w-100 h-100 d-inline">登入</button>
       </div>
-      <button className={"nav-item text-light align-items-center nav-link" + (isSignedIn ? "d-flex" : " d-none")} onClick={logout} style={{backgroundColor: "#ff000000", border: 0}}><span className="align-middle">登出</span></button>
+      <div className={"nav-item text-light text-center align-items-center" + (isSignedIn ? " d-flex" : " d-none")} style={{height: "40px", padding: "4px"}}>{"您好，" + user.email}</div>
+      <div className={"nav-item align-items-center" + (isSignedIn ? " d-flex" : " d-none")} style={{width: "80px", height: "40px", padding: "4px"}}>
+        <button className="btn btn-sm btn-light text-dark text-center align-text-top w-100 h-100 d-inline" onClick={logout}>登出</button>
+      </div>
     </div>
   );
 }

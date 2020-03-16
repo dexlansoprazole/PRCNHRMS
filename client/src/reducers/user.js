@@ -3,6 +3,7 @@ import actionTypes from '../actionTypes';
 const initialState = {
   _id: null,
   id: null,
+  email: null,
   name: null,
   team: null
 }

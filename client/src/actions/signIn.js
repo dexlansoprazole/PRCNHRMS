@@ -24,7 +24,7 @@ const login = (googleUser) => {
   }
 
   function request() {return {type: actionTypes.LOGIN_REQUEST}}
-  function success(user) {return {type: actionTypes.LOGIN_SUCCESS, user: {_id: user._id, id: user.id, name: user.name, team: user.team}}}
+  function success(user) {return {type: actionTypes.LOGIN_SUCCESS, user: {_id: user._id, id: user.id, email: user.email, name: user.name, team: user.team}}}
   function failure() {return {type: actionTypes.LOGIN_FAILURE}}
 }
 
