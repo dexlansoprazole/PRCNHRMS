@@ -52,14 +52,14 @@ const initGapi = () => {
     try {
       const auth2 = await window.gapi.auth2.init({client_id: process.env.REACT_APP_CLIENT_ID});
       auth2.attachClickHandler(window.$('#signIn').get(0), {},
-        (googleUser) => {
-          dispatch(login(googleUser));
+        async (googleUser) => {
+          await dispatch(login(googleUser));
         },
         (error) => {
           dispatch(failure());
         });
       if (auth2.isSignedIn.get() === true)
-        dispatch(login(auth2.currentUser.get()))
+        await dispatch(login(auth2.currentUser.get()))
       dispatch(success());
     } catch (error) {
       console.error(error);
