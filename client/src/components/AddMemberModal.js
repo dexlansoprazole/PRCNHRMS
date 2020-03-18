@@ -61,18 +61,18 @@ const AddMemberModal = () => {
           <div className="modal-body">
             <form className="needs-validation" noValidate onSubmit={handleSubmit}>
               <div className="form-group">
-                <label htmlFor="inputID">ID</label>
-                <input type="text" className="form-control" id="inputID" name="id" onChange={handleChange} value={newMember.id} required pattern="\d{9}"></input>
+                <label>ID</label>
+                <input type="text" className="form-control" name="id" onChange={handleChange} value={newMember.id} required pattern="\d{9}"></input>
                 <div className="invalid-feedback">必須為9位數字</div>
               </div>
               <div className="form-group">
-                <label htmlFor="inputName">暱稱</label>
-                <input type="text" className="form-control" id="inputName" name="name" onChange={handleChange} value={newMember.name} required></input>
+                <label>暱稱</label>
+                <input type="text" className="form-control" name="name" onChange={handleChange} value={newMember.name} required></input>
                 <div className="invalid-feedback">必填</div>
               </div>
               <div className="form-group">
-                <label htmlFor="inputJoinDate">加入日期</label>
-                <input type="text" className="form-control" id="inputJoinDate" name="join_date" onChange={handleChange} value={newMember.join_date} required pattern="([12]\d{3}\/(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01]))"></input>
+                <label>加入日期</label>
+                <input type="text" className="form-control" name="join_date" onChange={handleChange} value={newMember.join_date} required pattern="([12]\d{3}\/(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01]))"></input>
                 <div className="invalid-feedback">YYYY/MM/DD</div>
               </div>
               <div className="modal-footer">

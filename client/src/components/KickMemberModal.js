@@ -56,12 +56,12 @@ const KickMemberModal = () => {
           <div className="modal-body">
             <form className="needs-validation" noValidate onSubmit={handleSubmit}>
               <div className="form-group">
-                <label htmlFor="inputKickReason">踢除原因</label>
-                <input type="text" className="form-control" id="inputKickReason" name="kick_reason" onChange={handleChange} value={kickData.kick_reason}></input>
+                <label>踢除原因</label>
+                <input type="text" className="form-control" name="kick_reason" onChange={handleChange} value={kickData.kick_reason}></input>
               </div>
               <div className="form-group">
-                <label htmlFor="inputKickDate">踢除日期</label>
-                <input type="text" className="form-control" id="inputKickDate" name="leave_date" onChange={handleChange} value={kickData.leave_date} required pattern="([12]\d{3}\/(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01]))"></input>
+                <label>踢除日期</label>
+                <input type="text" className="form-control" name="leave_date" onChange={handleChange} value={kickData.leave_date} required pattern="([12]\d{3}\/(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01]))"></input>
                 <div className="invalid-feedback">YYYY/MM/DD</div>
               </div>
               <div className="modal-footer">

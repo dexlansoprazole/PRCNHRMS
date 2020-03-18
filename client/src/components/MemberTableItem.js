@@ -10,7 +10,7 @@ const MemberTableItem = props => {
 
   const [isHovered, setIsHovered] = useState(false);
 
-  const deleteButtonStyle = {
+  const buttonStyle = {
     opacity: isHovered ? 1 : 0,
     transition: "opacity .2s"
   };
@@ -23,11 +23,15 @@ const MemberTableItem = props => {
       <td>{moment(props.member.join_date).format('YYYY/MM/DD')}</td>
       <td>{props.member.leave_date ? moment(props.member.leave_date).format('YYYY/MM/DD') : "-"}</td>
       <td>{props.member.kick_reason ? props.member.kick_reason : "-"}</td>
-      <td className="fit">{
-        !props.member.leave_date ?
-          <button className="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#kickMemberModal" style={deleteButtonStyle} onClick={() => setMemberSelected(props.member)}>踢除</button> :
-          ""
-      }
+      <td className="fit">
+        <div className="btn-group" id="btnGroupFilter">
+          <button className="btn btn-warning btn-sm" data-toggle="modal" data-target="#editMemberModal" style={buttonStyle} onClick={() => setMemberSelected(props.member)}>編輯</button>
+          {
+            !props.member.leave_date ?
+              <button className="btn btn-danger btn-sm" data-toggle="modal" data-target="#kickMemberModal" style={buttonStyle} onClick={() => setMemberSelected(props.member)}>踢除</button> :
+              ""
+          }
+        </div>
       </td>
     </tr>
   );

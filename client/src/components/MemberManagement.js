@@ -2,6 +2,7 @@ import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import MemberTable from './MemberTable';
 import AddMemberModal from './AddMemberModal';
+import EditMemberModal from './EditMemberModal';
 import KickMemberModal from './KickMemberModal';
 import AddTeamModal from './AddTeamModal';
 import memberActions, {MemberFilters} from '../actions/member';
@@ -33,6 +34,7 @@ const MemberManagement = () => {
     return (
       <div className="container">
         <AddMemberModal></AddMemberModal>
+        <EditMemberModal></EditMemberModal>
         <KickMemberModal></KickMemberModal>
         <div className="row">
           <div className="col">

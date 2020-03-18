@@ -4,7 +4,7 @@ import actionTypes from '../actionTypes';
 const initialState = {
   memberFilter: MemberFilters.ACTIVE,
   members: [],
-  memberSelected: null
+  memberSelected: {}
 }
 
 function member(state = initialState, action) {

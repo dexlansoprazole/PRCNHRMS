@@ -55,8 +55,8 @@ const AddTeamModal = () => {
           <div className="modal-body">
             <form className="needs-validation" noValidate onSubmit={handleSubmit}>
               <div className="form-group">
-                <label htmlFor="inputName">戰隊名稱</label>
-                <input type="text" className="form-control" id="inputName" name="name" onChange={handleChange} value={newTeam.name} required></input>
+                <label>戰隊名稱</label>
+                <input type="text" className="form-control" name="name" onChange={handleChange} value={newTeam.name} required></input>
                 <div className="invalid-feedback">必填</div>
               </div>
               <div className="modal-footer">
