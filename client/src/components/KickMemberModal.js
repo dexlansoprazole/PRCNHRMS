@@ -47,7 +47,7 @@ const KickMemberModal = () => {
     <div className="modal fade" id="kickMemberModal">
       <div className="modal-dialog">
         <div className="modal-content">
-          <div className="modal-header">
+          <div className="modal-header bg-warning">
             <h5 className="modal-title">踢除成員</h5>
             <button type="button" className="close" data-dismiss="modal">
               <span aria-hidden="true">&times;</span>
@@ -66,7 +66,7 @@ const KickMemberModal = () => {
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" data-dismiss="modal">取消</button>
-                <button type="submit" className="btn btn-danger">踢除</button>
+                <button type="submit" className="btn btn-warning">踢除</button>
               </div>
             </form>
           </div>

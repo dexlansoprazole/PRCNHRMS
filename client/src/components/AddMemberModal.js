@@ -52,9 +52,9 @@ const AddMemberModal = () => {
     <div className="modal fade" id="addMemberModal">
       <div className="modal-dialog">
         <div className="modal-content">
-          <div className="modal-header">
+          <div className="modal-header bg-primary text-light">
             <h5 className="modal-title">新增成員</h5>
-            <button type="button" className="close" data-dismiss="modal">
+            <button type="button" className="close text-light" data-dismiss="modal">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -77,7 +77,7 @@ const AddMemberModal = () => {
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" data-dismiss="modal">取消</button>
-                <button type="submit" className="btn btn-success">新增</button>
+                <button type="submit" className="btn btn-primary">新增</button>
               </div>
             </form>
           </div>
