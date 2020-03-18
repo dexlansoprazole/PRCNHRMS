@@ -1,11 +1,17 @@
 import React from 'react';
 import {BrowserRouter, Switch, Route, NavLink, Redirect} from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import './App.css';
 import Home from './components/Home';
 import SignIn from './components/SignIn';
 import MemberManagement from './components/MemberManagement';
+import LoadingModal from './components/LoadingModal';
 
 const App = () => {
+  const loading = useSelector(state => state.loading);
+  window.$('.modal-backdrop').remove();
+  window.$('body').removeClass('modal-open');
+
   return (
     <div className="app">
       <BrowserRouter>
@@ -24,11 +30,16 @@ const App = () => {
             </div>
           </div>
         </nav>
-        <Switch>
-          <Route exact path="/home" component={Home} />
-          <Route exact path="/member_management" component={MemberManagement} />
-          <Redirect to="/home" />
-        </Switch>
+        {loading ? (
+          <LoadingModal></LoadingModal>
+        ) : (
+          <Switch>
+            <Route exact path="/home" component={Home} />
+            <Route exact path="/member_management" component={MemberManagement} />
+            <Redirect to="/home" />
+          </Switch>
+        )}
+        
       </BrowserRouter>
     </div>
   );

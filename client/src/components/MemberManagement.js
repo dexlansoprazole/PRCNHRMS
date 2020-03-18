@@ -1,6 +1,5 @@
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import LoadingModal from './LoadingModal';
 import MemberTable from './MemberTable';
 import AddMemberModal from './AddMemberModal';
 import AddTeamModal from './AddTeamModal';
@@ -21,7 +20,6 @@ const getVisibleMembers = (members, filter) => {
 
 const MemberManagement = () => {
   const dispatch = useDispatch();
-  const loading = useSelector(state => state.member.loading);
   const isSignedIn = useSelector(state => state.signIn.isSignedIn);
   const team = useSelector(state => state.team);
   const memberFilter = useSelector(state => state.member.memberFilter);
@@ -30,10 +28,6 @@ const MemberManagement = () => {
   const onFilterClick = filter => dispatch(memberActions.setMemberFilter(filter));
   const addMember = newMember => dispatch(memberActions.addMember(newMember));
   
-  if (loading)
-    return (<LoadingModal></LoadingModal>);
-  window.$('.modal-backdrop').remove();
-  window.$('body').removeClass('modal-open');
   if (isSignedIn && team._id)
     return (
       <div className="container">

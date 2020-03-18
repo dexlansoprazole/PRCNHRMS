@@ -2,7 +2,6 @@ import {MemberFilters} from '../actions/member';
 import actionTypes from '../actionTypes';
 
 const initialState = {
-  loading: false,
   memberFilter: MemberFilters.ACTIVE,
   members: [],
 }
@@ -29,45 +28,8 @@ function member(state = initialState, action) {
       return Object.assign({}, state, {
         members: action.members
       });
-    case actionTypes.INIT_GAPI_REQUEST:
-      return Object.assign({}, state, {
-        loading: true
-      });
-    case actionTypes.INIT_GAPI_SUCCESS:
-      return Object.assign({}, state, {
-        loading: false
-      });
-    case actionTypes.INIT_GAPI_FAILURE:
-      return Object.assign({}, state, {
-        loading: false
-      });
-    case actionTypes.LOGIN_REQUEST:
-      return Object.assign({}, state, {
-        loading: true
-      });
-    case actionTypes.LOGIN_SUCCESS:
-      return Object.assign({}, state, {
-        loading: false
-      });
-    case actionTypes.LOGIN_FAILURE://TODO: alert
-      return Object.assign({}, state, {
-        loading: false
-      });
-    case actionTypes.LOGOUT_REQUEST:
-      return Object.assign({}, state, {
-        loading: true
-      });
     case actionTypes.LOGOUT_SUCCESS:
-      return Object.assign({}, state,
-        {
-          ...initialState,
-          loading: false
-        }
-      );
-    case actionTypes.LOGOUT_FAILURE://TODO: alert
-      return Object.assign({}, state, {
-        loading: false
-      });
+      return Object.assign({}, state, initialState);
     default:
       return state;
   }
