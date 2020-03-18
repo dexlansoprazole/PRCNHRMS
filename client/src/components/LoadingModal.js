@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 
-const LoadingModal = props => {
+const LoadingModal = () => {
   useEffect(() => {
     window.$('#loadingModal').modal({backdrop: "static"});
   });

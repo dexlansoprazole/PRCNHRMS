@@ -1,11 +1,17 @@
 import React, {useEffect, useState} from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import memberActions from '../actions/member';
 var moment = require('moment');
 
-const AddMemberModal = (props) => {
+const AddMemberModal = () => {
+  const dispatch = useDispatch();
+  const addMember = newMember => dispatch(memberActions.addMember(newMember));
+  const team = useSelector(state => state.team);
+
   const [newMember, setNewMember] = useState({
     id: "",
     name: "",
-    team: props.team_id,
+    team: team._id,
     join_date: moment().format("YYYY/MM/DD")
   });
 
@@ -23,7 +29,7 @@ const AddMemberModal = (props) => {
   const handleSubmit = (evt) => {
     evt.preventDefault();
     if (evt.target.checkValidity() === true) {
-      props.addMember(newMember);
+      addMember(newMember);
       window.$('#addMemberModal').modal('hide');
     }
     else
@@ -35,7 +41,7 @@ const AddMemberModal = (props) => {
       setNewMember({
         id: "",
         name: "",
-        team: props.team_id,
+        team: team._id,
         join_date: moment().format("YYYY/MM/DD")
       })
       window.$(this).find('form').removeClass('was-validated');

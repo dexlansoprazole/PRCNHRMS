@@ -4,7 +4,7 @@ import memberActions from '../actions/member';
 
 var moment = require('moment');
 
-const KickMemberModal = props => {
+const KickMemberModal = () => {
   const dispatch = useDispatch();
   const patchMember = (id, data) => dispatch(memberActions.patchMember(id, data));
   const member = useSelector(state => state.member.memberSelected);

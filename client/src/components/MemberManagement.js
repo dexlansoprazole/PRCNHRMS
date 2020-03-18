@@ -21,19 +21,18 @@ const getVisibleMembers = (members, filter) => {
 
 const MemberManagement = () => {
   const dispatch = useDispatch();
+  const onFilterClick = filter => dispatch(memberActions.setMemberFilter(filter));
   const isSignedIn = useSelector(state => state.signIn.isSignedIn);
   const team = useSelector(state => state.team);
   const memberFilter = useSelector(state => state.member.memberFilter);
   const members = getVisibleMembers(useSelector(state => state.member.members), memberFilter);
 
-  const onFilterClick = filter => dispatch(memberActions.setMemberFilter(filter));
-  const addMember = newMember => dispatch(memberActions.addMember(newMember));
-  const patchMember = (id, data) => dispatch(memberActions.patchMember(id, data));
   
+
   if (isSignedIn && team._id)
     return (
       <div className="container">
-        <AddMemberModal addMember={addMember} team_id={team._id}></AddMemberModal>
+        <AddMemberModal></AddMemberModal>
         <KickMemberModal></KickMemberModal>
         <div className="row">
           <div className="col">
