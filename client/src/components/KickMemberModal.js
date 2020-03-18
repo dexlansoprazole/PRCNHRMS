@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import memberActions from '../actions/member';
 
 var moment = require('moment');
@@ -7,6 +7,7 @@ var moment = require('moment');
 const KickMemberModal = props => {
   const dispatch = useDispatch();
   const patchMember = (id, data) => dispatch(memberActions.patchMember(id, data));
+  const member = useSelector(state => state.member.memberSelected);
 
   const [kickData, setKickData] = useState({
     kick_reason: "",
@@ -27,14 +28,14 @@ const KickMemberModal = props => {
   const handleSubmit = (evt) => {
     evt.preventDefault();
     if (evt.target.checkValidity() === true) {
-      patchMember(props.member._id, kickData);
-      window.$('#kickMemberModal' + props.member._id).modal('hide');
+      patchMember(member._id, kickData);
+      window.$('#kickMemberModal').modal('hide');
     }
     else
       evt.target.classList.add('was-validated');
   }
 
-  window.$('#kickMemberModal' + props.member._id).on('hidden.bs.modal', function(e) {
+  window.$('#kickMemberModal').on('hidden.bs.modal', function(e) {
     setKickData({
       kick_reason: "",
       leave_date: moment().format('YYYY/MM/DD')
@@ -43,7 +44,7 @@ const KickMemberModal = props => {
   })
 
   return (
-    <div className="modal fade" id={"kickMemberModal" + props.member._id}>
+    <div className="modal fade" id="kickMemberModal">
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
@@ -55,12 +56,12 @@ const KickMemberModal = props => {
           <div className="modal-body">
             <form className="needs-validation" noValidate onSubmit={handleSubmit}>
               <div className="form-group">
-                <label htmlFor={"inputKickReason" + props.member._id}>踢除原因</label>
-                <input type="text" className="form-control" id={"inputKickReason" + props.member._id} name="kick_reason" onChange={handleChange} value={kickData.kick_reason}></input>
+                <label htmlFor="inputKickReason">踢除原因</label>
+                <input type="text" className="form-control" id="inputKickReason" name="kick_reason" onChange={handleChange} value={kickData.kick_reason}></input>
               </div>
               <div className="form-group">
-                <label htmlFor={"inputKickDate" + props.member._id}>踢除日期</label>
-                <input type="text" className="form-control" id={"inputKickDate" + props.member._id} name="leave_date" onChange={handleChange} value={kickData.leave_date} required pattern="([12]\d{3}\/(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01]))"></input>
+                <label htmlFor="inputKickDate">踢除日期</label>
+                <input type="text" className="form-control" id="inputKickDate" name="leave_date" onChange={handleChange} value={kickData.leave_date} required pattern="([12]\d{3}\/(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01]))"></input>
                 <div className="invalid-feedback">YYYY/MM/DD</div>
               </div>
               <div className="modal-footer">

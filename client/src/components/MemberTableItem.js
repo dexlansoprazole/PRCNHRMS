@@ -1,9 +1,13 @@
 import React, {useState} from 'react';
-import KickMemberModal from './KickMemberModal';
+import { useDispatch } from 'react-redux';
+import memberActions from '../actions/member';
 
 var moment = require('moment');
 
 const MemberTableItem = props => {
+  const dispatch = useDispatch();
+  const setMemberSelected = member => dispatch(memberActions.setMemberSelected(member));
+
   const [isHovered, setIsHovered] = useState(false);
 
   const deleteButtonStyle = {
@@ -21,11 +25,10 @@ const MemberTableItem = props => {
       <td>{props.member.kick_reason ? props.member.kick_reason : "-"}</td>
       <td className="fit">{
         !props.member.leave_date ?
-          <button className="btn btn-outline-danger btn-sm" data-toggle="modal" data-target={"#kickMemberModal" + props.member._id} style={deleteButtonStyle}>踢除</button> :
+          <button className="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#kickMemberModal" style={deleteButtonStyle} onClick={() => setMemberSelected(props.member)}>踢除</button> :
           ""
       }
       </td>
-      <td><KickMemberModal member={props.member}></KickMemberModal></td>
     </tr>
   );
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import MemberTable from './MemberTable';
 import AddMemberModal from './AddMemberModal';
+import KickMemberModal from './KickMemberModal';
 import AddTeamModal from './AddTeamModal';
 import memberActions, {MemberFilters} from '../actions/member';
 
@@ -27,11 +28,13 @@ const MemberManagement = () => {
 
   const onFilterClick = filter => dispatch(memberActions.setMemberFilter(filter));
   const addMember = newMember => dispatch(memberActions.addMember(newMember));
+  const patchMember = (id, data) => dispatch(memberActions.patchMember(id, data));
   
   if (isSignedIn && team._id)
     return (
       <div className="container">
         <AddMemberModal addMember={addMember} team_id={team._id}></AddMemberModal>
+        <KickMemberModal></KickMemberModal>
         <div className="row">
           <div className="col">
             <h1 id="title">{team.name + " 成員清單"}</h1>

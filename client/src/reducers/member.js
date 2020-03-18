@@ -4,6 +4,7 @@ import actionTypes from '../actionTypes';
 const initialState = {
   memberFilter: MemberFilters.ACTIVE,
   members: [],
+  memberSelected: null
 }
 
 function member(state = initialState, action) {
@@ -11,6 +12,10 @@ function member(state = initialState, action) {
     case actionTypes.SET_MEMBER_FILTER:
       return Object.assign({}, state, {
         memberFilter: action.filter
+      });
+    case actionTypes.SET_MEMBER_SELECTED:
+      return Object.assign({}, state, {
+        memberSelected: action.member
       });
     case actionTypes.GET_MEMBERS_SUCCESS:
       return Object.assign({}, state, {
