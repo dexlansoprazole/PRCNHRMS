@@ -2,6 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
+if (process.env.NODE_ENV !== 'production')
+  require('dotenv').config();
+
 // IMPORT MODELS
 require('./models/Players');
 require('./models/Users');
@@ -10,7 +13,7 @@ require('./models/Teams');
 const app = express();
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/prcnhrms');
+mongoose.connect(process.env.MONGODB_URI || process.env.MONGODB_URI_TEST);
 
 app.use(bodyParser.json());
 

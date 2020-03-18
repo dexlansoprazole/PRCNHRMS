@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "npm run start --prefix client",
     "server": "nodemon index.js",
-    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "dev": "export NODE_ENV=development && concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "start": "node index.js",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "concurrently": "^5.1.0",
+    "dotenv": "^8.2.0",
     "nodemon": "^2.0.2"
   }
 }
