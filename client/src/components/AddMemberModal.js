@@ -78,7 +78,6 @@ const AddMemberModal = () => {
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" data-dismiss="modal">取消</button>
                 <button type="submit" className="btn btn-success">新增</button>
-                {/* data-dismiss="modal" */}
               </div>
             </form>
           </div>

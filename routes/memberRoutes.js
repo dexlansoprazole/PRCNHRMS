@@ -18,10 +18,10 @@ module.exports = (app) => {
   });
 
   app.post(`/api/member`, async (req, res) => {
-    await Players.create(req.body).catch(err => {
+    player = await Players.create(req.body).catch(err => {
       return handleError(res, err)
     });
-    let members = await Players.find({team: req.body.team});
+    let members = await Players.find({team: player.team});
     return res.status(200).send(members)
   })
 
@@ -36,10 +36,10 @@ module.exports = (app) => {
 
   app.delete(`/api/member/:id`, async (req, res) => {
     const {id} = req.params;
-    await Players.findByIdAndDelete(id).catch(err => {
+    player = await Players.findByIdAndDelete(id).catch(err => {
       return handleError(res, err)
     });
-    let members = await Players.find({team: req.body.team});
+    let members = await Players.find({team: player.team});
     return res.status(200).send(members)
   })
 

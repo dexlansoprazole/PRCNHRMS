@@ -25,12 +25,13 @@ const MemberTableItem = props => {
       <td>{props.member.kick_reason ? props.member.kick_reason : "-"}</td>
       <td className="fit">
         <div className="btn-group" id="btnGroupFilter">
-          <button className="btn btn-warning btn-sm" data-toggle="modal" data-target="#editMemberModal" style={buttonStyle} onClick={() => setMemberSelected(props.member)}>編輯</button>
+          <button className="btn btn-success btn-sm" data-toggle="modal" data-target="#editMemberModal" style={buttonStyle} onClick={() => setMemberSelected(props.member)}>編輯</button>
           {
             !props.member.leave_date ?
-              <button className="btn btn-danger btn-sm" data-toggle="modal" data-target="#kickMemberModal" style={buttonStyle} onClick={() => setMemberSelected(props.member)}>踢除</button> :
+              <button className="btn btn-warning btn-sm" data-toggle="modal" data-target="#kickMemberModal" style={buttonStyle} onClick={() => setMemberSelected(props.member)}>踢除</button> :
               ""
           }
+          <button className="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteMemberModal" style={buttonStyle} onClick={() => setMemberSelected(props.member)}>刪除</button>
         </div>
       </td>
     </tr>

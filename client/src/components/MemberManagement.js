@@ -4,6 +4,7 @@ import MemberTable from './MemberTable';
 import AddMemberModal from './AddMemberModal';
 import EditMemberModal from './EditMemberModal';
 import KickMemberModal from './KickMemberModal';
+import DeleteMemberModal from './DeleteMemberModal';
 import AddTeamModal from './AddTeamModal';
 import memberActions, {MemberFilters} from '../actions/member';
 
@@ -36,6 +37,7 @@ const MemberManagement = () => {
         <AddMemberModal></AddMemberModal>
         <EditMemberModal></EditMemberModal>
         <KickMemberModal></KickMemberModal>
+        <DeleteMemberModal></DeleteMemberModal>
         <div className="row">
           <div className="col">
             <h1 id="title">{team.name + " 成員清單"}</h1>
