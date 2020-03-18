@@ -16,14 +16,14 @@ const DeleteMemberModal = () => {
     <div className="modal fade" id="deleteMemberModal">
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
-          <div className="modal-header">
+          <div className="modal-header bg-danger text-light">
             <h5 className="modal-title">刪除成員</h5>
               <button type="button" className="close" data-dismiss="modal">
                 <span aria-hidden="true">&times;</span>
               </button>
           </div>
           <div className="modal-body">
-            <p>確定要刪除"{member.name}"嗎？</p>
+            <h5>確定要刪除"{member.name}"嗎？</h5>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-dismiss="modal">取消</button>
               <button type="button" className="btn btn-danger" onClick={handleConfirm}>刪除</button>
