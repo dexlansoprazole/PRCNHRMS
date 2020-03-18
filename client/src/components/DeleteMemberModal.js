@@ -18,7 +18,7 @@ const DeleteMemberModal = () => {
         <div className="modal-content">
           <div className="modal-header bg-danger text-light">
             <h5 className="modal-title">刪除成員</h5>
-              <button type="button" className="close" data-dismiss="modal">
+              <button type="button" className="close text-light" data-dismiss="modal">
                 <span aria-hidden="true">&times;</span>
               </button>
           </div>
