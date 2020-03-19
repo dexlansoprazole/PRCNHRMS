@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { useDispatch } from 'react-redux';
 import memberActions from '../actions/member';
-import {Edit, LogOut, Trash} from 'react-feather';
+import {Edit, LogOut, Trash2} from 'react-feather';
 import {createUseStyles} from 'react-jss'
 
 var moment = require('moment');
@@ -45,7 +45,7 @@ const MemberTableItem = props => {
               <button className={classes.btnFunc} data-toggle="modal" data-target="#kickMemberModal" style={btnStyles} onClick={() => setMemberSelected(props.member)}><LogOut></LogOut></button> :
               ""
           }
-          <button className={classes.btnFunc} data-toggle="modal" data-target="#deleteMemberModal" style={btnStyles} onClick={() => setMemberSelected(props.member)}><Trash></Trash></button>
+          <button className={classes.btnFunc} data-toggle="modal" data-target="#deleteMemberModal" style={btnStyles} onClick={() => setMemberSelected(props.member)}><Trash2></Trash2></button>
       </td>
     </tr>
   );
