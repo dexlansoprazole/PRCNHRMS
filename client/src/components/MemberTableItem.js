@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import { useDispatch } from 'react-redux';
 import memberActions from '../actions/member';
+import {Edit, LogOut, Trash} from 'react-feather';
+import {createUseStyles} from 'react-jss'
 
 var moment = require('moment');
 
@@ -10,10 +12,23 @@ const MemberTableItem = props => {
 
   const [isHovered, setIsHovered] = useState(false);
 
-  const buttonStyle = {
-    opacity: isHovered ? 1 : 0,
-    transition: "opacity .2s"
-  };
+  const btnStyles = {
+    opacity: isHovered ? 1 : 0
+  }
+
+  const classes = createUseStyles({
+    btnFunc: {
+      transition: "opacity .2s",
+      backgroundColor: "transparent",
+      border: 0,
+      padding: "0px",
+      margin: "0px 8px 0px 8px",
+      '&:focus': {
+        outline: 'none',
+        boxShadow: 'none'
+      }
+    }
+  })();
 
   return (
     <tr onMouseOver={() => {setIsHovered(true)}} onMouseLeave={() => {setIsHovered(false)}} style={{height: "56px", backgroundColor: isHovered ? "#f2f2f2" : ""}}>
@@ -24,15 +39,13 @@ const MemberTableItem = props => {
       <td>{props.member.leave_date ? moment(props.member.leave_date).format('YYYY/MM/DD') : "-"}</td>
       <td>{props.member.kick_reason ? props.member.kick_reason : "-"}</td>
       <td className="fit">
-        <div className="btn-group" id="btnGroupFilter">
-          <button className="btn btn-primary btn-sm" data-toggle="modal" data-target="#editMemberModal" style={buttonStyle} onClick={() => setMemberSelected(props.member)}>編輯</button>
+          <button className={classes.btnFunc} data-toggle="modal" data-target="#editMemberModal" style={btnStyles} onClick={() => setMemberSelected(props.member)}><Edit></Edit></button>
           {
             !props.member.leave_date ?
-              <button className="btn btn-warning btn-sm" data-toggle="modal" data-target="#kickMemberModal" style={buttonStyle} onClick={() => setMemberSelected(props.member)}>踢除</button> :
+              <button className={classes.btnFunc} data-toggle="modal" data-target="#kickMemberModal" style={btnStyles} onClick={() => setMemberSelected(props.member)}><LogOut></LogOut></button> :
               ""
           }
-          <button className="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteMemberModal" style={buttonStyle} onClick={() => setMemberSelected(props.member)}>刪除</button>
-        </div>
+          <button className={classes.btnFunc} data-toggle="modal" data-target="#deleteMemberModal" style={btnStyles} onClick={() => setMemberSelected(props.member)}><Trash></Trash></button>
       </td>
     </tr>
   );
