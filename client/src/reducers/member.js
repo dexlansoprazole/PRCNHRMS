@@ -16,21 +16,21 @@ function member(state = initialState, action) {
       return Object.assign({}, state, {
         memberSelected: action.member
       });
-    case actionTypes.GET_MEMBERS_SUCCESS:
+    case actionTypes.GET_MEMBERS_SUCCESS:    
       return Object.assign({}, state, {
-        members: action.members
+        members: action.res.members
       });
     case actionTypes.ADD_MEMBER_SUCCESS:
       return Object.assign({}, state, {
-        members: action.members
+        members: action.res.members
       });
     case actionTypes.DELETE_MEMBER_SUCCESS:
       return Object.assign({}, state, {
-        members: action.members
+        members: action.res.members
       });
     case actionTypes.PATCH_MEMBER_SUCCESS:
       return Object.assign({}, state, {
-        members: action.members
+        members: action.res.members
       });
     case actionTypes.LOGOUT_SUCCESS:
       return Object.assign({}, state, initialState);

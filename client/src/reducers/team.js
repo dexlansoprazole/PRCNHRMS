@@ -9,11 +9,11 @@ function team(state = initialState, action) {
   switch (action.type) {
     case actionTypes.GET_TEAM_SUCCESS:
       return Object.assign({}, state, 
-        action.team
+        action.res.teams[0]
       );
     case actionTypes.ADD_TEAM_SUCCESS:
       return Object.assign({}, state, 
-        action.team
+        action.res.teams
       );
     case actionTypes.LOGOUT_SUCCESS:
       return Object.assign({}, state,

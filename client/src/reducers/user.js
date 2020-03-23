@@ -10,7 +10,7 @@ const initialState = {
 
 function user(state = initialState, action) {
   switch (action.type) {
-    case actionTypes.LOGIN_SUCCESS:
+    case actionTypes.LOGIN_SUCCESS:   
       return Object.assign({}, state, 
         action.user
       );

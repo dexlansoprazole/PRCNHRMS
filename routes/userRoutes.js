@@ -22,10 +22,10 @@ async function verify(token) {
 
 module.exports = (app) => {
   app.post(`/api/user/query`, async (req, res) => {
-    let user = await Users.find(req.body).catch(err => {
+    let users = await Users.find(req.body).catch(err => {
       return handleError(res, err)
     });
-    return res.status(200).send(user);
+    return res.status(200).send({users});
   });
 
   app.post(`/api/user/auth`, async (req, res) => {
@@ -33,7 +33,7 @@ module.exports = (app) => {
     user = await Users.findOneAndUpdate({id: user.id}, user, {upsert: true}).catch(err => {
       return handleError(res, err)
     });
-    return res.status(200).send(user)
+    return res.status(200).send({user})
   })
 
   app.patch(`/api/user/:id`, async (req, res) => {
@@ -41,7 +41,7 @@ module.exports = (app) => {
     let user = await Users.findByIdAndUpdate(id, req.body, {new: true}).catch(err => {
       return handleError(res, err)
     });
-    return res.status(200).send(user)
+    return res.status(200).send({user})
   });
 
   app.delete(`/api/user/:id`, async (req, res) => {
@@ -50,7 +50,7 @@ module.exports = (app) => {
       return handleError(res, err)
     });
     let users = await Users.find();
-    return res.status(200).send(users)
+    return res.status(200).send({users})
   })
 
   function handleError(res, err) {

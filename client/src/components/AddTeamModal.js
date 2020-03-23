@@ -6,7 +6,7 @@ const AddTeamModal = () => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
 
-  const addTeam = (user_id, newTeam) => dispatch(teamActions.add(user_id, newTeam));
+  const addTeam = (user_id, newTeam) => dispatch(teamActions.addTeam(user_id, newTeam));
 
   const [newTeam, setNewTeam] = useState({
     name: "",

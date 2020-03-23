@@ -2,23 +2,14 @@ import teamService from '../services/teamService';
 import {actionTypes} from '../constants';
 import userActions from './user';
 
-const get = (query) => {
-  return async dispatch => {
-    dispatch(request());
-    try {
-      const team = (await teamService.get(query))[0];
-      dispatch(success(team));
-    } catch (error) {
-      dispatch(failure());
-    }
+const getTeams = (query = null) => {
+  return {
+    types: [actionTypes.GET_TEAM_REQUEST, actionTypes.GET_TEAM_SUCCESS, actionTypes.GET_TEAM_FAILURE],
+    callAPI: () => teamService.get(query)
   }
-
-  function request() {return {type: actionTypes.GET_TEAM_REQUEST}}
-  function success(team) {return {type: actionTypes.GET_TEAM_SUCCESS, team: {_id: team._id, name: team.name}}}
-  function failure() {return {type: actionTypes.GET_TEAM_FAILURE}}
 }
 
-const add = (user_id, newTeam) => {
+const addTeam = (user_id, newTeam) => { //TODO: use middleware
   return async dispatch => {
     dispatch(request());
     try {
@@ -37,6 +28,6 @@ const add = (user_id, newTeam) => {
 }
 
 export default {
-  get,
-  add
+  getTeams,
+  addTeam
 };

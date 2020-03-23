@@ -7,14 +7,14 @@ module.exports = (app) => {
     let members = await Players.find().catch(err => {
       return handleError(res, err)
     });
-    return res.status(200).send(members);
+    return res.status(200).send({members});
   });
 
   app.post(`/api/member/query`, async (req, res) => {
     let members = await Players.find(req.body).catch(err => {
       return handleError(res, err)
     });
-    return res.status(200).send(members);
+    return res.status(200).send({members});
   });
 
   app.post(`/api/member`, async (req, res) => {
@@ -22,7 +22,7 @@ module.exports = (app) => {
       return handleError(res, err)
     });
     let members = await Players.find({team: player.team});
-    return res.status(200).send(members)
+    return res.status(200).send({members})
   })
 
   app.patch(`/api/member/:id`, async (req, res) => {
@@ -31,7 +31,7 @@ module.exports = (app) => {
       return handleError(res, err)
     });
     let members = await Players.find({team: player.team});
-    return res.status(200).send(members);
+    return res.status(200).send({members});
   });
 
   app.delete(`/api/member/:id`, async (req, res) => {
@@ -40,7 +40,7 @@ module.exports = (app) => {
       return handleError(res, err)
     });
     let members = await Players.find({team: player.team});
-    return res.status(200).send(members)
+    return res.status(200).send({members})
   })
 
   function handleError(res, err) {

@@ -3,16 +3,16 @@ import {actionTypes} from '../constants';
 import teamActions from './team';
 import memberActions from './member'
 
-const login = (googleUser) => {
+const login = (googleUser) => { //TODO: use middleware
   return async dispatch => {
     dispatch(request());
     const id_token = googleUser.getAuthResponse().id_token;
 
     try {
-      const user = await signInService.login(id_token);
+      const user = (await signInService.login(id_token)).user;
       
       if (user.team && user.team.length > 0) {
-        await dispatch(teamActions.get({_id: user.team}));
+        await dispatch(teamActions.getTeams({_id: user.team}));
         await dispatch(memberActions.getMembers({team: user.team}))
       }
         
@@ -28,7 +28,7 @@ const login = (googleUser) => {
   function failure() {return {type: actionTypes.LOGIN_FAILURE}}
 }
 
-const logout = () => {
+const logout = () => { //TODO: use middleware
   return async dispatch => {
     dispatch(request());
     const auth2 = window.gapi.auth2.getAuthInstance();

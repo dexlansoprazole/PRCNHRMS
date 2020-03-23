@@ -3,17 +3,17 @@ const Teams = mongoose.model('teams');
 
 module.exports = (app) => {
   app.post(`/api/team/query`, async (req, res) => {
-    let team = await Teams.find(req.body).catch(err => {
+    let teams = await Teams.find(req.body).catch(err => {
       return handleError(res, err)
     });
-    return res.status(200).send(team);
+    return res.status(200).send({teams});
   });
 
   app.post(`/api/team/`, async (req, res) => {
-    team = await Teams.create(req.body).catch(err => {
+    let team = await Teams.create(req.body).catch(err => {
       return handleError(res, err)
     });
-    return res.status(200).send(team)
+    return res.status(200).send({teams: team})
   })
 
   app.put(`/api/team/:id`, async (req, res) => {
@@ -22,7 +22,7 @@ module.exports = (app) => {
       return handleError(res, err)
     });
     let teams = await Teams.find();
-    return res.status(200).send(teams)
+    return res.status(200).send({teams})
   });
 
   app.delete(`/api/team/:id`, async (req, res) => {
@@ -31,7 +31,7 @@ module.exports = (app) => {
       return handleError(res, err)
     });
     let teams = await Teams.find();
-    return res.status(200).send(teams)
+    return res.status(200).send({teams})
   })
 
   function handleError(res, err) {

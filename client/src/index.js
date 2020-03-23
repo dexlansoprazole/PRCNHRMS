@@ -8,9 +8,10 @@ import rootReducer from './reducers'
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {composeWithDevTools} from 'redux-devtools-extension/developmentOnly';
+import callAPIMiddleware from './callAPIMiddleware';
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(
-  thunkMiddleware
+  thunkMiddleware, callAPIMiddleware
 )))
 
 render(
