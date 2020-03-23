@@ -13,11 +13,13 @@ const login = (googleUser) => { //TODO: use middleware
       await dispatch(teamActions.getTeams({leader: user._id}));
       const team = getState().team.teams.filter(t => t.leader === user._id)[0] || null;
       if (team) {
-        await dispatch(memberActions.getMembers({_id: team.leader}))
         dispatch(teamActions.setTeamSelected(team)); //TODO: set to selected
+        const query = getState().team.teams.map(m => ({team: m._id}));
+        await dispatch(memberActions.getMembers({$or: query}))
       }
       dispatch(success(user));
     } catch (error) {
+      console.error(error);
       dispatch(failure());
       dispatch(logout());
     }

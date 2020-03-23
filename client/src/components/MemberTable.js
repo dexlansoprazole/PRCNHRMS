@@ -17,7 +17,7 @@ const MemberTable = props => {
       </thead>
       <tbody>
         {(props.members && props.members.length > 0) ? (
-          props.members.map((member, index) => <MemberTableItem key={member._id} member={member} index={index + 1}></MemberTableItem>)
+          props.members.map((member, index) => <MemberTableItem key={index} member={member} index={index + 1}></MemberTableItem>)
         ) : (
           <tr><td colSpan="7">查無成員：3</td></tr>
         )}

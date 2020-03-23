@@ -15,7 +15,7 @@ const TeamTable = props => {
       </thead>
       <tbody>
         {(props.teams && props.teams.length > 0) ? (
-          props.teams.map((team, index) => <TeamTableItem key={team._id} team={team} index={index + 1}></TeamTableItem>)
+          props.teams.map((team, index) => <TeamTableItem key={index} team={team} index={index + 1}></TeamTableItem>)
         ) : (
             <tr><td colSpan="4">您還沒有戰隊：3</td></tr>
           )}

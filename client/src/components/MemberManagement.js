@@ -8,7 +8,8 @@ import DeleteMemberModal from './DeleteMemberModal';
 import memberActions from '../actions/member';
 import {memberFilters} from '../constants';
 
-const getVisibleMembers = (members, filter) => {
+const getVisibleMembers = (members, team, filter) => {
+  members = members.filter(m => m.team === team._id);
   switch (filter) {
     case memberFilters.ALL:
       return members;
@@ -27,9 +28,7 @@ const MemberManagement = () => {
   const isSignedIn = useSelector(state => state.signIn.isSignedIn);
   const team = useSelector(state => state.team.teamSelected);
   const memberFilter = useSelector(state => state.member.memberFilter);
-  const members = getVisibleMembers(useSelector(state => state.member.members), memberFilter);
-
-  
+  const members = getVisibleMembers(useSelector(state => state.member.members), team, memberFilter);
 
   if (isSignedIn && Object.keys(team).length !== 0)
     return (

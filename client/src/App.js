@@ -7,9 +7,12 @@ import SignIn from './components/SignIn';
 import MemberManagement from './components/MemberManagement';
 import TeamManagement from './components/TeamManagement';
 import LoadingModal from './components/LoadingModal';
+import TeamDropdown from './components/TeamDropdown';
 
 const App = () => {
   const loading = useSelector(state => state.loading);
+  const isSignedIn = useSelector(state => state.signIn.isSignedIn);
+  const team = useSelector(state => state.team.teamSelected);
   window.$('.modal-backdrop').remove();
   window.$('body').removeClass('modal-open');
 
@@ -28,13 +31,7 @@ const App = () => {
                 <NavLink className="nav-item nav-link" to="team_management">戰隊管理</NavLink>
                 <NavLink className="nav-item nav-link" to="member_management">成員管理</NavLink>
               </div>
-              <div className="nav-item dropdown align-items-center d-flex">
-                <a className="nav-link btn btn-secondary dropdown-toggle text-light" data-toggle="dropdown" style={{border: 0, marginRight: 4}}>戰隊選擇</a> 
-                <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <button className="dropdown-item">test</button>
-                  <button className="dropdown-item">test</button>
-                </div>
-              </div>
+              {(isSignedIn && Object.keys(team).length !== 0) ? <TeamDropdown></TeamDropdown> : null}
               <SignIn></SignIn>
             </div>
           </div>

@@ -30,7 +30,7 @@ module.exports = (app) => {
 
   app.post(`/api/user/auth`, async (req, res) => {
     let user = await verify(req.body.token).catch(console.error);
-    user = await Users.findOneAndUpdate({id: user.id}, user, {upsert: true}).catch(err => {
+    user = await Users.findOneAndUpdate({id: user.id}, user, {upsert: true, new: true}).catch(err => {
       return handleError(res, err)
     });
     return res.status(200).send({user})

@@ -6,7 +6,7 @@ var moment = require('moment');
 const AddMemberModal = () => {
   const dispatch = useDispatch();
   const addMember = newMember => dispatch(memberActions.addMember(newMember));
-  const team = useSelector(state => state.team);
+  const team = useSelector(state => state.team.teamSelected);
 
   const [newMember, setNewMember] = useState({
     id: "",
@@ -14,6 +14,13 @@ const AddMemberModal = () => {
     team: team._id,
     join_date: moment().format("YYYY/MM/DD")
   });
+
+  useEffect(() => {
+    setNewMember({
+      ...newMember,
+      team: team._id
+    })
+  }, [team]);
 
   const handleChange = (evt) => {
     const target = evt.target;

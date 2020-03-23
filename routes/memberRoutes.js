@@ -21,8 +21,7 @@ module.exports = (app) => {
     player = await Players.create(req.body).catch(err => {
       return handleError(res, err)
     });
-    let members = await Players.find({team: player.team});
-    return res.status(200).send({members})
+    return res.status(200).send({member: player})
   })
 
   app.patch(`/api/member/:id`, async (req, res) => {
@@ -30,8 +29,7 @@ module.exports = (app) => {
     player = await Players.findByIdAndUpdate(id, req.body, {new: true}).catch(err => {
       return handleError(res, err)
     });
-    let members = await Players.find({team: player.team});
-    return res.status(200).send({members});
+    return res.status(200).send({member: player});
   });
 
   app.delete(`/api/member/:id`, async (req, res) => {
@@ -39,8 +37,7 @@ module.exports = (app) => {
     player = await Players.findByIdAndDelete(id).catch(err => {
       return handleError(res, err)
     });
-    let members = await Players.find({team: player.team});
-    return res.status(200).send({members})
+    return res.status(200).send({member: player})
   })
 
   function handleError(res, err) {

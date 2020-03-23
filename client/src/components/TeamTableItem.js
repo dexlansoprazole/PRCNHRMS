@@ -1,8 +1,11 @@
 import React, {useState} from 'react';
+import {useSelector} from 'react-redux';
 import {Trash2} from 'react-feather';
 import {createUseStyles} from 'react-jss'
 
 const TeamTableItem = props => {
+  const members = useSelector(state => state.member.members);
+  
   const [isHovered, setIsHovered] = useState(false);
 
   const btnStyles = {
@@ -27,7 +30,7 @@ const TeamTableItem = props => {
     <tr onMouseOver={() => {setIsHovered(true)}} onMouseLeave={() => {setIsHovered(false)}} style={{height: "56px"}}>
       <td className="fit">{props.index}</td>
       <td>{props.team.name}</td>
-      <td>???</td>
+      <td>{members.filter(m => m.team === props.team._id).length}</td>
       <td>???</td>
       <td className="fit">
         <button className={classes.btnFunc} data-toggle="modal" data-target="#" style={btnStyles}><Trash2></Trash2></button>
