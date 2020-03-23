@@ -28,8 +28,8 @@ const App = () => {
             <div className="navbar-collapse collapse" id="navbarNavAltMarkup">
               <div className="navbar-nav mr-auto">
                 <NavLink className="nav-item nav-link" to="home">Home</NavLink>
-                <NavLink className="nav-item nav-link" to="team_management">戰隊管理</NavLink>
-                <NavLink className="nav-item nav-link" to="member_management">成員管理</NavLink>
+                {isSignedIn ? <NavLink className="nav-item nav-link" to="team_management">戰隊管理</NavLink> : null}
+                {isSignedIn ? <NavLink className="nav-item nav-link" to="member_management">成員管理</NavLink> : null}
               </div>
               {(isSignedIn && Object.keys(team).length !== 0) ? <TeamDropdown></TeamDropdown> : null}
               <SignIn></SignIn>
@@ -41,8 +41,8 @@ const App = () => {
         ) : (
           <Switch>
             <Route exact path="/home" component={Home} />
-            <Route exact path="/team_management" component={TeamManagement} />
-            <Route exact path="/member_management" component={MemberManagement} />
+            {isSignedIn ? <Route exact path="/team_management" component={TeamManagement} /> : null}
+            {isSignedIn ? <Route exact path="/member_management" component={MemberManagement} /> : null}
             <Redirect to="/home" />
           </Switch>
         )}

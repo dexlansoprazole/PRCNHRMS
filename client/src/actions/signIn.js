@@ -11,6 +11,7 @@ const login = (googleUser) => { //TODO: use middleware
     try {
       const user = (await signInService.login(id_token)).user;
       await dispatch(teamActions.getTeams({leader: user._id}));
+      //TODO: refactor
       const team = getState().team.teams.filter(t => t.leader === user._id)[0] || null;
       if (team) {
         dispatch(teamActions.setTeamSelected(team)); //TODO: set to selected
