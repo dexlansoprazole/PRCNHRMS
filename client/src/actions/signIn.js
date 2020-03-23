@@ -4,14 +4,18 @@ import teamActions from './team';
 import memberActions from './member'
 
 const login = (googleUser) => { //TODO: use middleware
-  return async dispatch => {
+  return async (dispatch, getState) => {
     dispatch(request());
     const id_token = googleUser.getAuthResponse().id_token;
 
     try {
       const user = (await signInService.login(id_token)).user;
       await dispatch(teamActions.getTeams({leader: user._id}));
-      await dispatch(memberActions.getMembers({team: user.team}))
+      const team = getState().team.teams.filter(t => t.leader === user._id)[0] || null;
+      if (team) {
+        await dispatch(memberActions.getMembers({_id: team.leader}))
+        dispatch(teamActions.setTeamSelected(team)); //TODO: set to selected
+      }
       dispatch(success(user));
     } catch (error) {
       dispatch(failure());

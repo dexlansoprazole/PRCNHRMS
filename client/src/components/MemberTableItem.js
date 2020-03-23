@@ -31,7 +31,7 @@ const MemberTableItem = props => {
   })();
 
   return (
-    <tr onMouseOver={() => {setIsHovered(true)}} onMouseLeave={() => {setIsHovered(false)}} style={{height: "56px", backgroundColor: isHovered ? "#f2f2f2" : ""}}>
+    <tr onMouseOver={() => {setIsHovered(true)}} onMouseLeave={() => {setIsHovered(false)}} style={{height: "56px"}}>
       <td className="fit">{props.index}</td>
       <td className="fit">{props.member.id}</td>
       <td>{props.member.name}</td>

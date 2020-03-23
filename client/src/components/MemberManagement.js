@@ -5,7 +5,6 @@ import AddMemberModal from './AddMemberModal';
 import EditMemberModal from './EditMemberModal';
 import KickMemberModal from './KickMemberModal';
 import DeleteMemberModal from './DeleteMemberModal';
-import AddTeamModal from './AddTeamModal';
 import memberActions from '../actions/member';
 import {memberFilters} from '../constants';
 
@@ -26,13 +25,13 @@ const MemberManagement = () => {
   const dispatch = useDispatch();
   const onFilterClick = filter => dispatch(memberActions.setMemberFilter(filter));
   const isSignedIn = useSelector(state => state.signIn.isSignedIn);
-  const team = useSelector(state => state.team);
+  const team = useSelector(state => state.team.teamSelected);
   const memberFilter = useSelector(state => state.member.memberFilter);
   const members = getVisibleMembers(useSelector(state => state.member.members), memberFilter);
 
   
 
-  if (isSignedIn && team._id)
+  if (isSignedIn && Object.keys(team).length !== 0)
     return (
       <div className="container">
         <AddMemberModal></AddMemberModal>
@@ -63,17 +62,6 @@ const MemberManagement = () => {
         </div>
       </div>
     );
-  else if (isSignedIn && !team._id)
-    return (
-      <div className="container">
-        <AddTeamModal></AddTeamModal>
-        <div className="row">
-          <div className="col">
-            <button className="btn btn-primary" id="btnAddTeam" data-toggle="modal" data-target="#addTeamModal">建立戰隊</button>
-          </div>
-        </div>
-      </div>
-    )
   else
     return null;
 }

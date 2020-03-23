@@ -5,7 +5,6 @@ import teamActions from '../actions/team';
 const AddTeamModal = () => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
-
   const addTeam = (newTeam) => dispatch(teamActions.addTeam(newTeam));
 
   const [newTeam, setNewTeam] = useState({
@@ -37,7 +36,8 @@ const AddTeamModal = () => {
   useEffect(() => {
     window.$('#addTeamModal').on('hidden.bs.modal', function(e) {
       setNewTeam({
-        name: ""
+        name: "",
+        leader: user._id
       })
       window.$(this).find('form').removeClass('was-validated');
     })

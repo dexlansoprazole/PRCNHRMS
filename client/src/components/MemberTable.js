@@ -3,7 +3,7 @@ import MemberTableItem from './MemberTableItem';
 
 const MemberTable = props => {
   return (
-    <table className="table">
+    <table className="table table-hover">
       <thead>
         <tr>
           <th scope="col">#</th>
@@ -19,7 +19,7 @@ const MemberTable = props => {
         {(props.members && props.members.length > 0) ? (
           props.members.map((member, index) => <MemberTableItem key={member._id} member={member} index={index + 1}></MemberTableItem>)
         ) : (
-          <tr><td>查無成員：3</td></tr>
+          <tr><td colSpan="7">查無成員：3</td></tr>
         )}
       </tbody>
     </table>

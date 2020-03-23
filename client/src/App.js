@@ -5,6 +5,7 @@ import './App.css';
 import Home from './components/Home';
 import SignIn from './components/SignIn';
 import MemberManagement from './components/MemberManagement';
+import TeamManagement from './components/TeamManagement';
 import LoadingModal from './components/LoadingModal';
 
 const App = () => {
@@ -21,12 +22,20 @@ const App = () => {
               aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon"></span>
             </button>
-            <div className="navbar-collapse collapse justify-content-between" id="navbarNavAltMarkup">
-              <div className="navbar-nav">
+            <div className="navbar-collapse collapse" id="navbarNavAltMarkup">
+              <div className="navbar-nav mr-auto">
                 <NavLink className="nav-item nav-link" to="home">Home</NavLink>
+                <NavLink className="nav-item nav-link" to="team_management">戰隊管理</NavLink>
                 <NavLink className="nav-item nav-link" to="member_management">成員管理</NavLink>
               </div>
-                <SignIn></SignIn>
+              <div className="nav-item dropdown align-items-center d-flex">
+                <a className="nav-link btn btn-secondary dropdown-toggle text-light" data-toggle="dropdown" style={{border: 0, marginRight: 4}}>戰隊選擇</a> 
+                <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <button className="dropdown-item">test</button>
+                  <button className="dropdown-item">test</button>
+                </div>
+              </div>
+              <SignIn></SignIn>
             </div>
           </div>
         </nav>
@@ -35,6 +44,7 @@ const App = () => {
         ) : (
           <Switch>
             <Route exact path="/home" component={Home} />
+            <Route exact path="/team_management" component={TeamManagement} />
             <Route exact path="/member_management" component={MemberManagement} />
             <Redirect to="/home" />
           </Switch>
