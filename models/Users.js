@@ -5,8 +5,7 @@ const userSchema = new Schema({
   _id: Schema.Types.ObjectId,
   id: Number,
   name: String,
-  email: String,
-  team: Schema.Types.ObjectId
+  email: String
 })
 
 mongoose.model('users', userSchema);

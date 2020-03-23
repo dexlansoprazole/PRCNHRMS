@@ -3,6 +3,8 @@ const {Schema} = mongoose;
 
 const teamSchema = new Schema({
   name: String,
+  leader: Schema.Types.ObjectId,
+  managers: [Schema.Types.ObjectId]
 })
 
 mongoose.model('teams', teamSchema);

@@ -6,10 +6,11 @@ const AddTeamModal = () => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
 
-  const addTeam = (user_id, newTeam) => dispatch(teamActions.addTeam(user_id, newTeam));
+  const addTeam = (newTeam) => dispatch(teamActions.addTeam(newTeam));
 
   const [newTeam, setNewTeam] = useState({
     name: "",
+    leader: user._id
   });
 
   const handleChange = (evt) => {
@@ -26,7 +27,7 @@ const AddTeamModal = () => {
   const handleSubmit = (evt) => {
     evt.preventDefault();
     if (evt.target.checkValidity() === true) {
-      addTeam(user._id, newTeam);
+      addTeam(newTeam);
       window.$('#addTeamModal').modal('hide');
     }
     else

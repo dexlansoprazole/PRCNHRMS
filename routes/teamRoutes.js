@@ -13,7 +13,7 @@ module.exports = (app) => {
     let team = await Teams.create(req.body).catch(err => {
       return handleError(res, err)
     });
-    return res.status(200).send({teams: team})
+    return res.status(200).send({team})
   })
 
   app.put(`/api/team/:id`, async (req, res) => {

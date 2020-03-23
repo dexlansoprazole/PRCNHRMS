@@ -41,7 +41,7 @@ const MemberManagement = () => {
         <DeleteMemberModal></DeleteMemberModal>
         <div className="row">
           <div className="col">
-            <h1 id="title">{team.name + " 成員清單"}</h1>
+            <h1 id="title">{team.name}</h1>
           </div>
         </div>
         <div className="row">

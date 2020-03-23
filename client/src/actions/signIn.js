@@ -10,12 +10,8 @@ const login = (googleUser) => { //TODO: use middleware
 
     try {
       const user = (await signInService.login(id_token)).user;
-      
-      if (user.team && user.team.length > 0) {
-        await dispatch(teamActions.getTeams({_id: user.team}));
-        await dispatch(memberActions.getMembers({team: user.team}))
-      }
-        
+      await dispatch(teamActions.getTeams({leader: user._id}));
+      await dispatch(memberActions.getMembers({team: user.team}))
       dispatch(success(user));
     } catch (error) {
       dispatch(failure());

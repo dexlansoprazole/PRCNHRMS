@@ -1,7 +1,6 @@
 import {actionTypes} from '../constants';
 
 const initialState = {
-  isGapiReady: false,
   isSignedIn: false
 }
 
