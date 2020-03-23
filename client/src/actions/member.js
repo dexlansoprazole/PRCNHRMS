@@ -1,11 +1,5 @@
 import memberService from '../services/memberService';
-import actionTypes from '../actionTypes';
-
-export const MemberFilters = {
-  ALL: 'ALL',
-  ACTIVE: 'ACTIVE',
-  LEFT: 'LEFT'
-}
+import {actionTypes} from '../constants';
 
 const getMembers = (query = null) => {
   return async dispatch => {

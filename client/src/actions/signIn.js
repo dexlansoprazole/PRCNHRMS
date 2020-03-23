@@ -1,5 +1,5 @@
 import signInService from '../services/signInService';
-import actionTypes from '../actionTypes';
+import {actionTypes} from '../constants';
 import teamActions from './team';
 import memberActions from './member'
 

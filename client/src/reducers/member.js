@@ -1,8 +1,7 @@
-import {MemberFilters} from '../actions/member';
-import actionTypes from '../actionTypes';
+import {actionTypes, memberFilters} from '../constants';
 
 const initialState = {
-  memberFilter: MemberFilters.ACTIVE,
+  memberFilter: memberFilters.ACTIVE,
   members: [],
   memberSelected: {}
 }

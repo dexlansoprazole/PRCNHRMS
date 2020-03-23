@@ -1,4 +1,4 @@
-export default {
+export const actionTypes = {
   GET_MEMBERS_REQUEST: 'GET_MEMBERS_REQUEST',
   GET_MEMBERS_SUCCESS: 'GET_MEMBERS_SUCCESS',
   GET_MEMBERS_FAILURE: 'GET_MEMBERS_FAILURE',
@@ -43,3 +43,9 @@ export default {
   SET_MEMBER_SELECTED: 'SET_MEMBER_SELECTED',
   SET_IS_SIGNED_IN: 'SET_IS_SIGNED_IN',
 };
+
+export const memberFilters = {
+  ALL: 'ALL',
+  ACTIVE: 'ACTIVE',
+  LEFT: 'LEFT'
+}

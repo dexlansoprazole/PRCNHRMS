@@ -1,5 +1,5 @@
 import teamService from '../services/teamService';
-import actionTypes from '../actionTypes';
+import {actionTypes} from '../constants';
 import userActions from './user';
 
 const get = (query) => {

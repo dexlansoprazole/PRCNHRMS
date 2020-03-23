@@ -6,15 +6,16 @@ import EditMemberModal from './EditMemberModal';
 import KickMemberModal from './KickMemberModal';
 import DeleteMemberModal from './DeleteMemberModal';
 import AddTeamModal from './AddTeamModal';
-import memberActions, {MemberFilters} from '../actions/member';
+import memberActions from '../actions/member';
+import {memberFilters} from '../constants';
 
 const getVisibleMembers = (members, filter) => {
   switch (filter) {
-    case MemberFilters.ALL:
+    case memberFilters.ALL:
       return members;
-    case MemberFilters.ACTIVE:
+    case memberFilters.ACTIVE:
       return members.filter(m => m.leave_date == null);
-    case MemberFilters.LEFT:
+    case memberFilters.LEFT:
       return members.filter(m => m.leave_date != null);
     default:
       return members;
@@ -49,9 +50,9 @@ const MemberManagement = () => {
           </div>
           <div className="col text-right">
             <div className="btn-group" id="btnGroupFilter">
-              <button type="button" id="btnFilterActive" className={"btn " + (memberFilter === MemberFilters.ACTIVE ? "btn-success" : "btn-secondary")} name={MemberFilters.ACTIVE} onClick={(evt) => onFilterClick(evt.target.name)}>現役成員</button>
-              <button type="button" id="btnFilterLeft" className={"btn " + (memberFilter === MemberFilters.LEFT ? "btn-danger" : "btn-secondary")} name={MemberFilters.LEFT} onClick={(evt) => onFilterClick(evt.target.name)}>已退出</button>
-              <button type="button" id="btnFilterAll" className={"btn " + (memberFilter === MemberFilters.ALL ? "btn-dark" : "btn-secondary")} name={MemberFilters.ALL} onClick={(evt) => onFilterClick(evt.target.name)}>全部成員</button>
+              <button type="button" id="btnFilterActive" className={"btn " + (memberFilter === memberFilters.ACTIVE ? "btn-success" : "btn-secondary")} name={memberFilters.ACTIVE} onClick={(evt) => onFilterClick(evt.target.name)}>現役成員</button>
+              <button type="button" id="btnFilterLeft" className={"btn " + (memberFilter === memberFilters.LEFT ? "btn-danger" : "btn-secondary")} name={memberFilters.LEFT} onClick={(evt) => onFilterClick(evt.target.name)}>已退出</button>
+              <button type="button" id="btnFilterAll" className={"btn " + (memberFilter === memberFilters.ALL ? "btn-dark" : "btn-secondary")} name={memberFilters.ALL} onClick={(evt) => onFilterClick(evt.target.name)}>全部成員</button>
             </div>
           </div>
         </div>

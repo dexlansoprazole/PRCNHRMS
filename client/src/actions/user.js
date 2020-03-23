@@ -1,5 +1,5 @@
 import userService from '../services/userService';
-import actionTypes from '../actionTypes';
+import {actionTypes} from '../constants';
 
 const patch = (id, data) => {
   return async dispatch => {
