@@ -9,15 +9,18 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {composeWithDevTools} from 'redux-devtools-extension/developmentOnly';
 import callAPIMiddleware from './callAPIMiddleware';
+import { CookiesProvider } from 'react-cookie';
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(
   thunkMiddleware, callAPIMiddleware
 )))
 
 render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <CookiesProvider>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </CookiesProvider>,
   document.getElementById('root')
 )
 

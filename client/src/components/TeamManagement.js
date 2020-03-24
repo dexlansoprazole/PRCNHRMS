@@ -4,7 +4,7 @@ import TeamTable from './TeamTable';
 import AddTeamModal from './AddTeamModal';
 
 const MemberManagement = () => {
-  const user = useSelector(state => state.user);
+  const user = useSelector(state => state.auth.user);
   const teams = useSelector(state => state.team.teams).filter(t => t.leader === user._id);
 
   return (

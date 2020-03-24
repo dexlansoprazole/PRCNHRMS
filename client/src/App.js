@@ -11,7 +11,7 @@ import TeamDropdown from './components/TeamDropdown';
 
 const App = () => {
   const loading = useSelector(state => state.loading);
-  const isSignedIn = useSelector(state => state.signIn.isSignedIn);
+  const isSignedIn = useSelector(state => state.auth.isSignedIn);
   const team = useSelector(state => state.team.teamSelected);
   window.$('.modal-backdrop').remove();
   window.$('body').removeClass('modal-open');

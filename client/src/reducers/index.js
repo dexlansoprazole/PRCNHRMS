@@ -1,15 +1,13 @@
 import {combineReducers} from 'redux';
 import member from './member';
-import user from './user';
+import auth from './auth';
 import team from './team';
-import signIn from './signIn';
 import loading from './loading';
 
 const rootReducer = combineReducers({
   loading,
-  signIn,
   member,
-  user,
+  auth,
   team
 });
 

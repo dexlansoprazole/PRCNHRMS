@@ -4,11 +4,11 @@ const initialState = false
 
 function loading(state = initialState, action) {
   switch (action.type) {
-    case actionTypes.INIT_GAPI_REQUEST:
+    case actionTypes.INIT_AUTH_REQUEST:
       return true;
-    case actionTypes.INIT_GAPI_SUCCESS:
+    case actionTypes.INIT_AUTH_SUCCESS:
       return false;
-    case actionTypes.INIT_GAPI_FAILURE:
+    case actionTypes.INIT_AUTH_FAILURE:
       return false;
     case actionTypes.LOGIN_REQUEST:
       return true;

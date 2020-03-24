@@ -25,7 +25,7 @@ const getVisibleMembers = (members, team, filter) => {
 const MemberManagement = () => {
   const dispatch = useDispatch();
   const onFilterClick = filter => dispatch(memberActions.setMemberFilter(filter));
-  const isSignedIn = useSelector(state => state.signIn.isSignedIn);
+  const isSignedIn = useSelector(state => state.auth.isSignedIn);
   const team = useSelector(state => state.team.teamSelected);
   const memberFilter = useSelector(state => state.member.memberFilter);
   const members = getVisibleMembers(useSelector(state => state.member.members), team, memberFilter);

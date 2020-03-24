@@ -1,20 +1,22 @@
-import signInService from '../services/signInService';
+import signInService from '../services/authService';
 import {actionTypes} from '../constants';
 import teamActions from './team';
-import memberActions from './member'
+import memberActions from './member';
 
-const login = (googleUser) => { //TODO: use middleware
+const signIn = (googleUser) => { //TODO: use middleware
   return async (dispatch, getState) => {
     dispatch(request());
-    const id_token = googleUser.getAuthResponse().id_token;
-
     try {
-      const user = (await signInService.login(id_token)).user;
+      const id_token = googleUser.getAuthResponse().id_token;
+      const user = (await signInService.signIn(id_token)).user;
       await dispatch(teamActions.getTeams({leader: user._id}));
-      //TODO: refactor
-      const team = getState().team.teams.filter(t => t.leader === user._id)[0] || null;
+      let team = localStorage.getItem('teamSelected');
+      if (team)
+        team = getState().team.teams.find(t => (t._id === team)) || null;
+      else
+        team = getState().team.teams.find(t => (t.leader === user._id)) || null;
       if (team) {
-        dispatch(teamActions.setTeamSelected(team)); //TODO: set to selected
+        dispatch(teamActions.setTeamSelected(team));
         const query = getState().team.teams.map(m => ({team: m._id}));
         await dispatch(memberActions.getMembers({$or: query}))
       }
@@ -22,23 +24,24 @@ const login = (googleUser) => { //TODO: use middleware
     } catch (error) {
       console.error(error);
       dispatch(failure());
-      dispatch(logout());
+      dispatch(signOut());
     }
   }
 
   function request() {return {type: actionTypes.LOGIN_REQUEST}}
-  function success(user) {return {type: actionTypes.LOGIN_SUCCESS, user: {_id: user._id, id: user.id, email: user.email, name: user.name, team: user.team}}}
+  function success(user) {return {type: actionTypes.LOGIN_SUCCESS, user}}
   function failure() {return {type: actionTypes.LOGIN_FAILURE}}
 }
 
-const logout = () => { //TODO: use middleware
+const signOut = () => { //TODO: use middleware
   return async dispatch => {
     dispatch(request());
     const auth2 = window.gapi.auth2.getAuthInstance();
     try {
       await auth2.signOut();
-      signInService.logout();
+      signInService.signOut();
     } catch (error) {
+      console.error(error);
       dispatch(failure());
     }
     dispatch(success());
@@ -49,40 +52,39 @@ const logout = () => { //TODO: use middleware
   function failure() {return {type: actionTypes.LOGOUT_FAILURE}}
 }
 
-const initGapi = () => {
+const initAuth = () => {
   return async dispatch => {
     dispatch(request());
     try {
       const auth2 = await window.gapi.auth2.init({client_id: process.env.REACT_APP_CLIENT_ID});
-      auth2.attachClickHandler(window.$('#signIn').get(0), {},
-        async (googleUser) => {
-          await dispatch(login(googleUser));
-        },
-        (error) => {
-          dispatch(failure());
-        });
       if (auth2.isSignedIn.get() === true)
-        await dispatch(login(auth2.currentUser.get()))
-      dispatch(success());
+        await dispatch(signIn(auth2.currentUser.get()))
+      auth2.attachClickHandler(window.$('#signIn').get(0), {},
+      async (googleUser) => {
+        await dispatch(signIn(googleUser));
+      },
+      (error) => {
+        dispatch(failure());
+      });
     } catch (error) {
       console.error(error);
-      
       dispatch(failure());
     }
+    dispatch(success());
   }
 
-  function request() {return {type: actionTypes.INIT_GAPI_REQUEST}}
-  function success() {return {type: actionTypes.INIT_GAPI_SUCCESS}}
-  function failure() {return {type: actionTypes.INIT_GAPI_FAILURE}}
+  function request() {return {type: actionTypes.INIT_AUTH_REQUEST}}
+  function success() {return {type: actionTypes.INIT_AUTH_SUCCESS}}
+  function failure() {return {type: actionTypes.INIT_AUTH_FAILURE}}
 }
 
 const setIsSignedIn = (val) => {
-  return {type: actionTypes.SET_IS_SIGNED_IN, signIn: {isSignedIn: val}};
+  return {type: actionTypes.SET_IS_SIGNED_IN, isSignedIn: val};
 }
 
 export default {
-  login,
-  logout,
+  signIn,
+  signOut,
   setIsSignedIn,
-  initGapi
+  initAuth
 };

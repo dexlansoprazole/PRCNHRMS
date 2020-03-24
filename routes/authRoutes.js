@@ -22,28 +22,18 @@ async function verify(token) {
 }
 
 module.exports = (app) => {
-  app.post(`/api/user/query`, async (req, res) => {
-    let users = await Users.find(req.body).catch(err => {
+  app.post(`/api/auth/signin`, async (req, res) => {
+    console.log(req.cookies);
+    
+    let user = await verify(req.body.token).catch(console.error);
+    user = await Users.findOneAndUpdate({id: user.id}, user, {upsert: true, new: true}).catch(err => {
       return handleError(res, err)
     });
-    return res.status(200).send({users});
-  });
-
-  app.patch(`/api/user/:id`, async (req, res) => {
-    const {id} = req.params;
-    let user = await Users.findByIdAndUpdate(id, req.body, {new: true}).catch(err => {
-      return handleError(res, err)
-    });
+    let expiresIn = 60 * 60 * 24;
+    let token = generateToken({_id: user._id, id: user.id, name: user.name, email: user.email}, expiresIn);
+    res.cookie('token', token, {maxAge: 900000, httpOnly: true});
+    res.cookie('expires_in', expiresIn, {maxAge: 900000, httpOnly: true});
     return res.status(200).send({user})
-  });
-
-  app.delete(`/api/user/:id`, async (req, res) => {
-    const {id} = req.params;
-    await Users.findByIdAndDelete(id).catch(err => {
-      return handleError(res, err)
-    });
-    let users = await Users.find();
-    return res.status(200).send({users})
   })
 
   function handleError(res, err) {

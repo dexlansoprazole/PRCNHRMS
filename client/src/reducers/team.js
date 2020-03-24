@@ -20,6 +20,7 @@ function team(state = initialState, action) {
         initialState
       );
     case actionTypes.SET_TEAM_SELECTED:
+      localStorage.setItem('teamSelected', action.team._id)
       return Object.assign({}, state, {
         teamSelected: action.team
       });
