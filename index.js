@@ -2,7 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
-const helmet = require('helmet');
 
 if (process.env.NODE_ENV !== 'production')
   require('dotenv').config();
@@ -17,7 +16,6 @@ const app = express();
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI || process.env.MONGODB_URI_TEST);
 
-app.use(helmet());
 app.use(bodyParser.json());
 app.use(cookieParser());
 
