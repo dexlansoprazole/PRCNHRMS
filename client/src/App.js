@@ -7,9 +7,9 @@ import SignIn from './components/SignIn';
 import MemberManagement from './components/MemberManagement';
 import TeamManagement from './components/TeamManagement';
 import LoadingModal from './components/LoadingModal';
-import TeamDropdown from './components/TeamDropdown';
 
 const App = () => {
+  const initialized = useSelector(state => state.initialized);
   const loading = useSelector(state => state.loading);
   const isSignedIn = useSelector(state => state.auth.isSignedIn);
   const team = useSelector(state => state.team.teamSelected);
@@ -38,8 +38,8 @@ const App = () => {
         {loading ? <LoadingModal></LoadingModal> : null}
         <Switch>
           <Route exact path="/home" component={Home} />
-          {isSignedIn ? <Route exact path="/team_management" component={TeamManagement} /> : <Route exact path="/team_management" />}
-          {isSignedIn ? <Route exact path="/member_management" component={MemberManagement} /> : <Route exact path="/member_management" />}
+          {initialized ? isSignedIn ? <Route exact path="/team_management" component={TeamManagement} /> : null : <Route exact path="/team_management" />}
+          {initialized ? isSignedIn && Object.keys(team).length !== 0 ? <Route exact path="/member_management" component={MemberManagement} />: null : <Route exact path="/member_management" />}
           <Redirect to="/home" />
         </Switch>
       </BrowserRouter>
