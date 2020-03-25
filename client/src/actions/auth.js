@@ -12,7 +12,7 @@ const signIn = (googleUser) => { //TODO: use middleware
       await dispatch(teamActions.getTeams({leader: user._id}));
       let team = localStorage.getItem('teamSelected');
       if (team)
-        team = getState().team.teams.find(t => (t._id === team)) || null;
+        team = getState().team.teams.find(t => (t._id === team)) || getState().team.teams.find(t => (t.leader === user._id)) || null;
       else
         team = getState().team.teams.find(t => (t.leader === user._id)) || null;
       if (team) {
