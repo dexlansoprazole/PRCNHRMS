@@ -22,6 +22,42 @@ function loading(state = initialState, action) {
       return false;
     case actionTypes.LOGOUT_FAILURE:
       return false;
+    case actionTypes.ADD_MEMBER_REQUEST:
+      return true;
+    case actionTypes.ADD_MEMBER_SUCCESS:
+      return false;
+    case actionTypes.ADD_MEMBER_FAILURE:
+      return false;
+    case actionTypes.DELETE_MEMBER_REQUEST:
+      return true;
+    case actionTypes.DELETE_MEMBER_SUCCESS:
+      return false;
+    case actionTypes.DELETE_MEMBER_FAILURE:
+      return false;
+    case actionTypes.PATCH_MEMBER_REQUEST:
+      return true;
+    case actionTypes.PATCH_MEMBER_SUCCESS:
+      return false;
+    case actionTypes.PATCH_MEMBER_FAILURE:
+      return false;
+    case actionTypes.ADD_TEAM_REQUEST:
+      return true;
+    case actionTypes.ADD_TEAM_SUCCESS:
+      return false;
+    case actionTypes.ADD_TEAM_FAILURE:
+      return false;
+    case actionTypes.DELETE_TEAM_REQUEST:
+      return true;
+    case actionTypes.DELETE_TEAM_SUCCESS:
+      return false;
+    case actionTypes.DELETE_TEAM_FAILURE:
+      return false;
+    case actionTypes.PATCH_TEAM_REQUEST:
+      return true;
+    case actionTypes.PATCH_TEAM_SUCCESS:
+      return false;
+    case actionTypes.PATCH_TEAM_FAILURE:
+      return false;
     default:
       return state;
   }
