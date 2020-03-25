@@ -29,7 +29,7 @@ const App = () => {
               <div className="navbar-nav mr-auto">
                 <NavLink className="nav-item nav-link" to="home">Home</NavLink>
                 {isSignedIn ? <NavLink className="nav-item nav-link" to="team_management">戰隊管理</NavLink> : null}
-                {isSignedIn ? <NavLink className="nav-item nav-link" to="member_management">成員管理</NavLink> : null}
+                {isSignedIn && Object.keys(team).length !== 0 ? <NavLink className="nav-item nav-link" to="member_management">成員管理</NavLink> : null}
               </div>
               {(isSignedIn && Object.keys(team).length !== 0) ? <TeamDropdown></TeamDropdown> : null}
               <SignIn></SignIn>

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Teams = mongoose.model('teams');
+const Players = mongoose.model('players');
 
 module.exports = (app) => {
   app.post(`/api/team/query`, async (req, res) => {
@@ -17,8 +18,8 @@ module.exports = (app) => {
   })
 
   app.patch(`/api/team/:id`, async (req, res) => {
-    const {id} = req.params;
-    await Teams.findByIdAndUpdate(id, req.body, {new: true}).catch(err => {
+    const id = req.params;
+    let team = await Teams.findByIdAndUpdate(id, req.body, {new: true}).catch(err => {
       return handleError(res, err)
     });
     return res.status(200).send({team})
@@ -26,10 +27,15 @@ module.exports = (app) => {
 
   app.delete(`/api/team/:id`, async (req, res) => {
     const {id} = req.params;
-    await Teams.findByIdAndDelete(id).catch(err => {
-      return handleError(res, err)
-    });
-    return res.status(200).send({team})
+    try {
+      let team = await Teams.findByIdAndDelete(id);
+      let members = await Players.find({team: id}, '_id');
+      if(members.length > 0)
+        await Players.deleteMany({$or: members});
+      return res.status(200).send({team, members});
+    } catch (error) {
+      return handleError(res, error)
+    }
   })
 
   function handleError(res, err) {

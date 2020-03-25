@@ -1,15 +1,19 @@
-import React from 'react';
+import React, {useState}from 'react';
 import {useSelector} from 'react-redux';
 import TeamTable from './TeamTable';
 import AddTeamModal from './AddTeamModal';
+import DeleteTeamModal from './DeleteTeamModal';
 
 const MemberManagement = () => {
   const user = useSelector(state => state.auth.user);
   const teams = useSelector(state => state.team.teams).filter(t => t.leader === user._id);
 
+  const [teamSelected, setTeamSelected] = useState({});
+
   return (
     <div className="container">
       <AddTeamModal></AddTeamModal>
+      <DeleteTeamModal teamSelected={teamSelected}></DeleteTeamModal>
       <div className="row">
         <div className="col">
           <h1>我的戰隊</h1>
@@ -22,7 +26,7 @@ const MemberManagement = () => {
       </div>
       <div className="row">
         <div className="col">
-          <TeamTable teams={teams}></TeamTable>
+          <TeamTable teams={teams} setTeamSelected={setTeamSelected}></TeamTable>
         </div>
       </div>
     </div>

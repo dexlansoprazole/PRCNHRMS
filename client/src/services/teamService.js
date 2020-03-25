@@ -19,5 +19,23 @@ export default {
     catch (err) {
       return handleResponse(err.response);
     }
+  },
+  patch: async (id, data) => {
+    try {
+      const res = await axios.patch(`/api/team/` + id, data);
+      return handleResponse(res);
+    }
+    catch (err) {
+      return handleResponse(err.response);
+    }
+  },
+  delete: async (id) => {
+    try {
+      const res = await axios.delete(`/api/team/` + id);
+      return handleResponse(res);
+    }
+    catch (err) {
+      return handleResponse(err.response);
+    }
   }
 }
