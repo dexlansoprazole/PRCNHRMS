@@ -7,14 +7,13 @@ const TeamDropdown = () => {
   const teamSelected = useSelector(state => state.team.teamSelected);
 
   return (
-    <div className="navbar-nav">
-      <div className="nav-item dropdown align-items-center d-flex">
-        <a className="nav-link btn btn-light dropdown-toggle text-dark align-items-center d-flex" data-toggle="dropdown" style={{border: 0, marginRight: 4, height: 32}}>{teamSelected.name}</a>
-        <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-          {
-            teams.map((team, index) => <TeamDropdownItem key={index} team={team} index={(index+1)}></TeamDropdownItem>)
-          }
-        </div>
+    <div className="align-items-center d-flex">
+      <h1 className="dropdown-toggle text-dark align-items-center d-flex" data-toggle="dropdown">{teamSelected.name}</h1>
+      <div className="dropdown-menu">
+        <h6 class="dropdown-header">戰隊選擇</h6>
+        {
+          teams.map((team, index) => <TeamDropdownItem key={index} team={team} index={(index+1)}></TeamDropdownItem>)
+        }
       </div>
     </div>
   );

@@ -23,3 +23,11 @@ html, body{
     white-space: nowrap;
     width: 1%;
 }
+
+.dropdown-toggle{
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}

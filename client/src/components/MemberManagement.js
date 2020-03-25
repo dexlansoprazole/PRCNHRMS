@@ -5,6 +5,7 @@ import AddMemberModal from './AddMemberModal';
 import EditMemberModal from './EditMemberModal';
 import KickMemberModal from './KickMemberModal';
 import DeleteMemberModal from './DeleteMemberModal';
+import TeamDropdown from './TeamDropdown';
 import memberActions from '../actions/member';
 import {memberFilters} from '../constants';
 
@@ -39,7 +40,7 @@ const MemberManagement = () => {
         <DeleteMemberModal></DeleteMemberModal>
         <div className="row">
           <div className="col">
-            <h1 id="title">{team.name}</h1>
+            <TeamDropdown></TeamDropdown>
           </div>
         </div>
         <div className="row">
