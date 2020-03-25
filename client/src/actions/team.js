@@ -22,7 +22,7 @@ const addTeam = (newTeam) => { //TODO: use middleware
       const res = await teamService.add(newTeam);
       const teamSelected = getState().team.teamSelected;
       if (Object.keys(teamSelected).length === 0 && teamSelected.constructor === Object)
-        dispatch(setTeamSelected(res.added));
+        dispatch(setTeamSelected(res.team));
       dispatch(success(res));
     } catch (error) {
       dispatch(failure());

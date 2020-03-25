@@ -13,17 +13,15 @@ module.exports = (app) => {
     let team = await Teams.create(req.body).catch(err => {
       return handleError(res, err)
     });
-    let teams = await Teams.find({});
-    return res.status(200).send({teams, added: {name: team.name, leader: team.leader, managers: team.managers}})
+    return res.status(200).send({team})
   })
 
-  app.put(`/api/team/:id`, async (req, res) => {
+  app.patch(`/api/team/:id`, async (req, res) => {
     const {id} = req.params;
-    await Teams.findByIdAndUpdate(id, req.body).catch(err => {
+    await Teams.findByIdAndUpdate(id, req.body, {new: true}).catch(err => {
       return handleError(res, err)
     });
-    let teams = await Teams.find();
-    return res.status(200).send({teams})
+    return res.status(200).send({team})
   });
 
   app.delete(`/api/team/:id`, async (req, res) => {
@@ -31,8 +29,7 @@ module.exports = (app) => {
     await Teams.findByIdAndDelete(id).catch(err => {
       return handleError(res, err)
     });
-    let teams = await Teams.find();
-    return res.status(200).send({teams})
+    return res.status(200).send({team})
   })
 
   function handleError(res, err) {
