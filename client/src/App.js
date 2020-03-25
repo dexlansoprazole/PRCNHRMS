@@ -36,17 +36,13 @@ const App = () => {
             </div>
           </div>
         </nav>
-        {loading ? (
-          <LoadingModal></LoadingModal>
-        ) : (
-          <Switch>
-            <Route exact path="/home" component={Home} />
-            {isSignedIn ? <Route exact path="/team_management" component={TeamManagement} /> : null}
-            {isSignedIn ? <Route exact path="/member_management" component={MemberManagement} /> : null}
-            <Redirect to="/home" />
-          </Switch>
-        )}
-        
+        {loading ? <LoadingModal></LoadingModal> : null}
+        <Switch>
+          <Route exact path="/home" component={Home} />
+          {isSignedIn ? <Route exact path="/team_management" component={TeamManagement} /> : null}
+          {isSignedIn ? <Route exact path="/member_management" component={MemberManagement} /> : null}
+          <Redirect to="/home" />
+        </Switch>
       </BrowserRouter>
     </div>
   );
