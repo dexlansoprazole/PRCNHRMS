@@ -39,8 +39,8 @@ const App = () => {
         {loading ? <LoadingModal></LoadingModal> : null}
         <Switch>
           <Route exact path="/home" component={Home} />
-          {isSignedIn ? <Route exact path="/team_management" component={TeamManagement} /> : null}
-          {isSignedIn ? <Route exact path="/member_management" component={MemberManagement} /> : null}
+          {isSignedIn ? <Route exact path="/team_management" component={TeamManagement} /> : <Route exact path="/team_management" />}
+          {isSignedIn ? <Route exact path="/member_management" component={MemberManagement} /> : <Route exact path="/member_management" />}
           <Redirect to="/home" />
         </Switch>
       </BrowserRouter>
