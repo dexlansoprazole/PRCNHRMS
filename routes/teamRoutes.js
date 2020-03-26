@@ -27,13 +27,19 @@ module.exports = (app) => {
 
   app.delete(`/api/team/:id`, async (req, res) => {
     const {id} = req.params;
+    const session = await Teams.startSession();
+    session.startTransaction();
     try {
-      let team = await Teams.findByIdAndDelete(id);
+      let team = await Teams.findByIdAndDelete(id, {session});
       let members = await Players.find({team: id}, '_id');
       if(members.length > 0)
-        await Players.deleteMany({$or: members});
+        await Players.deleteMany({$or: members}, {session});
+      await session.commitTransaction();
+      session.endSession();
       return res.status(200).send({team, members});
     } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
       return handleError(res, error)
     }
   })

@@ -31,7 +31,7 @@ const TeamTableItem = props => {
 
   const renderBadge = (text, color) => {
     return (
-      <span class={"badge badge-pill badge-" + color}>{text}</span>
+      <span className={"badge badge-pill badge-" + color}>{text}</span>
     )
   }
 
