@@ -19,12 +19,17 @@ const TeamTableItem = props => {
     btnFunc: {
       transition: "opacity .2s",
       backgroundColor: "transparent",
-      border: 0,
-      padding: "0px",
+      border: '1px solid transparent',
+      borderRadius: 4,
+      padding: "4px",
       margin: "0px 8px 0px 8px",
       '&:focus': {
         outline: 'none',
         boxShadow: 'none'
+      },
+      '&:hover': {
+        border: '1px solid #ccc',
+        backgroundColor: '#ddd'
       }
     }
   })();
@@ -36,7 +41,7 @@ const TeamTableItem = props => {
   }
 
   return (
-    <tr onMouseOver={() => {setIsHovered(true)}} onMouseLeave={() => {setIsHovered(false)}} style={{height: "56px"}}>
+    <tr onMouseOver={() => {setIsHovered(true)}} onMouseLeave={() => {setIsHovered(false)}}>
       <td className="fit">{props.index}</td>
       <td>{props.team.name}</td>
       <td>{props.team.leader.email}</td>
@@ -44,7 +49,7 @@ const TeamTableItem = props => {
       <td>
         {props.team.leader._id === user._id ? renderBadge('隊長', 'primary') : null}
       </td>
-      <td className="fit">
+      <td className="fit p-0" style={{verticalAlign: 'middle'}}>
         <button className={classes.btnFunc} data-toggle="modal" data-target="#deleteTeamModal" style={btnStyles} onClick={() => setTeamSelected(props.team)}><Trash2></Trash2></button>
       </td>
     </tr>
