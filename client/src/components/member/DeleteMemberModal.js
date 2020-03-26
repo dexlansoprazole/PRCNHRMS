@@ -1,29 +1,29 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import teamActions from '../actions/team';
+import { useSelector, useDispatch } from 'react-redux';
+import memberActions from '../../actions/member';
 
-const DeleteTeamModal = (props) => {
+const DeleteMemberModal = () => {
   const dispatch = useDispatch()
-  const deleteTeam = id => dispatch(teamActions.deleteTeam(id));
-  const teamSelected = props.teamSelected;
+  const deleteMember = id => dispatch(memberActions.deleteMember(id));
+  const member = useSelector(state => state.member.memberSelected);
 
   const handleConfirm = () => {
-    deleteTeam(teamSelected._id);
-    window.$('#deleteTeamModal').modal('hide');
+    deleteMember(member._id);
+    window.$('#deleteMemberModal').modal('hide');
   }
 
   return (
-    <div className="modal fade" id="deleteTeamModal">
+    <div className="modal fade" id="deleteMemberModal">
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header bg-danger text-light">
-            <h5 className="modal-title">刪除戰隊</h5>
+            <h5 className="modal-title">刪除成員</h5>
               <button type="button" className="close text-light" data-dismiss="modal">
                 <span aria-hidden="true">&times;</span>
               </button>
           </div>
           <div className="modal-body">
-            <h5>確定要刪除"{teamSelected.name}"嗎？</h5>
+            <h5>確定要刪除"{member.name}"嗎？</h5>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-dismiss="modal">取消</button>
               <button type="button" className="btn btn-danger" onClick={handleConfirm}>刪除</button>
@@ -35,4 +35,4 @@ const DeleteTeamModal = (props) => {
   );
 }
 
-export default DeleteTeamModal;
+export default DeleteMemberModal;

@@ -1,8 +1,8 @@
 import React, {useState}from 'react';
 import {useSelector} from 'react-redux';
-import TeamTable from './TeamTable';
-import AddTeamModal from './AddTeamModal';
-import DeleteTeamModal from './DeleteTeamModal';
+import TeamTable from './team/TeamTable';
+import AddTeamModal from './team/AddTeamModal';
+import DeleteTeamModal from './team/DeleteTeamModal';
 
 const MemberManagement = () => {
   const user = useSelector(state => state.auth.user);

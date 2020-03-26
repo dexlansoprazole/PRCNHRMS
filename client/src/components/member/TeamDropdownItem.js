@@ -1,6 +1,6 @@
 import React from 'react';
 import {useDispatch} from 'react-redux';
-import teamActions from '../actions/team';
+import teamActions from '../../actions/team';
 
 const TeamDropdownItem = (props) => {
   const dispatch = useDispatch();

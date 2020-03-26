@@ -1,11 +1,11 @@
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import MemberTable from './MemberTable';
-import AddMemberModal from './AddMemberModal';
-import EditMemberModal from './EditMemberModal';
-import KickMemberModal from './KickMemberModal';
-import DeleteMemberModal from './DeleteMemberModal';
-import TeamDropdown from './TeamDropdown';
+import MemberTable from './member/MemberTable';
+import AddMemberModal from './member/AddMemberModal';
+import EditMemberModal from './member/EditMemberModal';
+import KickMemberModal from './member/KickMemberModal';
+import DeleteMemberModal from './member/DeleteMemberModal';
+import TeamDropdown from './member/TeamDropdown';
 import memberActions from '../actions/member';
 import {memberFilters} from '../constants';
 

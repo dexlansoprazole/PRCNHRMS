@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import memberActions from '../actions/member';
+import memberActions from '../../actions/member';
 var moment = require('moment');
 
 const EditMemberModal = () => {

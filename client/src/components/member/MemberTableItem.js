@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { useDispatch } from 'react-redux';
-import memberActions from '../actions/member';
+import memberActions from '../../actions/member';
 import {Edit, LogOut, Trash2} from 'react-feather';
 import {createUseStyles} from 'react-jss'
 
