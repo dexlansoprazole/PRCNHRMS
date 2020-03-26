@@ -10,7 +10,7 @@ const TeamDropdown = () => {
     <div className="align-items-center d-flex">
       <h1 className="dropdown-toggle text-dark align-items-center d-flex" data-toggle="dropdown">{teamSelected.name}</h1>
       <div className="dropdown-menu">
-        <h6 class="dropdown-header">戰隊選擇</h6>
+        <h6 className="dropdown-header">戰隊選擇</h6>
         {
           teams.map((team, index) => <TeamDropdownItem key={index} team={team} index={(index+1)}></TeamDropdownItem>)
         }

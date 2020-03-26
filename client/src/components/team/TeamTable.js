@@ -9,7 +9,7 @@ const TeamTable = props => {
           <th scope="col">#</th>
           <th scope="col">名稱</th>
           <th scope="col">隊長</th>
-          <th scope="col">成員</th>
+          <th scope="col">成員數</th>
           <th scope="col">職位</th>
           <th scope="col"></th>
         </tr>

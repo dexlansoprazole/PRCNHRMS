@@ -1,19 +1,24 @@
 const mongoose = require('mongoose');
 const Teams = mongoose.model('teams');
 const Players = mongoose.model('players');
+const Users = mongoose.model('users');
 
 module.exports = (app) => {
   app.post(`/api/team/query`, async (req, res) => {
-    let teams = await Teams.find(req.body).catch(err => {
-      return handleError(res, err)
-    });
-    return res.status(200).send({teams});
+    try {
+      let teams = await Teams.find(req.body);
+      teams = await Promise.all(teams.map(async t => ({...t.toObject(), leader: await Users.findOne({_id: t.leader}, '_id email')})));  //get data of team leader
+      return res.status(200).send({teams});
+    } catch (error) {
+      return handleError(res, error)
+    }
   });
 
   app.post(`/api/team/`, async (req, res) => {
     let team = await Teams.create(req.body).catch(err => {
       return handleError(res, err)
     });
+    team = {...team.toObject(), leader: await Users.findOne({_id: team.leader}, '_id email')};  //get data of team leader
     return res.status(200).send({team})
   })
 

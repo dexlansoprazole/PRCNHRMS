@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {Trash2} from 'react-feather';
 import {createUseStyles} from 'react-jss';
 
@@ -39,10 +39,10 @@ const TeamTableItem = props => {
     <tr onMouseOver={() => {setIsHovered(true)}} onMouseLeave={() => {setIsHovered(false)}} style={{height: "56px"}}>
       <td className="fit">{props.index}</td>
       <td>{props.team.name}</td>
-      <td>???</td>
+      <td>{props.team.leader.email}</td>
       <td>{members.filter(m => m.team === props.team._id && !m.leave_date).length + "/30"}</td>
       <td>
-        {props.team.leader === user._id ? renderBadge('隊長', 'primary') : null}
+        {props.team.leader._id === user._id ? renderBadge('隊長', 'primary') : null}
       </td>
       <td className="fit">
         <button className={classes.btnFunc} data-toggle="modal" data-target="#deleteTeamModal" style={btnStyles} onClick={() => setTeamSelected(props.team)}><Trash2></Trash2></button>

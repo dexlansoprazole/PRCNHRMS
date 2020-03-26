@@ -5,7 +5,7 @@ import AddMemberModal from './member/AddMemberModal';
 import EditMemberModal from './member/EditMemberModal';
 import KickMemberModal from './member/KickMemberModal';
 import DeleteMemberModal from './member/DeleteMemberModal';
-import TeamDropdown from './member/TeamDropdown';
+import TeamDropdown from './team/TeamDropdown';
 import memberActions from '../actions/member';
 import {memberFilters} from '../constants';
 

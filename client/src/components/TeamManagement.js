@@ -4,9 +4,8 @@ import TeamTable from './team/TeamTable';
 import AddTeamModal from './team/AddTeamModal';
 import DeleteTeamModal from './team/DeleteTeamModal';
 
-const MemberManagement = () => {
-  const user = useSelector(state => state.auth.user);
-  const teams = useSelector(state => state.team.teams).filter(t => t.leader === user._id);
+const TeamManagement = () => {
+  const teams = useSelector(state => state.team.teams);
 
   const [teamSelected, setTeamSelected] = useState({});
 
@@ -33,4 +32,4 @@ const MemberManagement = () => {
   );
 }
  
-export default MemberManagement;
+export default TeamManagement;

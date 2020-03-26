@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const {OAuth2Client} = require('google-auth-library');
 const Users = mongoose.model('users');
-const generateToken = require('../utils/generateToken');
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const client = new OAuth2Client(CLIENT_ID);
