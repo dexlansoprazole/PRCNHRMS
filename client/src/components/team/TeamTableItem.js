@@ -39,7 +39,8 @@ const TeamTableItem = props => {
     <tr onMouseOver={() => {setIsHovered(true)}} onMouseLeave={() => {setIsHovered(false)}} style={{height: "56px"}}>
       <td className="fit">{props.index}</td>
       <td>{props.team.name}</td>
-      <td>{members.filter(m => m.team === props.team._id).length}</td>
+      <td>???</td>
+      <td>{members.filter(m => m.team === props.team._id && !m.leave_date).length + "/30"}</td>
       <td>
         {props.team.leader === user._id ? renderBadge('隊長', 'primary') : null}
       </td>
