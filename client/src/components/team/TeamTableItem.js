@@ -6,6 +6,7 @@ import {createUseStyles} from 'react-jss';
 const TeamTableItem = props => {
   const setTeamSelected = props.setTeamSelected;
 
+  const user = useSelector(state => state.auth.user);
   const members = useSelector(state => state.member.members);
   
   const [isHovered, setIsHovered] = useState(false);
@@ -28,12 +29,20 @@ const TeamTableItem = props => {
     }
   })();
 
+  const renderBadge = (text, color) => {
+    return (
+      <span class={"badge badge-pill badge-" + color}>{text}</span>
+    )
+  }
+
   return (
     <tr onMouseOver={() => {setIsHovered(true)}} onMouseLeave={() => {setIsHovered(false)}} style={{height: "56px"}}>
       <td className="fit">{props.index}</td>
       <td>{props.team.name}</td>
       <td>{members.filter(m => m.team === props.team._id).length}</td>
-      <td>???</td>
+      <td>
+        {props.team.leader === user._id ? renderBadge('隊長', 'primary') : null}
+      </td>
       <td className="fit">
         <button className={classes.btnFunc} data-toggle="modal" data-target="#deleteTeamModal" style={btnStyles} onClick={() => setTeamSelected(props.team)}><Trash2></Trash2></button>
       </td>
