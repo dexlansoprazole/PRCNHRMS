@@ -8,7 +8,7 @@ class PermissionError extends Error {
 const handleError = (err, res, next) => {
   let statusCode = 500;
   let name = err.name
-  let message = 'Server error';
+  let message = err.message;
   switch (name) {
     case 'MongoError':
       statusCode = 400;
@@ -19,6 +19,7 @@ const handleError = (err, res, next) => {
       break;
     default:
       statusCode = 500;
+      message = 'Server error';
   }
   res.status(statusCode).json({
     error: true,

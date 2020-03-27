@@ -15,8 +15,8 @@ module.exports = (app) => {
   app.post(`/api/member`, async (req, res, next) => {
     try {
       const decoded = verifyToken(req.cookies.token);
-      const team = await Teams.findOne({leader: decoded._id});
-      if (!team || team._id.toString() !== req.body.team)
+      const teams = await Teams.find({leader: decoded._id});
+      if (!teams.find(t => t._id.toString() === req.body.team))
         throw new PermissionError();
       const player = await Players.create(req.body)
       return res.status(200).send({member: player})
