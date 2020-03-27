@@ -39,7 +39,7 @@ module.exports = (app) => {
     try {
       let team = await Teams.findByIdAndDelete(id, {session});
       let members = await Players.find({team: id}, '_id');
-      // if(members.length > 0)
+      if(members.length > 0)
         await Players.deleteMany({$or: members}, {session});
       await session.commitTransaction();
       session.endSession();
