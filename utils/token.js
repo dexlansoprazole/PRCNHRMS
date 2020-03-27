@@ -12,4 +12,16 @@ const generateToken = (user, expiresIn) => {
   });
 }
 
-module.exports = generateToken;
+const verifyToken = (token) => {
+  try {
+    var decoded = jwt.verify(token, process.env.JWT_SECRET);
+  } catch (err) {
+    throw new Error('Access denied');
+  }
+  return decoded;
+}
+
+module.exports = {
+  generateToken,
+  verifyToken
+};

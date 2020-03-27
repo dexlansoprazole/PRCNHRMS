@@ -2,7 +2,7 @@ export default (response) => {
   const data = response.data;
   if (response.status !== 200) {
     if(data.error){
-      console.error("Error (" + response.status + "): " + data.name + ': ' + data.message);
+      console.error("Error (" + response.status + "): " + data.message);
       return Promise.reject(data);
     }
   }
