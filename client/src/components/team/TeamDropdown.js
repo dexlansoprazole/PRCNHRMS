@@ -19,7 +19,7 @@ const TeamDropdown = () => {
   return (
     <div className="dropdown d-inline-block">
       <h1 className="dropdown-toggle m-0" data-toggle="dropdown" style={{cursor: 'pointer', userSelect: 'none'}}>{teamSelected.name}</h1>
-      <div className="dropdown-menu w-100" style={{marginTop: 8}}>
+      <div className="dropdown-menu w-100" style={{marginTop: 8, minWidth: 'fit-content'}}>
         <h6 className="dropdown-header">戰隊選擇</h6>
         {
           teams.map((team, index) => <TeamDropdownItem key={index} team={team} index={(index+1)}></TeamDropdownItem>)
