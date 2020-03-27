@@ -1,3 +1,5 @@
+import './logrocketSetup';
+import LogRocket from 'logrocket';
 import React from 'react';
 import {render} from 'react-dom'
 import {Provider} from 'react-redux'
@@ -9,10 +11,10 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {composeWithDevTools} from 'redux-devtools-extension/developmentOnly';
 import callAPIMiddleware from './callAPIMiddleware';
-import { CookiesProvider } from 'react-cookie';
+import {CookiesProvider} from 'react-cookie';
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(
-  thunkMiddleware, callAPIMiddleware
+  thunkMiddleware, callAPIMiddleware, LogRocket.reduxMiddleware()
 )))
 
 render(

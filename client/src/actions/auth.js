@@ -1,3 +1,4 @@
+import LogRocket from 'logrocket';
 import signInService from '../services/authService';
 import {actionTypes} from '../constants';
 import teamActions from './team';
@@ -19,6 +20,12 @@ const signIn = (googleUser) => { //TODO: use middleware
         dispatch(teamActions.setTeamSelected(team));
         const query = getState().team.teams.map(m => ({team: m._id}));
         await dispatch(memberActions.getMembers({$or: query}))
+      }
+      if (process.env.NODE_ENV === 'production') {
+        LogRocket.identify(user._id, {
+          name: user.name,
+          email: user.email,
+        });
       }
       dispatch(success(user));
     } catch (error) {
