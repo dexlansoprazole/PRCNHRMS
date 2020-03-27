@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const ErrorHandler = require('../utils/error').ErrorHandler;
 const {OAuth2Client} = require('google-auth-library');
 const Users = mongoose.model('users');
 const generateToken = require('../utils/generateToken');
@@ -27,7 +28,7 @@ module.exports = (app) => {
     
     let user = await verify(req.body.token).catch(console.error);
     user = await Users.findOneAndUpdate({id: user.id}, user, {upsert: true, new: true}).catch(err => {
-      return handleError(res, err)
+      next(new ErrorHandler(400, err));
     });
     let expiresIn = 60 * 60 * 24;
     let token = generateToken({_id: user._id, id: user.id, name: user.name, email: user.email}, expiresIn);
@@ -35,9 +36,4 @@ module.exports = (app) => {
     res.cookie('expires_in', expiresIn, {maxAge: 900000, httpOnly: true});
     return res.status(200).send({user})
   })
-
-  function handleError(res, err) {
-    console.log("err: " + err);
-    return res.status(400).send(err);
-  }
 }

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-generateToken = (user, expiresIn) => {
+const generateToken = (user, expiresIn) => {
   var u = {
     _id: user._id,
     id: user.id,
