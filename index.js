@@ -43,5 +43,5 @@ app.listen(PORT, () => {
 });
 
 app.use((err, req, res, next) => {
-  handleError(err, res);
+  handleError(err, res, next);
 });
