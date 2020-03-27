@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const ErrorHandler = require('../utils/error').ErrorHandler;
 const Teams = mongoose.model('teams');
 const Players = mongoose.model('players');
 const Users = mongoose.model('users');
@@ -12,13 +11,13 @@ module.exports = (app) => {
       teams = await Promise.all(teams.map(async t => ({...t.toObject(), leader: await Users.findOne({_id: t.leader}, '_id email')})));  //get data of team leader
       return res.status(200).send({teams});
     } catch (error) {
-      next(new ErrorHandler(400, error));
+      next(error);
     }
   });
 
   app.post(`/api/team/`, async (req, res, next) => {
     let team = await Teams.create(req.body).catch(err => {
-      next(new ErrorHandler(400, err));
+      next(err);
     });
     team = {...team.toObject(), leader: await Users.findOne({_id: team.leader}, '_id email')};  //get data of team leader
     return res.status(200).send({team})
@@ -27,7 +26,7 @@ module.exports = (app) => {
   app.patch(`/api/team/:id`, async (req, res, next) => {
     const id = req.params;
     let team = await Teams.findByIdAndUpdate(id, req.body, {new: true}).catch(err => {
-      next(new ErrorHandler(400, err));
+      next(err);
     });
     return res.status(200).send({team})
   });
@@ -47,7 +46,7 @@ module.exports = (app) => {
     } catch (error) {
       await session.abortTransaction();
       session.endSession();
-      next(new ErrorHandler(400, error));
+      next(error);
     }
   })
 }

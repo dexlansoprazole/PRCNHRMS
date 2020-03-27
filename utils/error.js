@@ -1,21 +1,34 @@
-class ErrorHandler extends Error {
-  constructor(statusCode, error) {
-    super(error.message);
-    this.statusCode = statusCode;
-    this.name = error.name;
+class PermissionError extends Error {
+  constructor(message = 'Permission denied'){
+    super(message);
+    this.name = 'PermissionError'
   }
 }
 
 const handleError = (err, res, next) => {
-  res.status(err.statusCode).json({
+  let statusCode = 500;
+  let name = err.name
+  let message = 'Server error';
+  switch (name) {
+    case 'MongoError':
+      statusCode = 400;
+      message = 'Database error';
+      break;
+    case 'PermissionError':
+      statusCode = 403;
+      break;
+    default:
+      statusCode = 500;
+  }
+  res.status(statusCode).json({
     error: true,
-    name: err.name,
-    message: err.message
+    name,
+    message
   });
   next(err)
 };
 
 module.exports = {
-  ErrorHandler,
+  PermissionError,
   handleError
 }
