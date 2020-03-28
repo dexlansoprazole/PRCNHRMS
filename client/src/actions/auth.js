@@ -19,7 +19,7 @@ const signIn = (googleUser) => { //TODO: use middleware
       if (team) {
         dispatch(teamActions.setTeamSelected(team));
         const query = getState().team.teams.map(m => ({team: m._id}));
-        await dispatch(memberActions.getMembers({$or: query}))
+        await dispatch(memberActions.getMembers(query))
       }
       if (process.env.NODE_ENV === 'production') {
         LogRocket.identify(user._id, {

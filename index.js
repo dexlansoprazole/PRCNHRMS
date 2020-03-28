@@ -16,6 +16,8 @@ require('./models/Teams');
 const app = express();
 
 mongoose.Promise = global.Promise;
+mongoose.set('useFindAndModify', true);
+mongoose.set('useUnifiedTopology', true);
 mongoose.connect(process.env.MONGODB_URI || process.env.MONGODB_URI_TEST);
 
 app.use(helmet());
