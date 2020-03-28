@@ -6,9 +6,8 @@ const permission = require('../utils/permission');
 module.exports = (app) => {
   app.post(`/api/member/query`, async (req, res, next) => {
     try {
-      await Promise.all(req.body.forEach(async q => {
+      for (q of req.body)
         await permission.checkIsLeader(req.cookies.token, q.team);
-      }));
       let members = await Players.find({$or: req.body});
       return res.status(200).send({members});
     } catch (error) {
