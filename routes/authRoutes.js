@@ -23,13 +23,15 @@ async function verify(token) {
 
 module.exports = (app) => {
   app.post(`/api/auth/signin`, async (req, res, next) => {
-    let user = await verify(req.body.token).catch(console.error);
-    user = await Users.findOneAndUpdate({id: user.id}, user, {upsert: true, new: true}).catch(err => {
-      next(err);
-    });
-    let expiresIn = 60 * 60 * 24;
-    let token = generateToken({_id: user._id, id: user.id, name: user.name, email: user.email}, expiresIn);
-    res.cookie('token', token, {maxAge: 900000, httpOnly: true});
-    return res.status(200).send({user})
+    try {
+      let user = await verify(req.body.token);
+      user = await Users.findOneAndUpdate({id: user.id}, user, {upsert: true, new: true});
+      let expiresIn = 60 * 60 * 24;
+      let token = generateToken({_id: user._id, id: user.id, name: user.name, email: user.email}, expiresIn);
+      res.cookie('token', token, {maxAge: 900000, httpOnly: true});
+      return res.status(200).send({user})
+    } catch (error) {
+      next(error);
+    }
   })
 }
