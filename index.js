@@ -28,7 +28,7 @@ app.use(cookieParser());
 //IMPORT ROUTES
 require('./routes/authRoutes')(app);
 require('./routes/memberRoutes')(app);
-require('./routes/userRoutes')(app);
+// require('./routes/userRoutes')(app);
 require('./routes/teamRoutes')(app);
 
 if (process.env.NODE_ENV === 'production') {
