@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 const helmet = require('helmet');
-const handleError = require('./utils/error').handleError;
+const {handleError} = require('./utils/error');
 
 if (process.env.NODE_ENV !== 'production')
   require('dotenv').config();
@@ -16,8 +16,9 @@ require('./models/Teams');
 const app = express();
 
 mongoose.Promise = global.Promise;
-mongoose.set('useFindAndModify', true);
+mongoose.set('useFindAndModify', false);
 mongoose.set('useUnifiedTopology', true);
+mongoose.set('useNewUrlParser', true);
 mongoose.connect(process.env.MONGODB_URI || process.env.MONGODB_URI_TEST);
 
 app.use(helmet());

@@ -1,24 +1,14 @@
 const mongoose = require('mongoose');
 const { PermissionError } = require('../utils/error');
 const Players = mongoose.model('players');
-const Teams = mongoose.model('teams');
-const { verifyToken } = require('../utils/token');
+const permission = require('../utils/permission');
 
 module.exports = (app) => {
-  const isLeader = async (token, team_id) => {
-    const decoded = verifyToken(token);
-    const teams = await Teams.find({leader: decoded._id}).catch(err => {
-      throw err;
-    });
-    return teams.find(t => t._id.toString() === team_id) ? true : false;
-  }
-
   app.post(`/api/member/query`, async (req, res, next) => {
     try {
-      req.body.forEach(q => {
-        if (!isLeader(req.cookies.token, q.team))
-          throw new PermissionError();
-      });
+      await Promise.all(req.body.forEach(async q => {
+        await permission.checkIsLeader(req.cookies.token, q.team);
+      }));
       let members = await Players.find({$or: req.body});
       return res.status(200).send({members});
     } catch (error) {
@@ -28,8 +18,7 @@ module.exports = (app) => {
 
   app.post(`/api/member`, async (req, res, next) => {
     try {
-      if (!isLeader(req.cookies.token, req.body.team))
-        throw new PermissionError();
+      await permission.checkIsLeader(req.cookies.token, req.body.team);
       const player = await Players.create(req.body)
       return res.status(200).send({member: player})
     } catch (error) {
@@ -43,8 +32,7 @@ module.exports = (app) => {
       let player = await Players.findOne({_id: id});
       if (req.body.team)
         throw new PermissionError();
-      if (!isLeader(req.cookies.token, player.team.toString()))
-        throw new PermissionError();
+      await permission.checkIsLeader(req.cookies.token, player.team.toString());
       player = await Players.findByIdAndUpdate(id, req.body, {new: true});
       return res.status(200).send({member: player});
     } catch (error) {
@@ -56,8 +44,7 @@ module.exports = (app) => {
     const {id} = req.params;
     try {
       let player = await Players.findOne({_id: id});
-      if (!isLeader(req.cookies.token, player.team.toString()))
-        throw new PermissionError();
+      await permission.checkIsLeader(req.cookies.token, player.team.toString());
       player = await Players.findByIdAndDelete(id)
       return res.status(200).send({member: player})
     } catch (error) {
