@@ -10,12 +10,12 @@ const signIn = (googleUser) => { //TODO: use middleware
     try {
       const id_token = googleUser.getAuthResponse().id_token;
       const user = (await signInService.signIn(id_token)).user;
-      await dispatch(teamActions.getTeams({leader: user._id}));
+      await dispatch(teamActions.getTeams());
       let team = localStorage.getItem('teamSelected');
       if (team)
-        team = getState().team.teams.find(t => (t._id === team)) || getState().team.teams.find(t => (t.leader._id === user._id)) || null;
+        team = getState().team.teams.find(t => (t._id === team)) || getState().team.teams[0] || null;
       else
-        team = getState().team.teams.find(t => (t.leader._id === user._id)) || null;
+        team = getState().team.teams[0] || null;
       if (team) {
         dispatch(teamActions.setTeamSelected(team));
         const query = getState().team.teams.map(m => ({team: m._id}));
