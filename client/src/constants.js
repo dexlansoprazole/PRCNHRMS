@@ -52,7 +52,9 @@ export const actionTypes = {
   SET_TEAM_SELECTED: 'SET_TEAM_SELECTED',
   SET_IS_SIGNED_IN: 'SET_IS_SIGNED_IN',
   SET_INITIALIZED: 'SET_INITIALIZED',
-  SET_USER: 'SET_USER'
+  SET_USER: 'SET_USER',
+
+  REMOVE_TOAST: 'REMOVE_TOAST'
 };
 
 export const memberFilters = {

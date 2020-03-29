@@ -33,7 +33,7 @@ const MemberManagement = () => {
 
   if (isSignedIn && Object.keys(team).length !== 0)
     return (
-      <div className="container">
+      <div>
         <AddMemberModal></AddMemberModal>
         <EditMemberModal></EditMemberModal>
         <KickMemberModal></KickMemberModal>

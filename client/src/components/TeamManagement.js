@@ -10,7 +10,7 @@ const TeamManagement = () => {
   const [teamSelected, setTeamSelected] = useState({});
 
   return (
-    <div className="container">
+    <div>
       <AddTeamModal></AddTeamModal>
       <DeleteTeamModal teamSelected={teamSelected}></DeleteTeamModal>
       <div className="row">

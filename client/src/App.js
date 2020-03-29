@@ -7,6 +7,8 @@ import SignIn from './components/SignIn';
 import MemberManagement from './components/MemberManagement';
 import TeamManagement from './components/TeamManagement';
 import LoadingOverlay from './components/LoadingOverlay';
+import Toasts from './components/Toasts';
+import ScrollBarAdapter from './components/ScrollBarAdapter';
 
 const App = () => {
   const initialized = useSelector(state => state.initialized);
@@ -34,13 +36,17 @@ const App = () => {
             </div>
           </div>
         </nav>
-        <Switch>
-          <Route exact path="/home" component={Home} />
-          {initialized ? isSignedIn ? <Route exact path="/team_management" component={TeamManagement} /> : null : <Route exact path="/team_management" />}
-          {initialized ? isSignedIn && Object.keys(team).length !== 0 ? <Route exact path="/member_management" component={MemberManagement} />: null : <Route exact path="/member_management" />}
-          <Redirect to="/home" />
-        </Switch>
+        <div className="container">
+          <Toasts></Toasts>
+          <Switch>
+            <Route exact path="/home" component={Home} />
+            {initialized ? isSignedIn ? <Route exact path="/team_management" component={TeamManagement} /> : null : <Route exact path="/team_management" />}
+            {initialized ? isSignedIn && Object.keys(team).length !== 0 ? <Route exact path="/member_management" component={MemberManagement} />: null : <Route exact path="/member_management" />}
+            <Redirect to="/home" />
+          </Switch>
+        </div>
       </BrowserRouter>
+      <ScrollBarAdapter></ScrollBarAdapter>
     </div>
   );
 }
