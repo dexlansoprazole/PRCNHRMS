@@ -6,19 +6,18 @@ import Home from './components/Home';
 import SignIn from './components/SignIn';
 import MemberManagement from './components/MemberManagement';
 import TeamManagement from './components/TeamManagement';
-import LoadingModal from './components/LoadingModal';
+import LoadingOverlay from './components/LoadingOverlay';
 
 const App = () => {
   const initialized = useSelector(state => state.initialized);
   const loading = useSelector(state => state.loading);
   const isSignedIn = useSelector(state => state.auth.isSignedIn);
   const team = useSelector(state => state.team.teamSelected);
-  window.$('.modal-backdrop').remove();
-  window.$('body').removeClass('modal-open');
 
   return (
     <div className="app">
       <BrowserRouter>
+        <LoadingOverlay loading={loading} global={true}></LoadingOverlay>
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
           <div className="container">
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
@@ -35,7 +34,6 @@ const App = () => {
             </div>
           </div>
         </nav>
-        {loading ? <LoadingModal></LoadingModal> : null}
         <Switch>
           <Route exact path="/home" component={Home} />
           {initialized ? isSignedIn ? <Route exact path="/team_management" component={TeamManagement} /> : null : <Route exact path="/team_management" />}
