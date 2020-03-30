@@ -5,7 +5,8 @@ const userSchema = new Schema({
   _id: Schema.Types.ObjectId,
   id: Number,
   name: String,
-  email: String
+  email: String,
+  pictureUrl: String
 })
 
 mongoose.model('users', userSchema);

@@ -5,7 +5,8 @@ const generateToken = (user, expiresIn) => {
     _id: user._id,
     id: user.id,
     name: user.name,
-    email: user.email
+    email: user.email,
+    pictureUrl: user.pictureUrl
   };
   return token = jwt.sign(u, process.env.JWT_SECRET, {
     expiresIn: expiresIn
