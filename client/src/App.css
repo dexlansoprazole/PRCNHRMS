@@ -27,6 +27,12 @@ html, body, #root{
     white-space: nowrap;
 }
 
+.table td.fit, 
+.table th.fit {
+    white-space: nowrap;
+    width: 1%;
+}
+
 th {
     background-color: white;
     position: sticky;

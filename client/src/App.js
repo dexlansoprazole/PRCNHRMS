@@ -2,6 +2,7 @@ import React from 'react';
 import {BrowserRouter, Switch, Route, NavLink, Redirect} from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import './App.css';
+import './osTheme.scss';
 import Home from './components/Home';
 import SignIn from './components/SignIn';
 import MemberManagement from './components/MemberManagement';

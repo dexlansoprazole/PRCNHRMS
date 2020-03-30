@@ -6,6 +6,7 @@ import {Provider} from 'react-redux'
 import {createStore, applyMiddleware} from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import './index.css';
+import 'overlayscrollbars/css/OverlayScrollbars.css';
 import rootReducer from './reducers'
 import App from './App';
 import * as serviceWorker from './serviceWorker';

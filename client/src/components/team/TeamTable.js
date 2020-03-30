@@ -1,17 +1,22 @@
 import React, { useEffect, useRef } from 'react';
 import TeamTableItem from './TeamTableItem';
+import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
 
 const TeamTable = props => {
-  const tableRef = useRef(null);
+  const divRef = useRef(null);
 
   useEffect(() => {
-    let $table = window.$(tableRef.current);
-    $table.css('max-height', parseInt((window.$(window).height()) - $table.offset().top - 50) / 2);
-    window.$(window).resize(() => $table.css('max-height', parseInt((window.$(window).height()) - $table.offset().top - 50) / 2));
+    let $div = window.$(divRef.current);
+    $div.css('max-height', parseInt((window.$(window).height()) - $div.offset().top - 50) / 2);
+    window.$(window).resize(() => $div.css('max-height', parseInt((window.$(window).height()) - $div.offset().top - 50) / 2));
   }, []);
 
   return (
-    <div className="table-responsive" ref={tableRef}>
+    <OverlayScrollbarsComponent
+      className='os-theme-custom'
+      options={{ scrollbars: { autoHide: 'move' } }}
+    >
+    <div ref={divRef}>
       <table className="table table-hover">
         <thead className="thead-light">
           <tr>
@@ -32,6 +37,7 @@ const TeamTable = props => {
         </tbody>
       </table>
     </div>
+    </OverlayScrollbarsComponent>
   );
 }
 
