@@ -7,12 +7,12 @@ import DeleteTeamModal from './team/DeleteTeamModal';
 const TeamManagement = () => {
   const teams = useSelector(state => state.team.teams);
 
-  const [teamSelected, setTeamSelected] = useState({});
+  const [teamClicked, setTeamClicked] = useState({});
 
   return (
     <div>
       <AddTeamModal></AddTeamModal>
-      <DeleteTeamModal teamSelected={teamSelected}></DeleteTeamModal>
+      <DeleteTeamModal teamSelected={teamClicked}></DeleteTeamModal>
       <div className="row">
         <div className="col">
           <h1>我的戰隊</h1>
@@ -25,7 +25,7 @@ const TeamManagement = () => {
       </div>
       <div className="row">
         <div className="col">
-          <TeamTable teams={teams} setTeamSelected={setTeamSelected}></TeamTable>
+          <TeamTable teams={teams} setTeamClicked={setTeamClicked}></TeamTable>
         </div>
       </div>
     </div>

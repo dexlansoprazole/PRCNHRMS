@@ -1,15 +1,20 @@
 import React, {useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import {Trash2} from 'react-feather';
 import {createUseStyles} from 'react-jss';
+import teamActions from '../../actions/team'
 
 const TeamTableItem = props => {
-  const setTeamSelected = props.setTeamSelected;
+  const dispatch = useDispatch();
+  const setTeamClicked = props.setTeamClicked;
+  const setTeamSelected = (team) => dispatch(teamActions.setTeamSelected(team));
 
   const user = useSelector(state => state.auth.user);
   const members = useSelector(state => state.member.members);
   
   const [isHovered, setIsHovered] = useState(false);
+  const [isRedirect, setIsRedirect] = useState(false);
 
   const btnStyles = {
     opacity: isHovered ? 1 : 0
@@ -39,9 +44,21 @@ const TeamTableItem = props => {
       <span className={"badge badge-pill badge-" + color}>{text}</span>
     )
   }
+  
+  const handleOnClick = (e) => {
+    e.stopPropagation();
+    setTeamClicked(props.team);
+  }
+
+  if (isRedirect) {
+    return <Redirect to="/member_management" />;
+  }
 
   return (
-    <tr onMouseOver={() => {setIsHovered(true)}} onMouseLeave={() => {setIsHovered(false)}}>
+    <tr onMouseOver={() => { setIsHovered(true) }} onMouseLeave={() => { setIsHovered(false) }} onClick={() => {
+      setTeamSelected(props.team);
+      setIsRedirect(true);
+    }}>
       <td className="fit">{props.index}</td>
       <td>{props.team.name}</td>
       <td>{props.team.leader.email}</td>
@@ -50,7 +67,9 @@ const TeamTableItem = props => {
         {props.team.leader._id === user._id ? renderBadge('隊長', 'primary') : null}
       </td>
       <td className="fit p-0" style={{verticalAlign: 'middle'}}>
-        <button className={classes.btnFunc} data-toggle="modal" data-target="#deleteTeamModal" style={btnStyles} onClick={() => setTeamSelected(props.team)}><Trash2></Trash2></button>
+        <button className={classes.btnFunc} data-toggle="modal" data-target="#deleteTeamModal" style={btnStyles} onClick={handleOnClick}>
+          <Trash2></Trash2>
+        </button>
       </td>
     </tr>
   );
