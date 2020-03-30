@@ -1,11 +1,16 @@
-html, body{
+html, body, #root{
     padding: 0px;
     margin: 0px;
-    height:94%;
+    height:100vh;
+    overflow-y: hidden;
+}
+
+.app{
+    height:90%;
 }
 
 .container{
-    height:85%;
+    height:100%;
 }
 
 .row{
@@ -18,8 +23,35 @@ html, body{
     transition: opacity .15s linear;
 }
 
-.table td.fit, 
-.table th.fit {
+.btn {
     white-space: nowrap;
-    width: 1%;
+}
+
+th {
+    background-color: white;
+    position: sticky;
+    top: 0px;
+    z-index: 2;
+}
+
+th:after,
+th:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+}
+
+th:before {
+    top: -1px;
+    border-top: 1px solid #dee2e6;
+}
+
+th:after {
+    bottom: -2px;
+    border-bottom: 2px solid #dee2e6;
+}
+
+th, td {
+    white-space: nowrap;
 }
