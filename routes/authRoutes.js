@@ -30,7 +30,7 @@ module.exports = (app) => {
       user = await Users.findOneAndUpdate({id: user.id}, user, {upsert: true, new: true});
       let expiresIn = 60 * 60 * 24;
       let token = generateToken({_id: user._id, id: user.id, name: user.name, email: user.email, pictureUrl: user.pictureUrl}, expiresIn);
-      res.cookie('token', token, {maxAge: 900000, httpOnly: true});
+      res.cookie('token', token, {maxAge: 86400000, httpOnly: true});
       return res.status(200).send({user})
     } catch (error) {
       next(error);
