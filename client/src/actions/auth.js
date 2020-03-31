@@ -64,12 +64,8 @@ const initAuth = () => {
     dispatch(request());
     try {
       const auth2 = await window.gapi.auth2.init({client_id: process.env.REACT_APP_CLIENT_ID, cookie_policy: 'none'});
-      alert(auth2.isSignedIn.get())
-      if (auth2.isSignedIn.get() === true) {
-        console.log(auth2.currentUser.get());
-        alert(auth2.currentUser.get().getBasicProfile().getEmail());
+      if (auth2.isSignedIn.get() === true)
         await dispatch(signIn(auth2.currentUser.get()));
-      }
       auth2.attachClickHandler(window.$('#signIn').get(0), {},
       async (googleUser) => {
         await dispatch(signIn(googleUser));
@@ -79,7 +75,6 @@ const initAuth = () => {
         dispatch(failure());
       });
     } catch (error) {
-      alert(error)
       console.error(error);
       dispatch(failure());
     }
