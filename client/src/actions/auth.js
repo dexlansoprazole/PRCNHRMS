@@ -63,7 +63,7 @@ const initAuth = () => {
   return async dispatch => {
     dispatch(request());
     try {
-      const auth2 = await window.gapi.auth2.init({client_id: process.env.REACT_APP_CLIENT_ID});
+      const auth2 = await window.gapi.auth2.init({client_id: process.env.REACT_APP_CLIENT_ID, cookie_policy: 'none'});
       alert(auth2.isSignedIn.get())
       if (auth2.isSignedIn.get() === true) {
         console.log(auth2.currentUser.get());
