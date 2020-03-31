@@ -4,7 +4,7 @@ import {Transition, TransitionGroup} from 'react-transition-group';
 import notificationActions from '../actions/notification';
 import Toast from './Toast'
 
-const Toasts = (props) => {
+const Toasts = () => {
   const dispatch = useDispatch();
   const removeToast = (index) => dispatch(notificationActions.removeToast(index));
   const toasts = useSelector(state => state.notification.toasts);
@@ -53,13 +53,9 @@ const Toasts = (props) => {
 
   useEffect(() => {
     let $toasts = window.$(toastsRef.current);
+    positionToast($toasts);
     window.$(window).resize(() => positionToast($toasts));
   }, []);
-
-  useEffect(() => {
-    let $toasts = window.$(toastsRef.current);
-    positionToast($toasts);
-  }, [props]);
 
   return (
     <div ref={toastsRef} style={{position: 'absolute', zIndex: 1000}}>

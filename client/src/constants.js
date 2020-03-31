@@ -54,7 +54,8 @@ export const actionTypes = {
   SET_INITIALIZED: 'SET_INITIALIZED',
   SET_USER: 'SET_USER',
 
-  REMOVE_TOAST: 'REMOVE_TOAST'
+  REMOVE_TOAST: 'REMOVE_TOAST',
+  REMOVE_ALERT: 'REMOVE_ALERT'
 };
 
 export const memberFilters = {

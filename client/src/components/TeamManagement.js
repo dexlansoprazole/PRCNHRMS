@@ -15,7 +15,7 @@ const TeamManagement = () => {
       <DeleteTeamModal teamSelected={teamClicked}></DeleteTeamModal>
       <div className="row">
         <div className="col">
-          <h1>我的戰隊</h1>
+          <h1><strong>我的戰隊</strong></h1>
         </div>
       </div>
       <div className="row">

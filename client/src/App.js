@@ -1,7 +1,7 @@
 import React from 'react';
 import {BrowserRouter, Switch, Route, NavLink, Redirect} from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import './App.css';
+import './App.scss';
 import './osTheme.scss';
 import Home from './components/Home';
 import SignIn from './components/SignIn';
@@ -10,6 +10,7 @@ import TeamManagement from './components/TeamManagement';
 import LoadingOverlay from './components/LoadingOverlay';
 import Toasts from './components/Toasts';
 import ScrollBarAdapter from './components/ScrollBarAdapter';
+import Alerts from './components/Alerts'
 
 const App = () => {
   const initialized = useSelector(state => state.initialized);
@@ -39,6 +40,7 @@ const App = () => {
         </nav>
         <div className="container">
           <Toasts></Toasts>
+          <Alerts></Alerts>
           <Switch>
             <Route exact path="/home" component={Home} />
             {initialized ? isSignedIn ? <Route exact path="/team_management" component={TeamManagement} /> : null : <Route exact path="/team_management" />}
