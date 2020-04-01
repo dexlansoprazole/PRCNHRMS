@@ -33,4 +33,14 @@ module.exports = (app) => {
       next(error);
     }
   })
+
+  app.post(`/api/auth/signout`, async (req, res, next) => {
+    try {
+      if (req.session)
+        req.session.destroy();
+      return res.status(200).send({error: false})
+    } catch (error) {
+      next(error);
+    }
+  })
 }

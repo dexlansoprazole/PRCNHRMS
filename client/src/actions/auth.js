@@ -46,7 +46,7 @@ const signOut = () => { //TODO: use middleware
     const auth2 = window.gapi.auth2.getAuthInstance();
     try {
       await auth2.signOut();
-      signInService.signOut();
+      await signInService.signOut();
     } catch (error) {
       console.error(error);
       dispatch(failure());

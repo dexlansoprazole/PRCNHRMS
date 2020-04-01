@@ -11,7 +11,13 @@ export default {
       return handleResponse(err.response);
     }
   },
-  signOut() {
-    return;
+  signOut: async () => {
+    try {
+      const res = await axios.post(`/api/auth/signout`);
+      return res.data;
+    }
+    catch (err) {
+      return handleResponse(err.response);
+    }
   }
 }
