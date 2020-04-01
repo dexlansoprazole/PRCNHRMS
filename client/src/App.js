@@ -9,7 +9,6 @@ import SignOut from './components/SignOut';
 import MemberManagement from './components/MemberManagement';
 import TeamManagement from './components/TeamManagement';
 import LoadingOverlay from './components/LoadingOverlay';
-import Toasts from './components/Toasts';
 import ScrollBarAdapter from './components/ScrollBarAdapter';
 import Alerts from './components/Alerts'
 import authActions from './actions/auth';
