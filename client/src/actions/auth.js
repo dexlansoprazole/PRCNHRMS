@@ -8,8 +8,13 @@ const signIn = (googleUser) => { //TODO: use middleware
   return async (dispatch, getState) => {
     dispatch(request());
     try {
-      const id_token = googleUser.getAuthResponse().id_token;
-      const user = (await signInService.signIn(id_token)).user;
+      const id_token = googleUser ? googleUser.getAuthResponse().id_token : null;
+      const user = (await signInService.signIn(id_token)).user || null;
+      if (!user) {
+        dispatch(failure());
+        return;
+      }
+
       await dispatch(teamActions.getTeams());
       let team = localStorage.getItem('teamSelected');
       if (team)
@@ -31,22 +36,26 @@ const signIn = (googleUser) => { //TODO: use middleware
     } catch (error) {
       console.error(error);
       dispatch(failure());
-      dispatch(signOut());
     }
   }
 
-  function request() {return {type: actionTypes.LOGIN_REQUEST}}
-  function success(user) {return {type: actionTypes.LOGIN_SUCCESS, user}}
-  function failure() {return {type: actionTypes.LOGIN_FAILURE}}
+  function request() {return {type: googleUser ? actionTypes.LOGIN_REQUEST : actionTypes.TRY_LOGIN_REQUEST}}
+  function success(user) {return {type: googleUser ? actionTypes.LOGIN_SUCCESS : actionTypes.TRY_LOGIN_SUCCESS, user}}
+  function failure() {return {type: googleUser ? actionTypes.LOGIN_FAILURE : actionTypes.TRY_LOGIN_FAILURE}}
 }
 
-const signOut = () => { //TODO: use middleware
-  return async dispatch => {
+const signOut = () => {
+  return {
+    types: [actionTypes.LOGOUT_REQUEST, actionTypes.LOGOUT_SUCCESS, actionTypes.LOGOUT_FAILURE],
+    callAPI: () => signInService.signOut()
+  }
+}
+
+const trySignIn = () => {
+  return async (dispatch) => {
     dispatch(request());
-    const auth2 = window.gapi.auth2.getAuthInstance();
     try {
-      await auth2.signOut();
-      await signInService.signOut();
+      await dispatch(signIn());
     } catch (error) {
       console.error(error);
       dispatch(failure());
@@ -54,25 +63,25 @@ const signOut = () => { //TODO: use middleware
     dispatch(success());
   }
 
-  function request() {return {type: actionTypes.LOGOUT_REQUEST}}
-  function success() {return {type: actionTypes.LOGOUT_SUCCESS}}
-  function failure() {return {type: actionTypes.LOGOUT_FAILURE}}
+  function request() {return {type: actionTypes.TRY_LOGIN_REQUEST}}
+  function success() {return {type: actionTypes.TRY_LOGIN_SUCCESS}}
+  function failure() {return {type: actionTypes.TRY_LOGIN_FAILURE}}
 }
 
-const initAuth = () => {
-  return async dispatch => {
+const initGoogleSignIn = () => {
+  return async (dispatch) => {
     dispatch(request());
     try {
-      const auth2 = await window.gapi.auth2.init({client_id: process.env.REACT_APP_CLIENT_ID, cookie_policy: 'none'});
-      if (auth2.isSignedIn.get() === true)
-        await dispatch(signIn(auth2.currentUser.get()));
-      auth2.attachClickHandler(window.$('#signIn').get(0), {},
-      async (googleUser) => {
-        await dispatch(signIn(googleUser));
-      },
-      (error) => {
-        console.error(error);
-        dispatch(failure());
+      await window.gapi.load('auth2', async () => {
+        const auth2 = await window.gapi.auth2.init({client_id: process.env.REACT_APP_CLIENT_ID, cookie_policy: 'none'});
+        auth2.attachClickHandler(window.$('#signIn').get(0), {},
+          async (googleUser) => {
+            await dispatch(signIn(googleUser));
+          },
+          (error) => {
+            console.error(error);
+            dispatch(failure());
+          });
       });
     } catch (error) {
       console.error(error);
@@ -81,18 +90,14 @@ const initAuth = () => {
     dispatch(success());
   }
 
-  function request() {return {type: actionTypes.INIT_AUTH_REQUEST}}
-  function success() {return {type: actionTypes.INIT_AUTH_SUCCESS}}
-  function failure() {return {type: actionTypes.INIT_AUTH_FAILURE}}
-}
-
-const setIsSignedIn = (val) => {
-  return {type: actionTypes.SET_IS_SIGNED_IN, isSignedIn: val};
+  function request() {return {type: actionTypes.INIT_GOOGLESIGNIN_REQUEST}}
+  function success() {return {type: actionTypes.INIT_GOOGLESIGNIN_SUCCESS}}
+  function failure() {return {type: actionTypes.INIT_GOOGLESIGNIN_FAILURE}}
 }
 
 export default {
   signIn,
   signOut,
-  setIsSignedIn,
-  initAuth
+  trySignIn,
+  initGoogleSignIn
 };

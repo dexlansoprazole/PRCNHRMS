@@ -11,7 +11,7 @@ function notification(state = initialState, action) {
   let idxToast = state.toasts.length > 0 ? Math.max(...state.toasts.map(a => a.index)) + 1 : 0;
   let idxAlert = state.alerts.length > 0 ? Math.max(...state.alerts.map(a => a.index)) + 1 : 0;
   switch (action.type) {
-    case actionTypes.INIT_AUTH_FAILURE:
+    case actionTypes.INIT_GOOGLESIGNIN_FAILURE:
       alerts.push({
         index: idxAlert,
         type: 'danger',

@@ -1,22 +1,30 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {BrowserRouter, Switch, Route, NavLink, Redirect} from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import './App.scss';
 import './osTheme.scss';
 import Home from './components/Home';
-import SignIn from './components/SignIn';
+import GoogleSignIn from './components/GoogleSignIn';
+import SignOut from './components/SignOut';
 import MemberManagement from './components/MemberManagement';
 import TeamManagement from './components/TeamManagement';
 import LoadingOverlay from './components/LoadingOverlay';
 import Toasts from './components/Toasts';
 import ScrollBarAdapter from './components/ScrollBarAdapter';
 import Alerts from './components/Alerts'
+import authActions from './actions/auth';
 
 const App = () => {
+  const dispatch = useDispatch();
+  const signIn = () => dispatch(authActions.signIn());
   const initialized = useSelector(state => state.initialized);
   const loading = useSelector(state => state.loading);
   const isSignedIn = useSelector(state => state.auth.isSignedIn);
   const team = useSelector(state => state.team.teamSelected);
+
+  useEffect(() => {
+    signIn();
+  }, []);
 
   return (
     <div className="app">
@@ -34,12 +42,14 @@ const App = () => {
                 {isSignedIn ? <NavLink className="nav-item nav-link" to="team_management">戰隊管理</NavLink> : null}
                 {isSignedIn && Object.keys(team).length !== 0 ? <NavLink className="nav-item nav-link" to="member_management">成員管理</NavLink> : null}
               </div>
-              <SignIn></SignIn>
+              <div className="navbar-nav">
+                {initialized ? isSignedIn ? null : <GoogleSignIn></GoogleSignIn> : null}
+                {initialized ? isSignedIn ? <SignOut></SignOut> : null : null}
+              </div>
             </div>
           </div>
         </nav>
         <div className="container">
-          <Toasts></Toasts>
           <Alerts></Alerts>
           <Switch>
             <Route exact path="/home" component={Home} />

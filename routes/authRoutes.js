@@ -25,9 +25,16 @@ async function verify(token) {
 module.exports = (app) => {
   app.post(`/api/auth/signin`, async (req, res, next) => {
     try {
-      let user = await verify(req.body.token);
-      user = await Users.findOneAndUpdate({id: user.id}, user, {upsert: true, new: true});
-      req.session.user = user;
+      let token = req.body.token
+      let user = null;
+      if (token) {
+        user = await verify(req.body.token);
+        user = await Users.findOneAndUpdate({id: user.id}, user, {upsert: true, new: true});
+        req.session.user = user;
+      }
+      else if (req.session.user) {
+        user = req.session.user;
+      }
       return res.status(200).send({user})
     } catch (error) {
       next(error);

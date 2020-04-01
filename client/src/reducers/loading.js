@@ -4,11 +4,17 @@ const initialState = false
 
 function loading(state = initialState, action) {
   switch (action.type) {
-    case actionTypes.INIT_AUTH_REQUEST:
+    case actionTypes.INIT_GOOGLESIGNIN_REQUEST:
       return true;
-    case actionTypes.INIT_AUTH_SUCCESS:
+    case actionTypes.INIT_GOOGLESIGNIN_SUCCESS:
       return false;
-    case actionTypes.INIT_AUTH_FAILURE:
+    case actionTypes.INIT_GOOGLESIGNIN_FAILURE:
+      return false;
+    case actionTypes.TRY_LOGIN_REQUEST:
+      return true;
+    case actionTypes.TRY_LOGIN_SUCCESS:
+      return false;
+    case actionTypes.TRY_LOGIN_FAILURE:
       return false;
     case actionTypes.LOGIN_REQUEST:
       return true;

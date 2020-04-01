@@ -10,9 +10,14 @@ const initialState = {
   }
 }
 
-function team(state = initialState, action) {
+function auth(state = initialState, action) {
   switch (action.type) {
     case actionTypes.LOGIN_SUCCESS:
+      return Object.assign({}, state, {
+        isSignedIn: true,
+        user: action.user
+      });
+    case actionTypes.TRY_LOGIN_SUCCESS:
       return Object.assign({}, state, {
         isSignedIn: true,
         user: action.user
@@ -22,19 +27,9 @@ function team(state = initialState, action) {
       return Object.assign({}, state,
         initialState
       );
-    case actionTypes.SET_IS_SIGNED_IN:
-      return Object.assign({}, state,
-        {isSignedIn: action.isSignedIn}
-      );
-    case actionTypes.SET_USER:
-      return {
-        ...state,
-        isSignedIn: true,
-        user: action.user
-      }
     default:
       return state;
   }
 }
 
-export default team;
+export default auth;
