@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const {OAuth2Client} = require('google-auth-library');
 const Users = mongoose.model('users');
-const {generateToken} = require('../utils/token');
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const client = new OAuth2Client(CLIENT_ID);
@@ -28,9 +27,7 @@ module.exports = (app) => {
     try {
       let user = await verify(req.body.token);
       user = await Users.findOneAndUpdate({id: user.id}, user, {upsert: true, new: true});
-      let expiresIn = 60 * 60 * 24;
-      let token = generateToken({_id: user._id, id: user.id, name: user.name, email: user.email, pictureUrl: user.pictureUrl}, expiresIn);
-      res.cookie('token', token, {maxAge: 86400000, httpOnly: true});
+      req.session.user = user;
       return res.status(200).send({user})
     } catch (error) {
       next(error);

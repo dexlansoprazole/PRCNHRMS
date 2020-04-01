@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser')
+const session = require('express-session');
 const helmet = require('helmet');
 const {handleError} = require('./utils/error');
 
@@ -23,7 +23,22 @@ mongoose.connect(process.env.MONGODB_URI || process.env.MONGODB_URI_TEST);
 
 app.use(helmet());
 app.use(bodyParser.json());
-app.use(cookieParser());
+
+let sess = {
+  secret: process.env.COOKIE_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7
+  }
+}
+
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1)
+  sess.cookie.secure = true;
+}
+
+app.use(session(sess));
 
 //IMPORT ROUTES
 require('./routes/authRoutes')(app);
