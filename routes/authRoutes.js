@@ -32,7 +32,7 @@ module.exports = (app) => {
         user = await Users.findOneAndUpdate({id: user.id}, user, {upsert: true, new: true});
         req.session.user = user;
       }
-      else if (req.session.user) {
+      else {
         user = req.session.user;
       }
       return res.status(200).send({user})
