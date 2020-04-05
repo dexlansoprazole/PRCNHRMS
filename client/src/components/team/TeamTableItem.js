@@ -55,7 +55,7 @@ const TeamTableItem = props => {
   }
 
   return (
-    <tr onMouseOver={() => { setIsHovered(true) }} onMouseLeave={() => { setIsHovered(false) }} onClick={() => {
+    <tr style={{cursor: 'pointer'}} onMouseOver={() => { setIsHovered(true) }} onMouseLeave={() => { setIsHovered(false) }} onClick={() => {
       setTeamSelected(props.team);
       setIsRedirect(true);
     }}>

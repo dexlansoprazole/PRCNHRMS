@@ -30,7 +30,7 @@ const AccountDropdown = () => {
 
   return (
     <div className="dropdown d-inline-block" ref={dropdownRef}>
-      <img className="dropdown-toggle" data-toggle="dropdown" src={user.pictureUrl} style={{verticalAlign: 'middle', width: 36, height: 36, borderRadius: '50%'}} alt=''></img>
+      <img className="dropdown-toggle" data-toggle="dropdown" src={user.pictureUrl} style={{verticalAlign: 'middle', width: 36, height: 36, borderRadius: '50%', cursor: 'pointer'}} alt=''></img>
       <div className="dropdown-menu p-2 m-0" ref={dropdownMenuRef}>
         <div className="d-flex align-items-center text-nowrap">
           <img src={user.pictureUrl} style={{verticalAlign: 'middle', width: 40, height: 40, borderRadius: '50%'}} alt=''></img>
