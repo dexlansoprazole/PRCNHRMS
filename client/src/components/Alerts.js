@@ -42,7 +42,7 @@ const Alerts = () => {
         unmountOnExit
       >
         <Alert variant={alert.type} onClose={() => removeAlert(alert.index)} dismissible>
-          <strong>{alert.title + '\t'}</strong>{alert.msg}
+          {alert.msg}
         </Alert>
       </Transition>
     )
