@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const helmet = require('helmet');
 const {handleError} = require('./utils/error');
 
@@ -26,6 +27,7 @@ app.use(bodyParser.json());
 
 let sess = {
   secret: process.env.COOKIE_SECRET,
+  store: new MongoStore({url: process.env.MONGODB_URI || process.env.MONGODB_URI_TEST}),
   resave: false,
   saveUninitialized: false,
   cookie: {
