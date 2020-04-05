@@ -1,23 +1,25 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {useSelector} from 'react-redux';
 import TeamDropdownItem from './TeamDropdownItem';
 
 const TeamDropdown = () => {
   const teams = useSelector(state => state.team.teams);
   const teamSelected = useSelector(state => state.team.teamSelected);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
-    window.$('.dropdown').on('show.bs.dropdown', function() {
+    let $dropdown = window.$(dropdownRef.current);
+    $dropdown.on('show.bs.dropdown', function() {
       window.$(this).find('.dropdown-menu').first().stop(true, true).slideDown('fast');
     });
 
-    window.$('.dropdown').on('hide.bs.dropdown', function() {
+    $dropdown.on('hide.bs.dropdown', function() {
       window.$(this).find('.dropdown-menu').first().stop(true, true).slideUp('fast');
     });
   },[]);
 
   return (
-    <div className="dropdown d-inline-block mb-2">
+    <div className="dropdown d-inline-block mb-2" ref={dropdownRef}>
       <h1 className="dropdown-toggle m-0" data-toggle="dropdown" style={{cursor: 'pointer', userSelect: 'none'}}><strong>{teamSelected.name}</strong></h1>
       <div className="dropdown-menu w-100" style={{marginTop: 8, minWidth: 'fit-content'}}>
         <h6 className="dropdown-header">戰隊選擇</h6>

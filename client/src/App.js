@@ -4,8 +4,8 @@ import {useSelector, useDispatch} from 'react-redux';
 import './App.scss';
 import './osTheme.scss';
 import Home from './components/Home';
+import AccountDropdown from './components/AccountDropdown';
 import GoogleSignIn from './components/GoogleSignIn';
-import SignOut from './components/SignOut';
 import MemberManagement from './components/MemberManagement';
 import TeamManagement from './components/TeamManagement';
 import LoadingOverlay from './components/LoadingOverlay';
@@ -29,22 +29,16 @@ const App = () => {
     <div className="app">
       <BrowserRouter>
         <LoadingOverlay loading={loading} global={true}></LoadingOverlay>
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
           <div className="container">
-            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-              aria-expanded="false" aria-label="Toggle navigation">
-              <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="navbar-collapse collapse" id="navbarNavAltMarkup">
-              <div className="navbar-nav mr-auto">
-                <NavLink className="nav-item nav-link" to="home">Home</NavLink>
-                {isSignedIn ? <NavLink className="nav-item nav-link" to="team_management">戰隊管理</NavLink> : null}
-                {isSignedIn && Object.keys(team).length !== 0 ? <NavLink className="nav-item nav-link" to="member_management">成員管理</NavLink> : null}
-              </div>
-              <div className="navbar-nav">
-                {initialized ? isSignedIn ? null : <GoogleSignIn></GoogleSignIn> : null}
-                {initialized ? isSignedIn ? <SignOut></SignOut> : null : null}
-              </div>
+            <div className="navbar-nav mr-auto">
+              <NavLink className="nav-item nav-link" to="home">Home</NavLink>
+              {isSignedIn ? <NavLink className="nav-item nav-link" to="team_management">戰隊管理</NavLink> : null}
+              {isSignedIn && Object.keys(team).length !== 0 ? <NavLink className="nav-item nav-link" to="member_management">成員管理</NavLink> : null}
+            </div>
+            <div className="navbar-nav">
+              {initialized ? isSignedIn ? null : <GoogleSignIn></GoogleSignIn> : null}
+              {initialized ? isSignedIn ? <AccountDropdown></AccountDropdown> : null : null}
             </div>
           </div>
         </nav>
