@@ -19,7 +19,8 @@ const GoogleSignIn = () => {
     paddingLeft: '4px',
     border: "0",
     fontFamily: "Roboto",
-    backgroundColor: isSignInHover ? "#EEEEEE" : "#FFFFFF"
+    backgroundColor: isSignInHover ? "#EEEEEE" : "#FFFFFF",
+    transition: 'none'
   }
 
   return (
