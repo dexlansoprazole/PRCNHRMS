@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import {Edit, Trash2} from 'react-feather';
+import {Edit, Trash2, PlusSquare} from 'react-feather';
 import {createUseStyles} from 'react-jss';
 import teamActions from '../../actions/team'
 
@@ -62,17 +62,22 @@ const TeamTableItem = props => {
   }
 
   return (
-    <tr style={{cursor: 'pointer'}} onMouseOver={() => { setIsHovered(true) }} onMouseLeave={() => { setIsHovered(false) }} onClick={() => {
-      setTeamSelected(props.team);
-      setIsRedirect(true);
+    <tr style={{cursor: props.isSearchResult ? 'normal' : 'pointer'}} onMouseOver={() => {setIsHovered(true)}} onMouseLeave={() => {setIsHovered(false)}} onClick={
+      props.isSearchResult ? null :
+        () => {
+        setTeamSelected(props.team);
+        setIsRedirect(true);
     }}>
       <td className="fit">{props.index}</td>
       <td>{props.team.name}</td>
       <td>{props.team.leader.name}</td>
       <td>{members.filter(m => m.team === props.team._id && !m.leave_date).length + "/30"}</td>
-      <td>
-        {isLeader ? renderBadge('隊長', 'primary') : null}
-      </td>
+      {
+        props.isSearchResult ? null :
+        <td>
+          {isLeader ? renderBadge('隊長', 'primary') : null}
+        </td>
+      }
       <td className="fit p-0" style={{verticalAlign: 'middle'}}>
         {isLeader ?
           <button className={classes.btnFunc} data-toggle="modal" data-target="#editTeamModal" style={btnStyles} onClick={handleOnClick}>
@@ -86,7 +91,12 @@ const TeamTableItem = props => {
         </button> :
         null
         }
-        
+        {!(isLeader || isManager) ?
+          <button className={classes.btnFunc} data-toggle="modal" data-target="#" style={btnStyles} onClick={handleOnClick}>
+            <PlusSquare></PlusSquare>
+          </button> :
+          null
+        }
       </td>
     </tr>
   );

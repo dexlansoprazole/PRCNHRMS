@@ -191,6 +191,16 @@ function notification(state = initialState, action) {
       return Object.assign({}, state, {
         alerts
       });
+    case actionTypes.SEARCH_TEAM_FAILURE:
+      alerts.push({
+        index: idxAlert,
+        type: 'danger',
+        title: '錯誤',
+        msg: '搜尋戰隊失敗'
+      });
+      return Object.assign({}, state, {
+        alerts
+      });
     case actionTypes.REMOVE_TOAST:
       toasts = toasts.filter(t => t.index !== action.index);
       return Object.assign({}, state, {

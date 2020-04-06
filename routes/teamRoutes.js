@@ -7,11 +7,12 @@ const {PermissionError} = require('../utils/error');
 
 module.exports = (app) => {
   app.post(`/api/team/query`, async (req, res, next) => {
+    query = Object.filter(req.body, ['name']);
     try {
       let user = req.session.user;
       if (!user)
         throw new PermissionError();
-      let teams = await Teams.find({leader: user._id});
+      let teams = await Teams.find(Object.keys(query).length > 0 ? {name: new RegExp('^\\S*' + query.name + '\\S*$', "i")} : {leader: user._id});
       teams = await Promise.all(teams.map(async t => ({...t.toObject(), leader: await Users.findOne({_id: t.leader}, '_id name email')})));  //get data of team leader
       return res.status(200).send({teams});
     } catch (error) {

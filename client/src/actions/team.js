@@ -41,6 +41,13 @@ const patchTeam = (id, data) => {
   }
 }
 
+const searchTeams = (query) => {
+  return {
+    types: [actionTypes.SEARCH_TEAM_REQUEST, actionTypes.SEARCH_TEAM_SUCCESS, actionTypes.SEARCH_TEAM_FAILURE],
+    callAPI: () => teamService.get(query)
+  }
+}
+
 const setTeamSelected = (team) => {
   return {type: actionTypes.SET_TEAM_SELECTED, team};
 }
@@ -50,5 +57,6 @@ export default {
   addTeam,
   deleteTeam,
   patchTeam,
+  searchTeams,
   setTeamSelected
 };

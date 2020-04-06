@@ -2,7 +2,11 @@ import {actionTypes} from '../constants';
 
 const initialState = {
   teams: [],
-  teamSelected: {}
+  teamSelected: {},
+  search: {
+    loading: false,
+    result: []
+  }
 }
 
 function team(state = initialState, action) {
@@ -36,6 +40,27 @@ function team(state = initialState, action) {
       return Object.assign({}, state, {
         teams,
         teamSelected
+      });
+    case actionTypes.SEARCH_TEAM_REQUEST:
+      return Object.assign({}, state, {
+        search: {
+          ...state.search,
+          loading: true
+        }
+      });
+    case actionTypes.SEARCH_TEAM_SUCCESS:
+      return Object.assign({}, state, {
+        search: {
+          loading: false,
+          result: action.res.teams
+        }
+      });
+    case actionTypes.SEARCH_TEAM_FAILURE:
+      return Object.assign({}, state, {
+        search: {
+          ...state.search,
+          loading: false
+        }
       });
     case actionTypes.LOGOUT_SUCCESS:
       return Object.assign({}, state, initialState);
