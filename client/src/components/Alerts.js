@@ -41,7 +41,7 @@ const Alerts = () => {
         appear
         unmountOnExit
       >
-        <Alert variant={alert.type} onClose={() => removeAlert(alert.index)} dismissible>
+        <Alert variant={alert.type} onClose={() => removeAlert(alert.index)} onClick={() => removeAlert(alert.index)} style={{cursor: 'pointer'}} dismissible>
           {alert.msg}
         </Alert>
       </Transition>
