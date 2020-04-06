@@ -32,6 +32,20 @@ module.exports = (app) => {
     }
   })
 
+  app.post(`/api/team/requests/:id`, async (req, res, next) => {
+    const team_id = req.params.id;
+    try {
+      let user = req.session.user;
+      if (!user)
+        throw new PermissionError();
+      let team = await Teams.findByIdAndUpdate(team_id, { $push: { requests: user._id } }, { new: true });
+      team = { ...team.toObject(), leader: await Users.findOne({ _id: team.leader }, '_id name email') };  //get data of team leader
+      return res.status(200).send({ team })
+    } catch (error) {
+      next(error);
+    }
+  });
+
   app.patch(`/api/team/:id`, async (req, res, next) => {
     const _id = req.params.id;
     const data = Object.filter(req.body, ['name', 'managers', 'leader']);
