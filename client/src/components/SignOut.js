@@ -1,10 +1,9 @@
 import React from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import authActions from '../actions/auth';
 
 const SignOut = () => {
   const dispatch = useDispatch();
-  const user = useSelector(state => state.auth.user);
   const signOut = () => dispatch(authActions.signOut());
 
   return (
