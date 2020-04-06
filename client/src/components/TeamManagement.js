@@ -4,6 +4,7 @@ import TeamTable from './team/TeamTable';
 import AddTeamModal from './team/AddTeamModal';
 import DeleteTeamModal from './team/DeleteTeamModal';
 import EditTeamModal from './team/EditTeamModal';
+import JoinTeamModal from './team/JoinTeamModal';
 
 const TeamManagement = () => {
   const teams = useSelector(state => state.team.teams);
@@ -13,6 +14,7 @@ const TeamManagement = () => {
   return (
     <div>
       <AddTeamModal></AddTeamModal>
+      <JoinTeamModal></JoinTeamModal>
       <DeleteTeamModal teamSelected={teamClicked}></DeleteTeamModal>
       <EditTeamModal teamSelected={teamClicked}></EditTeamModal>
       <div className="row">
