@@ -34,14 +34,21 @@ module.exports = (app) => {
 
   app.post(`/api/team/requests/:id`, async (req, res, next) => {
     const team_id = req.params.id;
+    const session = await Teams.startSession();
+    session.startTransaction();
     try {
       let user = req.session.user;
       if (!user)
         throw new PermissionError();
-      let team = await Teams.findByIdAndUpdate(team_id, { $push: { requests: user._id } }, { new: true });
-      team = { ...team.toObject(), leader: await Users.findOne({ _id: team.leader }, '_id name email') };  //get data of team leader
+      let team = await Teams.findByIdAndUpdate(team_id, {$push: {requests: user._id}}, {new: true}, {session});
+      user = await Users.findByIdAndUpdate(user._id, {$push: {requests: team._id}}, {new: true}, {session});
+      team = {...team.toObject(), leader: await Users.findOne({_id: team.leader}, '_id name email')};  //get data of team leader
+      await session.commitTransaction();
+      session.endSession();
       return res.status(200).send({ team })
     } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
       next(error);
     }
   });
