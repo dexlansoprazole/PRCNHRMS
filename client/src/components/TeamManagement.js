@@ -32,7 +32,7 @@ const TeamManagement = () => {
       </div>
       <div className="row">
         <div className="col">
-          <TeamTable teams={teams} setTeamClicked={setTeamClicked}></TeamTable>
+          <TeamTable teams={teams} setTeamClicked={setTeamClicked} showPosition></TeamTable>
         </div>
       </div>
     </div>

@@ -24,15 +24,15 @@ const TeamTable = props => {
             <th scope="col">名稱</th>
             <th scope="col">隊長</th>
             <th scope="col">成員數</th>
-            {props.isSearchResult ? null : <th scope="col">職位</th>}
+            {props.showPosition ? <th scope="col">職位</th> : null}
             <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
           {(props.teams && props.teams.length > 0) ? (
-            props.teams.map((team, index) => <TeamTableItem key={index} team={team} index={index + 1} setTeamClicked={props.setTeamClicked} isSearchResult={props.isSearchResult}></TeamTableItem>)
+            props.teams.map((team, index) => <TeamTableItem key={index} team={team} index={index + 1} setTeamClicked={props.setTeamClicked} showPosition={props.showPosition}></TeamTableItem>)
           ) : (
-            props.isSearchResult ? null : <tr><td colSpan="6">查無戰隊</td></tr>
+                <tr><td colSpan={props.showPosition ? '6' : '5'}>查無戰隊</td></tr>
           )}
         </tbody>
       </table>

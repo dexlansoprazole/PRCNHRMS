@@ -69,6 +69,13 @@ function team(state = initialState, action) {
       return Object.assign({}, state, {
         teamSelected: action.team
       });
+    case actionTypes.SET_SEARCH_TEAM_RESULT:
+      return Object.assign({}, state, {
+        search: {
+          ...state.search,
+          result: action.result
+        }
+      });
     default:
       return state;
   }

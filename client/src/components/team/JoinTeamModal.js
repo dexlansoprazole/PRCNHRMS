@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
+import {actionTypes} from '../../constants';
 import teamActions from '../../actions/team';
 import LoadingOverlay from '../LoadingOverlay';
 import TeamTable from './TeamTable';
@@ -7,6 +8,7 @@ import TeamTable from './TeamTable';
 const JoinTeamModal = () => {
   const dispatch = useDispatch();
   const searchTeams = (query) => dispatch(teamActions.searchTeams(query));
+  const setSearchTeamResult = (result) => dispatch({type: actionTypes.SET_SEARCH_TEAM_RESULT, result});
   const loading = useSelector(state => state.team.search.loading);
   const myTeams = useSelector(state => state.team.teams);
   const result = useSelector(state => state.team.search.result).filter(t => !myTeams.find(mt => mt._id === t._id));
@@ -22,9 +24,10 @@ const JoinTeamModal = () => {
 
   useEffect(() => {
     window.$('#joinTeamModal').on('hidden.bs.modal', function(e) {
-      setInputTeamName('')
+      setInputTeamName('');
+      setSearchTeamResult([]);
     })
-  });
+  }, []);
 
   return (
     <div className="modal fade" id="joinTeamModal">
@@ -40,7 +43,7 @@ const JoinTeamModal = () => {
           <div className="modal-body">
             <div className="row">
               <div className="col">
-                <input type="text" className="form-control" name="name" onChange={handleChange} value={inputTeamName} required placeholder='戰隊名稱'></input>
+                <input type="text" className="form-control" name="name" onChange={handleChange} value={inputTeamName} placeholder='戰隊名稱'></input>
               </div>
               <div className="col-auto">
                 <button type="button" className="btn btn-primary" onClick={() => searchTeams({name: inputTeamName})}>搜尋</button>
@@ -48,7 +51,7 @@ const JoinTeamModal = () => {
             </div>
             <div className="row">
               <div className="col">
-                <TeamTable teams={result} setTeamClicked={setTeamClicked} isSearchResult></TeamTable>
+                <TeamTable teams={result} setTeamClicked={setTeamClicked}></TeamTable>
               </div>
             </div>
           </div>

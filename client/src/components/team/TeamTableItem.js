@@ -62,21 +62,24 @@ const TeamTableItem = props => {
   }
 
   return (
-    <tr style={{cursor: props.isSearchResult ? 'normal' : 'pointer'}} onMouseOver={() => {setIsHovered(true)}} onMouseLeave={() => {setIsHovered(false)}} onClick={
-      props.isSearchResult ? null :
+    <tr style={{cursor: props.showPosition ? 'pointer' : 'normal'}} onMouseOver={() => {setIsHovered(true)}} onMouseLeave={() => {setIsHovered(false)}} onClick={
+      props.showPosition ? 
         () => {
-        setTeamSelected(props.team);
-        setIsRedirect(true);
-    }}>
+          setTeamSelected(props.team);
+          setIsRedirect(true);
+        }
+      : null
+    }>
       <td className="fit">{props.index}</td>
       <td>{props.team.name}</td>
       <td>{props.team.leader.name}</td>
       <td>{members.filter(m => m.team === props.team._id && !m.leave_date).length + "/30"}</td>
       {
-        props.isSearchResult ? null :
-        <td>
-          {isLeader ? renderBadge('隊長', 'primary') : null}
-        </td>
+        props.showPosition ? 
+          <td>
+            {isLeader ? renderBadge('隊長', 'primary') : null}
+          </td>
+        : null
       }
       <td className="fit p-0" style={{verticalAlign: 'middle'}}>
         {isLeader ?
