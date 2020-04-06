@@ -8,7 +8,7 @@ module.exports = (app) => {
     try {
       for (q of req.body)
         await permission.checkIsLeader(req.session.user, q.team);
-      let members = await Players.find({$or: req.body});
+      let members = await Players.find({$or: req.body.map(q => Object.filter(q, ['team']))});
       return res.status(200).send({members});
     } catch (error) {
       next(err);
@@ -16,9 +16,10 @@ module.exports = (app) => {
   });
 
   app.post(`/api/member`, async (req, res, next) => {
+    const newMember = Object.filter(req.body, ['id', 'name', 'join_date', 'team']);
     try {
-      await permission.checkIsLeader(req.session.user, req.body.team);
-      const player = await Players.create(req.body)
+      await permission.checkIsLeader(req.session.user, newMember.team);
+      const player = await Players.create(newMember)
       return res.status(200).send({member: player})
     } catch (error) {
       next(error);
@@ -26,13 +27,12 @@ module.exports = (app) => {
   })
 
   app.patch(`/api/member/:id`, async (req, res, next) => {
-    const {id} = req.params;
+    const _id = req.params.id;
+    const data = Object.filter(req.body, ['id', 'name', 'join_date', 'leave_date', 'kick_reason']);
     try {
-      let player = await Players.findOne({_id: id});
-      if (req.body.team)
-        throw new PermissionError();
+      let player = await Players.findOne({ _id: _id});
       await permission.checkIsLeader(req.session.user, player.team.toString());
-      player = await Players.findByIdAndUpdate(id, req.body, {new: true});
+      player = await Players.findByIdAndUpdate(_id, data, {new: true});
       return res.status(200).send({member: player});
     } catch (error) {
       next(error);
@@ -40,11 +40,11 @@ module.exports = (app) => {
   });
 
   app.delete(`/api/member/:id`, async (req, res, next) => {
-    const {id} = req.params;
+    const _id = req.params.id;
     try {
-      let player = await Players.findOne({_id: id});
+      let player = await Players.findOne({ _id: _id});
       await permission.checkIsLeader(req.session.user, player.team.toString());
-      player = await Players.findByIdAndDelete(id)
+      player = await Players.findByIdAndDelete(_id)
       return res.status(200).send({member: player})
     } catch (error) {
       next(error);

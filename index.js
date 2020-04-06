@@ -42,6 +42,11 @@ if (process.env.NODE_ENV === 'production') {
 
 app.use(session(sess));
 
+Object.filter = (obj, predicate) =>
+  Object.keys(obj)
+    .filter(key => predicate.includes(key))
+    .reduce((res, key) => (res[key] = obj[key], res), {});
+
 //IMPORT ROUTES
 require('./routes/authRoutes')(app);
 require('./routes/memberRoutes')(app);

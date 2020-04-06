@@ -20,10 +20,11 @@ module.exports = (app) => {
   });
 
   app.post(`/api/team/`, async (req, res, next) => {
+    const newTeam = Object.filter(req.body, ['name', 'leader']);
     try {
       if (!req.session.user)
         throw new PermissionError();
-      let team = await Teams.create(req.body);
+      let team = await Teams.create(newTeam);
       team = {...team.toObject(), leader: await Users.findOne({_id: team.leader}, '_id name email')};  //get data of team leader
       return res.status(200).send({team})
     } catch (error) {
@@ -32,11 +33,11 @@ module.exports = (app) => {
   })
 
   app.patch(`/api/team/:id`, async (req, res, next) => {
-    const {id} = req.params;
-    const data = {name, managers, leader} = req.body;
+    const _id = req.params.id;
+    const data = Object.filter(req.body, ['name', 'managers', 'leader']);
     try {
-      await permission.checkIsLeader(req.session.user, id);
-      let team = await Teams.findByIdAndUpdate(id, data, {new: true});
+      await permission.checkIsLeader(req.session.user, _id);
+      let team = await Teams.findByIdAndUpdate(_id, data, {new: true});
       team = { ...team.toObject(), leader: await Users.findOne({ _id: team.leader }, '_id name email') };  //get data of team leader
       return res.status(200).send({team})
     } catch (error) {
@@ -45,13 +46,13 @@ module.exports = (app) => {
   });
 
   app.delete(`/api/team/:id`, async (req, res, next) => {
-    const {id} = req.params;
+    const _id = req.params.id;
     const session = await Teams.startSession();
     session.startTransaction();
     try {
-      await permission.checkIsLeader(req.session.user, id);
-      let team = await Teams.findByIdAndDelete(id, {session});
-      let members = await Players.find({team: id}, '_id');
+      await permission.checkIsLeader(req.session.user, _id);
+      let team = await Teams.findByIdAndDelete(_id, {session});
+      let members = await Players.find({team: _id}, '_id');
       if(members.length > 0)
         await Players.deleteMany({$or: members}, {session});
       await session.commitTransaction();
