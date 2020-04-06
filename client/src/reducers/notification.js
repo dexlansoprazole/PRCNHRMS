@@ -171,6 +171,26 @@ function notification(state = initialState, action) {
       return Object.assign({}, state, {
         alerts
       });
+    case actionTypes.PATCH_TEAM_SUCCESS:
+      alerts.push({
+        index: idxAlert,
+        type: 'success',
+        title: '成功',
+        msg: '修改戰隊成功'
+      });
+      return Object.assign({}, state, {
+        alerts
+      });
+    case actionTypes.PATCH_TEAM_FAILURE:
+      alerts.push({
+        index: idxAlert,
+        type: 'danger',
+        title: '錯誤',
+        msg: '修改戰隊失敗'
+      });
+      return Object.assign({}, state, {
+        alerts
+      });
     case actionTypes.REMOVE_TOAST:
       toasts = toasts.filter(t => t.index !== action.index);
       return Object.assign({}, state, {

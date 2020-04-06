@@ -28,19 +28,17 @@ const addTeam = (newTeam) => { //TODO: use middleware
 }
 
 const deleteTeam = (id) => {
-  return async (dispatch, getState) => {
-    dispatch(request());
-    try {
-      const res = await teamService.delete(id); 
-      dispatch(success(res));
-    } catch (error) {
-      dispatch(failure());
-    }
+  return {
+    types: [actionTypes.DELETE_TEAM_REQUEST, actionTypes.DELETE_TEAM_SUCCESS, actionTypes.DELETE_TEAM_FAILURE],
+    callAPI: () => teamService.delete(id)
   }
+}
 
-  function request() {return {type: actionTypes.DELETE_TEAM_REQUEST}}
-  function success(res) {return {type: actionTypes.DELETE_TEAM_SUCCESS, res}}
-  function failure() {return {type: actionTypes.DELETE_TEAM_FAILURE}}
+const patchTeam = (id, data) => {
+  return {
+    types: [actionTypes.PATCH_TEAM_REQUEST, actionTypes.PATCH_TEAM_SUCCESS, actionTypes.PATCH_TEAM_FAILURE],
+    callAPI: () => teamService.patch(id, data)
+  }
 }
 
 const setTeamSelected = (team) => {
@@ -51,5 +49,6 @@ export default {
   getTeams,
   addTeam,
   deleteTeam,
+  patchTeam,
   setTeamSelected
 };

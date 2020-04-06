@@ -7,6 +7,7 @@ const initialState = {
 
 function team(state = initialState, action) {
   let teams = state.teams.slice();
+  let teamSelected = state.teamSelected;
   switch (action.type) {
     case actionTypes.GET_TEAM_SUCCESS:
       return Object.assign({}, state, {
@@ -19,19 +20,22 @@ function team(state = initialState, action) {
       });
     case actionTypes.DELETE_TEAM_SUCCESS:
       teams = teams.filter(t => t._id !== action.res.team._id);
-      let teamSelected = teams.length > 0 ? teams[0] : {};  
+      teamSelected = teams.length > 0 ? teams[0] : {};
       if (teamSelected)
         localStorage.setItem('teamSelected', teamSelected._id);
       else
         localStorage.removeItem('teamSelected');
       return Object.assign({}, state, {
         teams,
-        teamSelected : teamSelected
+        teamSelected
       });
     case actionTypes.PATCH_TEAM_SUCCESS:
       teams = teams.map(t => (t._id === action.res.team._id) ? action.res.team : t);
+      if (teamSelected._id === action.res.team._id)
+        teamSelected = action.res.team
       return Object.assign({}, state, {
-        teams
+        teams,
+        teamSelected
       });
     case actionTypes.LOGOUT_SUCCESS:
       return Object.assign({}, state, initialState);

@@ -12,7 +12,7 @@ module.exports = (app) => {
       if (!user)
         throw new PermissionError();
       let teams = await Teams.find({leader: user._id});
-      teams = await Promise.all(teams.map(async t => ({...t.toObject(), leader: await Users.findOne({_id: t.leader}, '_id email')})));  //get data of team leader
+      teams = await Promise.all(teams.map(async t => ({...t.toObject(), leader: await Users.findOne({_id: t.leader}, '_id name email')})));  //get data of team leader
       return res.status(200).send({teams});
     } catch (error) {
       next(error);
@@ -24,7 +24,7 @@ module.exports = (app) => {
       if (!req.session.user)
         throw new PermissionError();
       let team = await Teams.create(req.body);
-      team = {...team.toObject(), leader: await Users.findOne({_id: team.leader}, '_id email')};  //get data of team leader
+      team = {...team.toObject(), leader: await Users.findOne({_id: team.leader}, '_id name email')};  //get data of team leader
       return res.status(200).send({team})
     } catch (error) {
       next(error);
@@ -33,9 +33,11 @@ module.exports = (app) => {
 
   app.patch(`/api/team/:id`, async (req, res, next) => {
     const {id} = req.params;
+    const data = {name, managers, leader} = req.body;
     try {
       await permission.checkIsLeader(req.session.user, id);
-      let team = await Teams.findByIdAndUpdate(id, req.body, {new: true});
+      let team = await Teams.findByIdAndUpdate(id, data, {new: true});
+      team = { ...team.toObject(), leader: await Users.findOne({ _id: team.leader }, '_id name email') };  //get data of team leader
       return res.status(200).send({team})
     } catch (error) {
       next(error);

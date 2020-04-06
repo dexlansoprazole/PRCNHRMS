@@ -3,6 +3,7 @@ import {useSelector} from 'react-redux';
 import TeamTable from './team/TeamTable';
 import AddTeamModal from './team/AddTeamModal';
 import DeleteTeamModal from './team/DeleteTeamModal';
+import EditTeamModal from './team/EditTeamModal';
 
 const TeamManagement = () => {
   const teams = useSelector(state => state.team.teams);
@@ -13,6 +14,7 @@ const TeamManagement = () => {
     <div>
       <AddTeamModal></AddTeamModal>
       <DeleteTeamModal teamSelected={teamClicked}></DeleteTeamModal>
+      <EditTeamModal teamSelected={teamClicked}></EditTeamModal>
       <div className="row">
         <div className="col">
           <h1><strong>我的戰隊</strong></h1>

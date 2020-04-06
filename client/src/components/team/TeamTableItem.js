@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import {Trash2} from 'react-feather';
+import {Edit, Trash2} from 'react-feather';
 import {createUseStyles} from 'react-jss';
 import teamActions from '../../actions/team'
 
@@ -15,6 +15,13 @@ const TeamTableItem = props => {
   
   const [isHovered, setIsHovered] = useState(false);
   const [isRedirect, setIsRedirect] = useState(false);
+  const [isLeader, setIsLeader] = useState(false);
+  const [isManager, setIsManager] = useState(false);
+
+  useEffect(() => {
+    setIsLeader(props.team.leader._id === user._id);
+    setIsManager(props.team.managers.find(m => m._id === user._id) ? true : false);
+  }, [props, user]);
 
   const btnStyles = {
     opacity: isHovered ? 1 : 0
@@ -64,12 +71,22 @@ const TeamTableItem = props => {
       <td>{props.team.leader.email}</td>
       <td>{members.filter(m => m.team === props.team._id && !m.leave_date).length + "/30"}</td>
       <td>
-        {props.team.leader._id === user._id ? renderBadge('隊長', 'primary') : null}
+        {isLeader ? renderBadge('隊長', 'primary') : null}
       </td>
       <td className="fit p-0" style={{verticalAlign: 'middle'}}>
+        {isLeader ?
+          <button className={classes.btnFunc} data-toggle="modal" data-target="#editTeamModal" style={btnStyles} onClick={handleOnClick}>
+            <Edit></Edit>
+          </button> :
+          null
+        }
+        {isLeader ?
         <button className={classes.btnFunc} data-toggle="modal" data-target="#deleteTeamModal" style={btnStyles} onClick={handleOnClick}>
           <Trash2></Trash2>
-        </button>
+        </button> :
+        null
+        }
+        
       </td>
     </tr>
   );
