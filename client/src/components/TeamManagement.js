@@ -21,8 +21,11 @@ const TeamManagement = () => {
         </div>
       </div>
       <div className="row">
-        <div className="col">
+        <div className="col-auto">
           <button className="btn btn-primary" id="btnAddTeam" data-toggle="modal" data-target="#addTeamModal">建立戰隊</button>
+        </div>
+        <div className="col-auto">
+          <button className="btn btn-success" id="btnJoinTeam" data-toggle="modal" data-target="#joinTeamModal">加入戰隊</button>
         </div>
       </div>
       <div className="row">
