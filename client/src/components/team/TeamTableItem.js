@@ -68,7 +68,7 @@ const TeamTableItem = props => {
     }}>
       <td className="fit">{props.index}</td>
       <td>{props.team.name}</td>
-      <td>{props.team.leader.email}</td>
+      <td>{props.team.leader.name}</td>
       <td>{members.filter(m => m.team === props.team._id && !m.leave_date).length + "/30"}</td>
       <td>
         {isLeader ? renderBadge('隊長', 'primary') : null}
