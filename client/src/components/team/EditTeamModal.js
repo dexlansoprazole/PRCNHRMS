@@ -49,7 +49,7 @@ const EditTeamModal = (props) => {
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header bg-primary text-light">
-            <h5 className="modal-title">編輯成員</h5>
+            <h5 className="modal-title">編輯戰隊</h5>
             <button type="button" className="close text-light" data-dismiss="modal">
               <span aria-hidden="true">&times;</span>
             </button>
