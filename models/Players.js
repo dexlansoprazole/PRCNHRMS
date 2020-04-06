@@ -4,7 +4,7 @@ const {Schema} = mongoose;
 const playerSchema = new Schema({
   id: Number,
   name: String,
-  team: Schema.Types.ObjectId,
+  team: Schema.Types.ObjectId,  //TODO: remove
   join_date: Date,
   leave_date: Date,
   kick_reason: String
