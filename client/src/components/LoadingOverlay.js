@@ -22,9 +22,9 @@ const LoadingOverlay = (props) => {
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-    zIndex: 9999,
+    zIndex: props.global ? 9999 : 1031,
     opacity: 0,
-    background: 'rgba(39, 42, 43, 0.5)',
+    background: props.global ? 'rgba(39, 42, 43, 0.5)' : 'rgba(255, 255, 255, 0.8)',
     transition: 'opacity 200ms ease-in-out',
     borderRadius: '4px',
     margin: '0 0 0 0',
@@ -34,8 +34,8 @@ const LoadingOverlay = (props) => {
   return (
     <div className='text-light' ref={overlayRef} style={overlayStyle}>
       <div className='text-center'>
-        <div className="spinner-border text-light" role="status"></div>
-        <h3>Loading... </h3>
+        <div className={"spinner-border text-" + (props.global ? 'light' : 'primary')} role="status"></div>
+        {props.global ? <h3>Loading... </h3> : null}
       </div>
     </div>
   );

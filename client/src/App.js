@@ -28,13 +28,13 @@ const App = () => {
   return (
     <div className="app">
       <BrowserRouter>
-        <LoadingOverlay loading={loading} global={true}></LoadingOverlay>
+        <LoadingOverlay loading={loading} global></LoadingOverlay>
         <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
           <div className="container">
             <div className="navbar-nav mr-auto">
-              <NavLink className="nav-item nav-link" to="home">Home</NavLink>
-              {isSignedIn ? <NavLink className="nav-item nav-link" to="team_management">戰隊管理</NavLink> : null}
-              {isSignedIn && Object.keys(team).length !== 0 ? <NavLink className="nav-item nav-link" to="member_management">成員管理</NavLink> : null}
+              <NavLink className="nav-item nav-link" to="/home">Home</NavLink>
+              {isSignedIn ? <NavLink className="nav-item nav-link" to="/team_management/my_teams">戰隊管理</NavLink> : null}
+              {isSignedIn && Object.keys(team).length !== 0 ? <NavLink className="nav-item nav-link" to="/member_management">成員管理</NavLink> : null}
             </div>
             <div className="navbar-nav">
               {initialized ? isSignedIn ? null : <GoogleSignIn></GoogleSignIn> : null}
@@ -46,7 +46,7 @@ const App = () => {
           <Alerts></Alerts>
           <Switch>
             <Route exact path="/home" component={Home} />
-            {initialized ? isSignedIn ? <Route exact path="/team_management" component={TeamManagement} /> : null : <Route exact path="/team_management" />}
+            {initialized ? isSignedIn ? <Route path="/team_management" component={TeamManagement} /> : null : <Route path="/team_management" />}
             {initialized ? isSignedIn && Object.keys(team).length !== 0 ? <Route exact path="/member_management" component={MemberManagement} />: null : <Route exact path="/member_management" />}
             <Redirect to="/home" />
           </Switch>

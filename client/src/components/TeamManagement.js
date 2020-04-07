@@ -1,41 +1,42 @@
-import React, {useState}from 'react';
-import {useSelector} from 'react-redux';
-import TeamTable from './team/TeamTable';
+import React, {useState} from 'react';
+import {BrowserRouter, Switch, Route, Link, Redirect, useLocation} from 'react-router-dom';
+import {Nav} from 'react-bootstrap';
 import AddTeamModal from './team/AddTeamModal';
-import DeleteTeamModal from './team/DeleteTeamModal';
-import EditTeamModal from './team/EditTeamModal';
-import JoinTeamModal from './team/JoinTeamModal';
+import JoinTeam from './team/JoinTeam';
+import MyTeams from './team/MyTeams';
 
 const TeamManagement = () => {
-  const teams = useSelector(state => state.team.teams);
-
-  const [teamClicked, setTeamClicked] = useState({});
-
+  let location = useLocation();
   return (
-    <div>
+    <BrowserRouter>
       <AddTeamModal></AddTeamModal>
-      <JoinTeamModal></JoinTeamModal>
-      <DeleteTeamModal teamSelected={teamClicked}></DeleteTeamModal>
-      <EditTeamModal teamSelected={teamClicked}></EditTeamModal>
-      <div className="row">
-        <div className="col">
-          <h1><strong>我的戰隊</strong></h1>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-auto">
-          <button className="btn btn-primary" id="btnAddTeam" data-toggle="modal" data-target="#addTeamModal">建立戰隊</button>
-        </div>
-        <div className="col-auto">
-          <button className="btn btn-success" id="btnJoinTeam" data-toggle="modal" data-target="#joinTeamModal">加入戰隊</button>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col">
-          <TeamTable teams={teams} setTeamClicked={setTeamClicked} showPosition></TeamTable>
-        </div>
-      </div>
-    </div>
+      <Nav variant="tabs" defaultActiveKey={location.pathname}>
+        <Nav.Item>
+          <Link to="/team_management/my_teams" style={{textDecoration: 'none'}}>
+            <Nav.Link as='div' eventKey="/team_management/my_teams" style={{color: 'black'}}>
+              我的戰隊
+            </Nav.Link>
+          </Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Link to="/team_management/join_team" style={{textDecoration: 'none'}}>
+            <Nav.Link as='span' eventKey="/team_management/join_team" style={{color: 'black'}}>
+              加入戰隊
+            </Nav.Link>
+          </Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link as='span' eventKey="link-2" style={{cursor: 'pointer'}}>
+            申請中
+          </Nav.Link>
+        </Nav.Item>
+      </Nav>
+      <Switch>
+        <Route exact path="/team_management/my_teams" component={MyTeams} />
+        <Route exact path="/team_management/join_team" component={JoinTeam} />
+        <Redirect to="/team_management/my_teams" />
+      </Switch>
+    </BrowserRouter>
   );
 }
  
