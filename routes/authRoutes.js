@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const {OAuth2Client} = require('google-auth-library');
 const Users = mongoose.model('users');
+const Teams = mongoose.model('teams');
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const client = new OAuth2Client(CLIENT_ID);
@@ -31,9 +32,18 @@ module.exports = (app) => {
         user = await verify(req.body.token);
         user = await Users.findOneAndUpdate({id: user.id}, user, {upsert: true, new: true});
         req.session.user = user;
+
+        let requests = await Promise.all(user.requests.map(async r => await Teams.findById(r, '_id name leader managers requests')));
+        requests = await Promise.all(requests.map(async r => ({...r.toObject(), leader: await Users.findOne({_id: r.leader}, '_id name email')})));
+        user = {...user.toObject(), requests};
       }
-      else {
-        user = req.session.user;
+      else if (req.session.user) {
+        user = await Users.findOne({id: req.session.user.id});
+        req.session.user = user;
+
+        let requests = await Promise.all(user.requests.map(async r => await Teams.findById(r, '_id name leader managers requests')));
+        requests = await Promise.all(requests.map(async r => ({...r.toObject(), leader: await Users.findOne({_id: r.leader}, '_id name email')})));
+        user = {...user.toObject(), requests};
       }
       return res.status(200).send({user})
     } catch (error) {

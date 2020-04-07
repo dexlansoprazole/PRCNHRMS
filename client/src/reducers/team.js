@@ -11,6 +11,7 @@ const initialState = {
 
 function team(state = initialState, action) {
   let teams = state.teams.slice();
+  let result = state.search.result.slice();
   let teamSelected = state.teamSelected;
   switch (action.type) {
     case actionTypes.GET_TEAM_SUCCESS:
@@ -60,6 +61,22 @@ function team(state = initialState, action) {
         search: {
           ...state.search,
           loading: false
+        }
+      });
+    case actionTypes.ADD_JOIN_TEAM_REQUEST_SUCCESS:
+      result = result.map(r => r._id === action.res.team._id ? action.res.team : r);
+      return Object.assign({}, state, {
+        search: {
+          ...state.search,
+          result
+        }
+      });
+    case actionTypes.DELETE_JOIN_TEAM_REQUEST_SUCCESS:
+      result = result.map(r => r._id === action.res.team._id ? action.res.team : r);
+      return Object.assign({}, state, {
+        search: {
+          ...state.search,
+          result
         }
       });
     case actionTypes.LOGOUT_SUCCESS:

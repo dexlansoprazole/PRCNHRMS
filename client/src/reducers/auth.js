@@ -6,7 +6,8 @@ const initialState = {
     _id: null,
     id: null,
     email: null,
-    name: null
+    name: null,
+    requests: []
   }
 }
 
@@ -27,6 +28,14 @@ function auth(state = initialState, action) {
       return Object.assign({}, state,
         initialState
       );
+    case actionTypes.ADD_JOIN_TEAM_REQUEST_SUCCESS:
+      return Object.assign({}, state, {
+        user: action.res.user
+      });
+    case actionTypes.DELETE_JOIN_TEAM_REQUEST_SUCCESS:
+      return Object.assign({}, state, {
+        user: action.res.user
+      });
     default:
       return state;
   }

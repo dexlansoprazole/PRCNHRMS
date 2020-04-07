@@ -2,18 +2,21 @@ import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {actionTypes} from '../../constants';
 import teamActions from '../../actions/team';
-import LoadingOverlay from '../LoadingOverlay';
 import TeamTable from './TeamTable';
-const JoinTeam = () => {
+const SearchTeam = () => {
   const dispatch = useDispatch();
   const searchTeams = (query) => dispatch(teamActions.searchTeams(query));
   const setSearchTeamResult = (result) => dispatch({type: actionTypes.SET_SEARCH_TEAM_RESULT, result});
   const loading = useSelector(state => state.team.search.loading);
   const myTeams = useSelector(state => state.team.teams);
-  const result = useSelector(state => state.team.search.result).filter(t => !myTeams.find(mt => mt._id === t._id));
+  const requests = useSelector(state => state.auth.user.requests);
+  const result = useSelector(state => state.team.search.result).filter(t => !(myTeams.find(mt => mt._id === t._id) || requests.find(r => r._id === t._id)));
 
   const [inputTeamName, setInputTeamName] = useState('');
-  const [teamClicked, setTeamClicked] = useState({});
+
+  useEffect(() => {
+    setSearchTeamResult([]);
+  }, []);
 
   const handleChange = (evt) => {
     const target = evt.target;
@@ -33,12 +36,11 @@ const JoinTeam = () => {
       </div>
       <div className="row">
         <div className="col">
-          <LoadingOverlay loading={loading}></LoadingOverlay>
-          <TeamTable teams={result} setTeamClicked={setTeamClicked}></TeamTable>
+          <TeamTable teams={result} loading={loading}></TeamTable>
         </div>
       </div>
     </div>
   );
 }
 
-export default JoinTeam;
+export default SearchTeam;

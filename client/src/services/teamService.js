@@ -37,5 +37,25 @@ export default {
     catch (err) {
       return handleResponse(err.response);
     }
+  },
+  request: {
+    add: async (id) => {
+      try {
+        const res = await axios.post(`/api/team/request/` + id);
+        return handleResponse(res);
+      }
+      catch (err) {
+        return handleResponse(err.response);
+      }
+    },
+    delete: async (id) => {
+      try {
+        const res = await axios.delete(`/api/team/request/` + id);
+        return handleResponse(res);
+      }
+      catch (err) {
+        return handleResponse(err.response);
+      }
+    }
   }
 }

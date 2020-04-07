@@ -48,6 +48,20 @@ const searchTeams = (query) => {
   }
 }
 
+const addJoinRequest = (id) => {
+  return {
+    types: [actionTypes.ADD_JOIN_TEAM_REQUEST_REQUEST, actionTypes.ADD_JOIN_TEAM_REQUEST_SUCCESS, actionTypes.ADD_JOIN_TEAM_REQUEST_FAILURE],
+    callAPI: () => teamService.request.add(id)
+  }
+}
+
+const deleteJoinRequest = (id) => {
+  return {
+    types: [actionTypes.DELETE_JOIN_TEAM_REQUEST_REQUEST, actionTypes.DELETE_JOIN_TEAM_REQUEST_SUCCESS, actionTypes.DELETE_JOIN_TEAM_REQUEST_FAILURE],
+    callAPI: () => teamService.request.delete(id)
+  }
+}
+
 const setTeamSelected = (team) => {
   return {type: actionTypes.SET_TEAM_SELECTED, team};
 }
@@ -58,5 +72,7 @@ export default {
   deleteTeam,
   patchTeam,
   searchTeams,
+  addJoinRequest,
+  deleteJoinRequest,
   setTeamSelected
 };

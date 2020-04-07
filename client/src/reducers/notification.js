@@ -201,6 +201,46 @@ function notification(state = initialState, action) {
       return Object.assign({}, state, {
         alerts
       });
+    case actionTypes.ADD_JOIN_TEAM_REQUEST_SUCCESS:
+      alerts.push({
+        index: idxAlert,
+        type: 'success',
+        title: '成功',
+        msg: '申請成功'
+      });
+      return Object.assign({}, state, {
+        alerts
+      });
+    case actionTypes.ADD_JOIN_TEAM_REQUEST_FAILURE:
+      alerts.push({
+        index: idxAlert,
+        type: 'danger',
+        title: '錯誤',
+        msg: '申請失敗'
+      });
+      return Object.assign({}, state, {
+        alerts
+      });
+    case actionTypes.DELETE_JOIN_TEAM_REQUEST_SUCCESS:
+      alerts.push({
+        index: idxAlert,
+        type: 'success',
+        title: '成功',
+        msg: '取消申請成功'
+      });
+      return Object.assign({}, state, {
+        alerts
+      });
+    case actionTypes.DELETE_JOIN_TEAM_REQUEST_FAILURE:
+      alerts.push({
+        index: idxAlert,
+        type: 'danger',
+        title: '錯誤',
+        msg: '取消申請失敗'
+      });
+      return Object.assign({}, state, {
+        alerts
+      });
     case actionTypes.REMOVE_TOAST:
       toasts = toasts.filter(t => t.index !== action.index);
       return Object.assign({}, state, {

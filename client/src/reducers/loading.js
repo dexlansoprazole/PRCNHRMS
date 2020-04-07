@@ -64,6 +64,18 @@ function loading(state = initialState, action) {
       return false;
     case actionTypes.PATCH_TEAM_FAILURE:
       return false;
+    case actionTypes.ADD_JOIN_TEAM_REQUEST_REQUEST:
+      return true;
+    case actionTypes.ADD_JOIN_TEAM_REQUEST_SUCCESS:
+      return false;
+    case actionTypes.ADD_JOIN_TEAM_REQUEST_FAILURE:
+      return false;
+    case actionTypes.DELETE_JOIN_TEAM_REQUEST_REQUEST:
+      return true;
+    case actionTypes.DELETE_JOIN_TEAM_REQUEST_SUCCESS:
+      return false;
+    case actionTypes.DELETE_JOIN_TEAM_REQUEST_FAILURE:
+      return false;
     default:
       return state;
   }

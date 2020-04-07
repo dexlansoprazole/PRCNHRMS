@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import TeamTableItem from './TeamTableItem';
-import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
+import {OverlayScrollbarsComponent} from 'overlayscrollbars-react';
+import LoadingOverlay from '../LoadingOverlay';
 
 const TeamTable = props => {
   const divRef = useRef(null);
@@ -29,6 +30,7 @@ const TeamTable = props => {
           </tr>
         </thead>
         <tbody>
+          <LoadingOverlay loading={props.loading}></LoadingOverlay>
           {(props.teams && props.teams.length > 0) ? (
             props.teams.map((team, index) => <TeamTableItem key={index} team={team} index={index + 1} setTeamClicked={props.setTeamClicked} showPosition={props.showPosition}></TeamTableItem>)
           ) : (

@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import {Edit, Trash2, PlusSquare} from 'react-feather';
+import {Edit, Trash2, PlusSquare, XSquare} from 'react-feather';
 import {createUseStyles} from 'react-jss';
 import teamActions from '../../actions/team'
 
@@ -9,19 +9,18 @@ const TeamTableItem = props => {
   const dispatch = useDispatch();
   const setTeamClicked = props.setTeamClicked;
   const setTeamSelected = (team) => dispatch(teamActions.setTeamSelected(team));
+  const addJoinRequest = (id) => dispatch(teamActions.addJoinRequest(id));
+  const deleteJoinRequest = (id) => dispatch(teamActions.deleteJoinRequest(id));
 
   const user = useSelector(state => state.auth.user);
   const members = useSelector(state => state.member.members);
+
+  const isLeader = props.team.leader._id === user._id;
+  const isManager = props.team.managers.find(m => m._id === user._id) ? true : false;
+  const isRequested = props.team.requests.find(r => r === user._id) ? true : false;
   
   const [isHovered, setIsHovered] = useState(false);
   const [isRedirect, setIsRedirect] = useState(false);
-  const [isLeader, setIsLeader] = useState(false);
-  const [isManager, setIsManager] = useState(false);
-
-  useEffect(() => {
-    setIsLeader(props.team.leader._id === user._id);
-    setIsManager(props.team.managers.find(m => m._id === user._id) ? true : false);
-  }, [props, user]);
 
   const btnStyles = {
     opacity: isHovered ? 1 : 0
@@ -54,7 +53,8 @@ const TeamTableItem = props => {
   
   const handleOnClick = (e) => {
     e.stopPropagation();
-    setTeamClicked(props.team);
+    if (setTeamClicked)
+      setTeamClicked(props.team);
   }
 
   if (isRedirect) {
@@ -94,8 +94,11 @@ const TeamTableItem = props => {
         </button> :
         null
         }
-        {!(isLeader || isManager) ?
-          <button className={classes.btnFunc} data-toggle="modal" data-target="#" style={btnStyles} onClick={handleOnClick}>
+        {!(isLeader || isManager) ? isRequested ?
+          <button className={classes.btnFunc} data-toggle="modal" style={btnStyles} onClick={() => deleteJoinRequest(props.team._id)}>
+            <XSquare></XSquare>
+          </button> :
+          <button className={classes.btnFunc} data-toggle="modal" style={btnStyles} onClick={() => addJoinRequest(props.team._id)}>
             <PlusSquare></PlusSquare>
           </button> :
           null
