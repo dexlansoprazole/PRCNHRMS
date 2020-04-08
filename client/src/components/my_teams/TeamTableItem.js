@@ -62,7 +62,7 @@ const TeamTableItem = props => {
       <td className="fit">{props.index}</td>
       <td>{props.team.name}</td>
       <td>{props.team.users.leader.name}</td>
-      <td>{props.team.members.length + "/30"}</td>
+      <td>{props.team.members.filter(m => m.leave_date == null).length + "/30"}</td>
       {
         props.showPosition ? 
           <td>
