@@ -4,6 +4,7 @@ const Players = mongoose.model('players');
 const Users = mongoose.model('users');
 const permission = require('../utils/permission');
 const {PermissionError} = require('../utils/error');
+const parse = require('../utils/parse');
 
 module.exports = (app) => {
   app.post(`/api/team/query`, async (req, res, next) => {
@@ -13,7 +14,7 @@ module.exports = (app) => {
       if (!user)
         throw new PermissionError();
       let teams = await Teams.find(Object.keys(query).length > 0 ? {name: new RegExp('^\\S*' + query.name + '\\S*$', "i")} : {leader: user._id});
-      teams = await Promise.all(teams.map(async t => ({...t.toObject(), leader: await Users.findOne({_id: t.leader}, '_id name email')})));  //get data of team leader
+      teams = await Promise.all(teams.map(async t => await parse.team.leader(t)));
       return res.status(200).send({teams});
     } catch (error) {
       next(error);
@@ -26,7 +27,7 @@ module.exports = (app) => {
       if (!req.session.user)
         throw new PermissionError();
       let team = await Teams.create(newTeam);
-      team = {...team.toObject(), leader: await Users.findOne({_id: team.leader}, '_id name email')};  //get data of team leader
+      team = await parse.team.leader(team);
       return res.status(200).send({team})
     } catch (error) {
       next(error);
@@ -45,10 +46,8 @@ module.exports = (app) => {
       user = await Users.findByIdAndUpdate(user._id, {$addToSet: {requests: team._id}}, {new: true, session});
       await session.commitTransaction();
       session.endSession();
-      let requests = await Promise.all(user.requests.map(async r => await Teams.findById(r, '_id name leader managers requests')));
-      requests = await Promise.all(requests.map(async r => ({...r.toObject(), leader: await Users.findOne({_id: r.leader}, '_id name email')})));
-      user = {...user.toObject(), requests};
-      team = {...team.toObject(), leader: await Users.findOne({_id: team.leader}, '_id name email')};
+      user = await parse.user.requests(user);
+      team = await parse.team.leader(team);
       return res.status(200).send({ user, team })
     } catch (error) {
       await session.abortTransaction();
@@ -69,10 +68,8 @@ module.exports = (app) => {
       user = await Users.findByIdAndUpdate(user._id, {$pull: {requests: team._id}}, {new: true, session});
       await session.commitTransaction();
       session.endSession();
-      let requests = await Promise.all(user.requests.map(async r => await Teams.findById(r, '_id name leader managers requests')));
-      requests = await Promise.all(requests.map(async r => ({...r.toObject(), leader: await Users.findOne({_id: r.leader}, '_id name email')})));
-      user = {...user.toObject(), requests};
-      team = {...team.toObject(), leader: await Users.findOne({_id: team.leader}, '_id name email')};
+      user = await parse.user.requests(user);
+      team = await parse.team.leader(team);
       return res.status(200).send({ user, team })
     } catch (error) {
       await session.abortTransaction();
@@ -87,7 +84,7 @@ module.exports = (app) => {
     try {
       await permission.checkIsLeader(req.session.user, _id);
       let team = await Teams.findByIdAndUpdate(_id, data, {new: true});
-      team = { ...team.toObject(), leader: await Users.findOne({ _id: team.leader }, '_id name email') };  //get data of team leader
+      team = await parse.team.leader(team);
       return res.status(200).send({team})
     } catch (error) {
       next(error);
