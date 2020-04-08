@@ -102,8 +102,9 @@ module.exports = (app) => {
       await permission.checkIsLeader(req.session.user, _id);
       let team = await Teams.findByIdAndDelete(_id, {session});
       let members = await Players.find({team: _id}, '_id');
-      if(members.length > 0)
+      if (members.length > 0)
         await Players.deleteMany({$or: members}, {session});
+      await Users.updateMany({$or: team.requests.map(r => ({_id: r}))}, {$pull: {requests: team._id}}, {session});
       await session.commitTransaction();
       session.endSession();
       return res.status(200).send({team, members});
