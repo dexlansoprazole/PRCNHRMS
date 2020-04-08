@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Requests = () => {
+const Permissions = () => {
   return (
     <div>
 
@@ -8,4 +8,4 @@ const Requests = () => {
   );
 }
 
-export default Requests;
+export default Permissions;

@@ -1,11 +1,11 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import memberActions from '../../actions/member';
 
-const DeleteMemberModal = () => {
+const DeleteMemberModal = (props) => {
   const dispatch = useDispatch()
   const deleteMember = id => dispatch(memberActions.deleteMember(id));
-  const member = useSelector(state => state.member.memberSelected);
+  const member = props.member;
 
   const handleConfirm = () => {
     deleteMember(member._id);

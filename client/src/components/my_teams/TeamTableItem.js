@@ -1,26 +1,24 @@
 import React, {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {Edit, Trash2, PlusSquare, XSquare} from 'react-feather';
 import {createUseStyles} from 'react-jss';
 import teamActions from '../../actions/team'
 
 const TeamTableItem = props => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const setTeamClicked = props.setTeamClicked;
-  const setTeamSelected = (team) => dispatch(teamActions.setTeamSelected(team));
   const addJoinRequest = (id) => dispatch(teamActions.addJoinRequest(id));
   const deleteJoinRequest = (id) => dispatch(teamActions.deleteJoinRequest(id));
 
-  const user = useSelector(state => state.auth.user);
-  const members = useSelector(state => state.member.members);
+  const user = useSelector(state => state.user);
 
-  const isLeader = props.team.leader._id === user._id;
-  const isManager = props.team.managers.find(m => m._id === user._id) ? true : false;
-  const isRequested = props.team.requests.find(r => r === user._id) ? true : false;
+  const isLeader = props.team.users.leader._id === user._id;
+  const isManager = props.team.users.managers.find(m => m._id === user._id) ? true : false;
+  const isRequested = props.team.users.requests.find(r => r === user._id) ? true : false;
   
   const [isHovered, setIsHovered] = useState(false);
-  const [isRedirect, setIsRedirect] = useState(false);
 
   const btnStyles = {
     opacity: isHovered ? 1 : 0
@@ -57,23 +55,14 @@ const TeamTableItem = props => {
       setTeamClicked(props.team);
   }
 
-  if (isRedirect) {
-    return <Redirect to="/member_management" />;
-  }
-
   return (
     <tr style={{cursor: props.showPosition ? 'pointer' : 'normal'}} onMouseOver={() => {setIsHovered(true)}} onMouseLeave={() => {setIsHovered(false)}} onClick={
-      props.showPosition ? 
-        () => {
-          setTeamSelected(props.team);
-          setIsRedirect(true);
-        }
-      : null
+      props.showPosition ? () => history.push('/team/' + props.team._id) : null
     }>
       <td className="fit">{props.index}</td>
       <td>{props.team.name}</td>
-      <td>{props.team.leader.name}</td>
-      <td>{members.filter(m => m.team === props.team._id && !m.leave_date).length + "/30"}</td>
+      <td>{props.team.users.leader.name}</td>
+      <td>{props.team.members.length + "/30"}</td>
       {
         props.showPosition ? 
           <td>

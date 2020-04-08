@@ -2,9 +2,9 @@ import React, {useEffect, useRef} from 'react';
 import {useSelector} from 'react-redux';
 import TeamDropdownItem from './TeamDropdownItem';
 
-const TeamDropdown = () => {
-  const teams = useSelector(state => state.team.teams);
-  const teamSelected = useSelector(state => state.team.teamSelected);
+const TeamDropdown = (props) => {
+  const teams = useSelector(state => state.teams);
+  const teamSelected = props.team;
   const dropdownRef = useRef(null);
 
   useEffect(() => {

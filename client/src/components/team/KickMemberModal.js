@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import memberActions from '../../actions/member';
 
 var moment = require('moment');
 
-const KickMemberModal = () => {
+const KickMemberModal = (props) => {
   const dispatch = useDispatch();
   const patchMember = (id, data) => dispatch(memberActions.patchMember(id, data));
-  const member = useSelector(state => state.member.memberSelected);
+  const member = props.member;
 
   const [kickData, setKickData] = useState({
     kick_reason: "",

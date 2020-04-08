@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import memberActions from '../../actions/member';
 var moment = require('moment');
 
-const EditMemberModal = () => {
+const EditMemberModal = (props) => {
   const dispatch = useDispatch();
   const patchMember = (id, memberData) => dispatch(memberActions.patchMember(id, memberData));
-  const member = useSelector(state => state.member.memberSelected);
+  const member = props.member;
   const [memberData, setMemberData] = useState({});
 
   useEffect(() => {

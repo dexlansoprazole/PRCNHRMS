@@ -6,8 +6,8 @@ import './osTheme.scss';
 import Home from './components/Home';
 import AccountDropdown from './components/AccountDropdown';
 import GoogleSignIn from './components/GoogleSignIn';
-import MemberManagement from './components/MemberManagement';
-import TeamManagement from './components/TeamManagement';
+import MyTeams from './components/my_teams/MyTeams';
+import Team from './components/team/Team';
 import LoadingOverlay from './components/LoadingOverlay';
 import ScrollBarAdapter from './components/ScrollBarAdapter';
 import Alerts from './components/Alerts'
@@ -19,7 +19,6 @@ const App = () => {
   const initialized = useSelector(state => state.initialized);
   const loading = useSelector(state => state.loading);
   const isSignedIn = useSelector(state => state.auth.isSignedIn);
-  const team = useSelector(state => state.team.teamSelected);
 
   useEffect(() => {
     signIn();
@@ -33,8 +32,7 @@ const App = () => {
           <div className="container">
             <div className="navbar-nav mr-auto">
               <NavLink className="nav-item nav-link" to="/home">Home</NavLink>
-              {isSignedIn ? <NavLink className="nav-item nav-link" to="/team_management">戰隊管理</NavLink> : null}
-              {isSignedIn && Object.keys(team).length !== 0 ? <NavLink className="nav-item nav-link" to="/member_management">成員管理</NavLink> : null}
+              {isSignedIn ? <NavLink className="nav-item nav-link" to="/my_teams">我的戰隊</NavLink> : null}
             </div>
             <div className="navbar-nav">
               {initialized ? isSignedIn ? null : <GoogleSignIn></GoogleSignIn> : null}
@@ -46,8 +44,8 @@ const App = () => {
           <Alerts></Alerts>
           <Switch>
             <Route exact path="/home" component={Home} />
-            {initialized ? isSignedIn ? <Route path="/team_management" component={TeamManagement} /> : null : <Route path="/team_management" />}
-            {initialized ? isSignedIn && Object.keys(team).length !== 0 ? <Route exact path="/member_management" component={MemberManagement} />: null : <Route exact path="/member_management" />}
+            {initialized ? isSignedIn ? <Route path="/my_teams" component={MyTeams} /> : null : <Route path="/my_teams" />}
+            {initialized ? isSignedIn ? <Route path="/team/:team_id" component={Team} /> : null : <Route path="/team/:team_id" />}
             <Redirect to="/home" />
           </Switch>
         </div>

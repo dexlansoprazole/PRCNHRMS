@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux';
 import SignOut from './SignOut';
 
 const AccountDropdown = () => {
-  const user = useSelector(state => state.auth.user);
+  const user = useSelector(state => state.user);
   const dropdownMenuRef = useRef(null);
   const dropdownRef = useRef(null);
 

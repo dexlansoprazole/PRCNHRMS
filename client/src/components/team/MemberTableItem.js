@@ -1,14 +1,10 @@
 import React, {useState} from 'react';
-import { useDispatch } from 'react-redux';
-import memberActions from '../../actions/member';
 import {Edit, UserX, Trash2} from 'react-feather';
 import {createUseStyles} from 'react-jss'
 
 var moment = require('moment');
 
 const MemberTableItem = props => {
-  const dispatch = useDispatch();
-  const setMemberSelected = member => dispatch(memberActions.setMemberSelected(member));
 
   const [isHovered, setIsHovered] = useState(false);
 
@@ -44,13 +40,13 @@ const MemberTableItem = props => {
       <td>{props.member.leave_date ? moment(props.member.leave_date).format('YYYY/MM/DD') : "-"}</td>
       <td>{props.member.kick_reason ? props.member.kick_reason : "-"}</td>
       <td className="fit p-0" style={{verticalAlign: 'middle'}}>
-          <button className={classes.btnFunc} data-toggle="modal" data-target="#editMemberModal" style={btnStyles} onClick={() => setMemberSelected(props.member)}><Edit></Edit></button>
+        <button className={classes.btnFunc} data-toggle="modal" data-target="#editMemberModal" style={btnStyles} onClick={() => props.setMemberClicked(props.member)}><Edit></Edit></button>
           {
             !props.member.leave_date ?
-            <button className={classes.btnFunc} data-toggle="modal" data-target="#kickMemberModal" style={btnStyles} onClick={() => setMemberSelected(props.member)}><UserX></UserX></button> :
+            <button className={classes.btnFunc} data-toggle="modal" data-target="#kickMemberModal" style={btnStyles} onClick={() => props.setMemberClicked(props.member)}><UserX></UserX></button> :
               ""
           }
-          <button className={classes.btnFunc} data-toggle="modal" data-target="#deleteMemberModal" style={btnStyles} onClick={() => setMemberSelected(props.member)}><Trash2></Trash2></button>
+        <button className={classes.btnFunc} data-toggle="modal" data-target="#deleteMemberModal" style={btnStyles} onClick={() => props.setMemberClicked(props.member)}><Trash2></Trash2></button>
       </td>
     </tr>
   );

@@ -5,6 +5,7 @@ const Users = mongoose.model('users');
 const permission = require('../utils/permission');
 const {PermissionError} = require('../utils/error');
 const parse = require('../utils/parse');
+const wrap = require('../utils/wrap');
 
 module.exports = (app) => {
   app.post(`/api/team/query`, async (req, res, next) => {
@@ -15,6 +16,7 @@ module.exports = (app) => {
         throw new PermissionError();
       let teams = await Teams.find(Object.keys(query).length > 0 ? {name: new RegExp('^\\S*' + query.name + '\\S*$', "i")} : {leader: user._id});
       teams = await Promise.all(teams.map(async t => await parse.team.leader(t)));
+      teams = await Promise.all(teams.map(async t => await wrap.team(t)));
       return res.status(200).send({teams});
     } catch (error) {
       next(error);
@@ -28,6 +30,7 @@ module.exports = (app) => {
         throw new PermissionError();
       let team = await Teams.create(newTeam);
       team = await parse.team.leader(team);
+      team = await wrap.team(team);
       return res.status(200).send({team})
     } catch (error) {
       next(error);
@@ -48,6 +51,7 @@ module.exports = (app) => {
       session.endSession();
       user = await parse.user.requests(user);
       team = await parse.team.leader(team);
+      team = await wrap.team(team);
       return res.status(200).send({ user, team })
     } catch (error) {
       await session.abortTransaction();
@@ -70,6 +74,7 @@ module.exports = (app) => {
       session.endSession();
       user = await parse.user.requests(user);
       team = await parse.team.leader(team);
+      team = await wrap.team(team);
       return res.status(200).send({ user, team })
     } catch (error) {
       await session.abortTransaction();
@@ -85,6 +90,7 @@ module.exports = (app) => {
       await permission.checkIsLeader(req.session.user, _id);
       let team = await Teams.findByIdAndUpdate(_id, data, {new: true});
       team = await parse.team.leader(team);
+      team = await wrap.team(team);
       return res.status(200).send({team})
     } catch (error) {
       next(error);
@@ -98,10 +104,17 @@ module.exports = (app) => {
     try {
       await permission.checkIsLeader(req.session.user, _id);
       let team = await Teams.findByIdAndDelete(_id, {session});
+
+      // Delete members of deleted team
       let members = await Players.find({team: _id}, '_id');
       if (members.length > 0)
         await Players.deleteMany({$or: members}, {session});
-      await Users.updateMany({$or: team.requests.map(r => ({_id: r}))}, {$pull: {requests: team._id}}, {session});
+      
+      // Pull requests for deleted team
+      let or = team.requests.map(r => ({_id: r}));
+      if (or.length > 0)
+        await Users.updateMany({$or: or}, {$pull: {requests: team._id}}, {session});
+      
       await session.commitTransaction();
       session.endSession();
       return res.status(200).send({team, members});

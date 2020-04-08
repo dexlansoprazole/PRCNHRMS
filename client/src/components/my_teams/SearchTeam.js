@@ -8,14 +8,16 @@ const SearchTeam = () => {
   const searchTeams = (query) => dispatch(teamActions.searchTeams(query));
   const setSearchTeamResult = (result) => dispatch({type: actionTypes.SET_SEARCH_TEAM_RESULT, result});
   const loading = useSelector(state => state.team.search.loading);
-  const myTeams = useSelector(state => state.team.teams);
-  const requests = useSelector(state => state.auth.user.requests);
+  const myTeams = useSelector(state => state.teams);
+  const requests = useSelector(state => state.user.requests);
   const result = useSelector(state => state.team.search.result).filter(t => !(myTeams.find(mt => mt._id === t._id) || requests.find(r => r._id === t._id)));
 
   const [inputTeamName, setInputTeamName] = useState('');
 
   useEffect(() => {
-    setSearchTeamResult([]);
+    return () => {
+      setSearchTeamResult([]);
+    };
   }, []);
 
   const handleChange = (evt) => {

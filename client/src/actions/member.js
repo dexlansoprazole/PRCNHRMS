@@ -29,19 +29,9 @@ const deleteMember = (id) => {
   }
 }
 
-const setMemberFilter = (filter) => {
-  return { type: actionTypes.SET_MEMBER_FILTER, filter };
-}
-
-const setMemberSelected = (member) => {
-  return { type: actionTypes.SET_MEMBER_SELECTED, member };
-}
-
 export default {
   getMembers,
   addMember,
   deleteMember,
-  patchMember,
-  setMemberFilter,
-  setMemberSelected
+  patchMember
 };

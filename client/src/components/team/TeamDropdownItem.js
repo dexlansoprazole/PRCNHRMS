@@ -1,13 +1,11 @@
 import React from 'react';
-import {useDispatch} from 'react-redux';
-import teamActions from '../../actions/team';
+import {useHistory} from 'react-router-dom'
 
 const TeamDropdownItem = (props) => {
-  const dispatch = useDispatch();
-  const setTeamSelected = team => dispatch(teamActions.setTeamSelected(team));
+  const history = useHistory()
 
   return (
-    <button className="dropdown-item" onClick={() => setTeamSelected(props.team)}>{props.team.name}</button>
+    <button className="dropdown-item" onClick={() => history.push('/team/' + props.team._id)}>{props.team.name}</button>
   );
 }
  

@@ -4,7 +4,7 @@ import teamActions from '../../actions/team';
 
 const AddTeamModal = () => {
   const dispatch = useDispatch();
-  const user = useSelector(state => state.auth.user);
+  const user = useSelector(state => state.user);
   const addTeam = (newTeam) => dispatch(teamActions.addTeam(newTeam));
 
   const [newTeam, setNewTeam] = useState({

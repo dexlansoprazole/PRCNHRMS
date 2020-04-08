@@ -4,8 +4,8 @@ import DeleteTeamModal from './DeleteTeamModal';
 import EditTeamModal from './EditTeamModal';
 import TeamTable from './TeamTable';
 
-const MyTeams = () => {
-  const teams = useSelector(state => state.team.teams);
+const Teams = () => {
+  const teams = useSelector(state => state.teams);
 
   const [teamClicked, setTeamClicked] = useState({});
 
@@ -27,4 +27,4 @@ const MyTeams = () => {
   );
 }
 
-export default MyTeams;
+export default Teams;

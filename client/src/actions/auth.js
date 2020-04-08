@@ -1,38 +1,26 @@
 import LogRocket from 'logrocket';
 import signInService from '../services/authService';
 import {actionTypes} from '../constants';
-import teamActions from './team';
-import memberActions from './member';
 
-const signIn = (googleUser) => { //TODO: use middleware
-  return async (dispatch, getState) => {
+const signIn = (googleUser) => {
+  return async (dispatch) => {
     dispatch(request());
     try {
       const id_token = googleUser ? googleUser.getAuthResponse().id_token : null;
-      const user = (await signInService.signIn(id_token)).user || null;
+      const res = await signInService.signIn(id_token);
+      const user = res.user || null;
       if (!user) {
         dispatch(failure());
         return;
       }
 
-      await dispatch(teamActions.getTeams());
-      let team = localStorage.getItem('teamSelected');
-      if (team)
-        team = getState().team.teams.find(t => (t._id === team)) || getState().team.teams[0] || null;
-      else
-        team = getState().team.teams[0] || null;
-      if (team) {
-        dispatch(teamActions.setTeamSelected(team));
-        const query = getState().team.teams.map(m => ({team: m._id}));
-        await dispatch(memberActions.getMembers(query))
-      }
       if (process.env.NODE_ENV === 'production') {
         LogRocket.identify(user._id, {
           name: user.name,
           email: user.email,
         });
       }
-      dispatch(success(user));
+      dispatch(success(res));
     } catch (error) {
       console.error(error);
       dispatch(failure());
@@ -40,7 +28,7 @@ const signIn = (googleUser) => { //TODO: use middleware
   }
 
   function request() {return {type: googleUser ? actionTypes.LOGIN_REQUEST : actionTypes.TRY_LOGIN_REQUEST}}
-  function success(user) {return {type: googleUser ? actionTypes.LOGIN_SUCCESS : actionTypes.TRY_LOGIN_SUCCESS, user}}
+  function success(res) {return {type: googleUser ? actionTypes.LOGIN_SUCCESS : actionTypes.TRY_LOGIN_SUCCESS, user: res.user, teams: res.teams}}
   function failure() {return {type: googleUser ? actionTypes.LOGIN_FAILURE : actionTypes.TRY_LOGIN_FAILURE}}
 }
 

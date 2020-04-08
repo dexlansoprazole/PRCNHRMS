@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import memberActions from '../../actions/member';
 var moment = require('moment');
 
-const AddMemberModal = () => {
+const AddMemberModal = (props) => {
   const dispatch = useDispatch();
   const addMember = newMember => dispatch(memberActions.addMember(newMember));
-  const team = useSelector(state => state.team.teamSelected);
+  const team = props.team;
 
   const [newMember, setNewMember] = useState({
     id: "",
