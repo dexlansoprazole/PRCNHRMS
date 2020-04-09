@@ -43,6 +43,7 @@ module.exports = (app) => {
         user = await parse.user.requests(user);
         teams = await Teams.find({$or: [{leader: user._id}, {managers: {$in: [user._id]}}, {members: {$in: [user._id]}}]}, '-__v');
         teams = await Promise.all(teams.map(async t => await parse.team.leader(t)));
+        teams = await Promise.all(teams.map(async t => await parse.team.requests(t)));
         teams = await Promise.all(teams.map(async t => await wrap.team(t)));
       }
       return res.status(200).send({user, teams})
