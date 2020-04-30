@@ -31,7 +31,7 @@ const Alerts = () => {
         }}
         onEntered={() => {
           if (alert.type !== 'danger')
-            setTimeout(removeAlert, 3000, alert.index);
+            setTimeout(removeAlert, 800, alert.index);
         }}
         onExit={el => {
           let $alert = window.$(el);
