@@ -87,3 +87,8 @@ th:after {
 th, td {
     white-space: nowrap;
 }
+
+.user-item:hover {
+    color: #212529;
+    background-color: rgba(0,0,0,.05);
+}

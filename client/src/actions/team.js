@@ -36,17 +36,31 @@ const searchTeams = (query) => {
   }
 }
 
-const addJoinRequest = (id) => {
+const addJoinRequest = (team_id) => {
   return {
     types: [actionTypes.ADD_JOIN_TEAM_REQUEST_REQUEST, actionTypes.ADD_JOIN_TEAM_REQUEST_SUCCESS, actionTypes.ADD_JOIN_TEAM_REQUEST_FAILURE],
-    callAPI: () => teamService.request.add(id)
+    callAPI: () => teamService.request.add(team_id)
   }
 }
 
-const deleteJoinRequest = (id) => {
+const deleteJoinRequest = (team_id, user_id = null) => {
   return {
     types: [actionTypes.DELETE_JOIN_TEAM_REQUEST_REQUEST, actionTypes.DELETE_JOIN_TEAM_REQUEST_SUCCESS, actionTypes.DELETE_JOIN_TEAM_REQUEST_FAILURE],
-    callAPI: () => teamService.request.delete(id)
+    callAPI: () => teamService.request.delete(team_id, user_id)
+  }
+}
+
+const addMember = (team_id, user_id) => {
+  return {
+    types: [actionTypes.ADD_TEAM_MEMBER_REQUEST, actionTypes.ADD_TEAM_MEMBER_SUCCESS, actionTypes.ADD_TEAM_MEMBER_FAILURE],
+    callAPI: () => teamService.member.add(team_id, user_id)
+  }
+}
+
+const deleteMember = (team_id, user_id) => {
+  return {
+    types: [actionTypes.DELETE_TEAM_MEMBER_REQUEST, actionTypes.DELETE_TEAM_MEMBER_SUCCESS, actionTypes.DELETE_TEAM_MEMBER_FAILURE],
+    callAPI: () => teamService.member.delete(team_id, user_id)
   }
 }
 
@@ -57,5 +71,7 @@ export default {
   patchTeam,
   searchTeams,
   addJoinRequest,
-  deleteJoinRequest
+  deleteJoinRequest,
+  addMember,
+  deleteMember
 };

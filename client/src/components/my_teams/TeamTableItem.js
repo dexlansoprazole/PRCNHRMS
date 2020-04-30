@@ -16,6 +16,7 @@ const TeamTableItem = props => {
 
   const isLeader = props.team.users.leader._id === user._id;
   const isManager = props.team.users.managers.find(m => m._id === user._id) ? true : false;
+  const isMember = props.team.users.members.find(m => m._id === user._id) ? true : false;
   const isRequested = props.team.users.requests.find(r => r === user._id) ? true : false;
   
   const [isHovered, setIsHovered] = useState(false);
@@ -67,6 +68,8 @@ const TeamTableItem = props => {
         props.showPosition ? 
           <td>
             {isLeader ? renderBadge('隊長', 'primary') : null}
+            {isManager ? renderBadge('管理員', 'success') : null}
+            {isMember ? renderBadge('成員', 'secondary') : null}
           </td>
         : null
       }
@@ -83,7 +86,7 @@ const TeamTableItem = props => {
         </button> :
         null
         }
-        {!(isLeader || isManager) ? isRequested ?
+        {!(isLeader || isManager || isMember) ? isRequested ?
           <button className={classes.btnFunc} data-toggle="modal" style={btnStyles} onClick={() => deleteJoinRequest(props.team._id)}>
             <XSquare></XSquare>
           </button> :

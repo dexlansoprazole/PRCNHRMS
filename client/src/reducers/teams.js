@@ -16,6 +16,9 @@ function teams(state = initialState, action) {
       teams = teams.filter(t => t._id !== action.res.team._id);
       return teams;
     case actionTypes.PATCH_TEAM_SUCCESS:
+    case actionTypes.ADD_TEAM_MEMBER_SUCCESS:
+    case actionTypes.DELETE_TEAM_MEMBER_SUCCESS:
+    case actionTypes.DELETE_JOIN_TEAM_REQUEST_SUCCESS:
       teams = teams.map(t => (t._id === action.res.team._id) ? action.res.team : t);
       return teams;
     case actionTypes.ADD_MEMBER_SUCCESS:

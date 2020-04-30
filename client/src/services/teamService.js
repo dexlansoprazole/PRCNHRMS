@@ -39,18 +39,38 @@ export default {
     }
   },
   request: {
-    add: async (id) => {
+    add: async (team_id) => {
       try {
-        const res = await axios.post(`/api/team/request/` + id);
+        const res = await axios.patch(`/api/team/request/add`, {team_id});
         return handleResponse(res);
       }
       catch (err) {
         return handleResponse(err.response);
       }
     },
-    delete: async (id) => {
+    delete: async (team_id, user_id = null) => {
       try {
-        const res = await axios.delete(`/api/team/request/` + id);
+        const res = await axios.patch(`/api/team/request/delete`, {team_id, user_id});
+        return handleResponse(res);
+      }
+      catch (err) {
+        return handleResponse(err.response);
+      }
+    }
+  },
+  member: {
+    add: async (team_id, user_id) => {
+      try {
+        const res = await axios.patch(`/api/team/member/add`, {team_id, user_id});
+        return handleResponse(res);
+      }
+      catch (err) {
+        return handleResponse(err.response);
+      }
+    },
+    delete: async (team_id, user_id) => {
+      try {
+        const res = await axios.patch(`/api/team/member/delete`, {team_id, user_id});
         return handleResponse(res);
       }
       catch (err) {

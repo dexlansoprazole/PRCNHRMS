@@ -27,12 +27,12 @@ module.exports = (app) => {
   })
 
   app.patch(`/api/member/:id`, async (req, res, next) => {
-    const _id = req.params.id;
+    const player_id = req.params.id;
     const data = Object.filter(req.body, ['id', 'name', 'join_date', 'leave_date', 'kick_reason']);
     try {
-      let player = await Players.findOne({ _id: _id});
+      let player = await Players.findById(player_id);
       await permission.checkIsLeader(req.session.user, player.team.toString());
-      player = await Players.findByIdAndUpdate(_id, data, {new: true});
+      player = await Players.findByIdAndUpdate(player_id, data, {new: true});
       return res.status(200).send({member: player});
     } catch (error) {
       next(error);
@@ -40,11 +40,11 @@ module.exports = (app) => {
   });
 
   app.delete(`/api/member/:id`, async (req, res, next) => {
-    const _id = req.params.id;
+    const player_id = req.params.id;
     try {
-      let player = await Players.findOne({ _id: _id});
+      let player = await Players.findById(player_id);
       await permission.checkIsLeader(req.session.user, player.team.toString());
-      player = await Players.findByIdAndDelete(_id)
+      player = await Players.findByIdAndDelete(player_id)
       return res.status(200).send({member: player})
     } catch (error) {
       next(error);

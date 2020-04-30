@@ -11,9 +11,9 @@ const Requests = () => {
   return (
     <div className="row">
       <div className="col">
-        <div class="list-group">
+        <div className="list-group">
           {requests.map(r => 
-            <UserItem user={r} buttons={<RequestButtons></RequestButtons>}></UserItem>
+            <UserItem key={r._id} user={r} buttons={<RequestButtons team_id={team_id} user_id={r._id}></RequestButtons>}></UserItem>
           )}
         </div>
       </div>

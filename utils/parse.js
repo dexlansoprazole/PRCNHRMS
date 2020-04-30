@@ -12,10 +12,15 @@ const parseTeamRequests = async (team) => {
   return {...(team.toObject ? team.toObject() : team), requests};
 }
 
+const parseTeamMembers = async (team) => {
+  let members = await Promise.all(team.members.map(async r => await Users.findById(r, '_id name email pictureUrl')));
+  return {...(team.toObject ? team.toObject() : team), members};
+}
+
 const parseUserRequests = async (user) => {
-  let requests = await Promise.all(user.requests.map(async r => await Teams.findById(r, '_id name leader managers requests')));
+  let requests = await Teams.find({requests: {$in: [user._id]}}, '_id name leader managers members requests');
   requests = await Promise.all(requests.map(async r => await parseTeamLeader(r)));
-  requests = requests.map(r => ({_id: r._id, name: r.name, users: {leader: r.leader, managers: r.managers, requests: r.requests}}));
+  requests = requests.map(r => ({_id: r._id, name: r.name, users: {leader: r.leader, managers: r.managers, members: r.members, requests: r.requests}}));
   requests = await Promise.all(requests.map(async r => ({...r, members: await Players.find({team: r._id}, '_id')})));
   return {...(user.toObject ? user.toObject() : user), requests};
 }
@@ -23,7 +28,8 @@ const parseUserRequests = async (user) => {
 module.exports = {
   team: {
     leader: parseTeamLeader,
-    requests: parseTeamRequests
+    requests: parseTeamRequests,
+    members: parseTeamMembers
   },
   user: {
     requests: parseUserRequests

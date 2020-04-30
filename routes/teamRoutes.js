@@ -37,48 +37,76 @@ module.exports = (app) => {
     }
   })
 
-  app.post(`/api/team/request/:id`, async (req, res, next) => {
-    const team_id = req.params.id;
-    const session = await Teams.startSession();
-    session.startTransaction();
+  app.patch(`/api/team/request/add`, async (req, res, next) => {
+    const {team_id} = Object.filter(req.body, ['team_id']);
     try {
       let user = req.session.user;
       if (!user)
         throw new PermissionError();
-      let team = await Teams.findByIdAndUpdate(team_id, {$addToSet: {requests: user._id}}, {new: true, session});
-      user = await Users.findByIdAndUpdate(user._id, {$addToSet: {requests: team._id}}, {new: true, session});
-      await session.commitTransaction();
-      session.endSession();
+      let team = await Teams.findByIdAndUpdate(team_id, {$addToSet: {requests: user._id}}, {new: true});
       user = await parse.user.requests(user);
       team = await parse.team.leader(team);
       team = await wrap.team(team);
       return res.status(200).send({ user, team })
     } catch (error) {
-      await session.abortTransaction();
-      session.endSession();
       next(error);
     }
   });
 
-  app.delete(`/api/team/request/:id`, async (req, res, next) => {
-    const team_id = req.params.id;
-    const session = await Teams.startSession();
-    session.startTransaction();
+  app.patch(`/api/team/request/delete`, async (req, res, next) => {
+    const data = Object.filter(req.body, ['team_id', 'user_id']);
+    const team_id = data.team_id;
     try {
       let user = req.session.user;
       if (!user)
         throw new PermissionError();
-      let team = await Teams.findByIdAndUpdate(team_id, {$pull: {requests: user._id}}, {new: true, session});
-      user = await Users.findByIdAndUpdate(user._id, {$pull: {requests: team._id}}, {new: true, session});
-      await session.commitTransaction();
-      session.endSession();
+      let user_id = user._id;
+      if (data.user_id) {
+        await permission.checkIsLeader(user, team_id);
+        user_id = data.user_id;
+      }
+      
+      let team = await Teams.findByIdAndUpdate(team_id, {$pull: {requests: user_id}}, {new: true});
       user = await parse.user.requests(user);
       team = await parse.team.leader(team);
       team = await wrap.team(team);
       return res.status(200).send({ user, team })
     } catch (error) {
-      await session.abortTransaction();
-      session.endSession();
+      next(error);
+    }
+  });
+
+  app.patch(`/api/team/member/add`, async (req, res, next) => {
+    const {team_id, user_id} = Object.filter(req.body, ['team_id', 'user_id']);
+    try {
+      await permission.checkIsLeader(req.session.user, team_id);
+      console.log(user_id);
+      
+      let isRequesting = (await Teams.findById(team_id, 'requests')).requests.includes(user_id);
+      if (!isRequesting)
+        throw new PermissionError();
+      let team = await Teams.findByIdAndUpdate(team_id, {$addToSet: {members: user_id}, $pull: {requests: user_id}}, {new: true});
+      team = await parse.team.leader(team);
+      team = await parse.team.members(team);
+      team = await parse.team.requests(team);
+      team = await wrap.team(team);
+      return res.status(200).send({team})
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.patch(`/api/team/member/delete`, async (req, res, next) => {
+    const {team_id, user_id} = Object.filter(req.body, ['team_id', 'user_id']);
+    try {
+      await permission.checkIsLeader(req.session.user, team_id);
+      let team = await Teams.findByIdAndUpdate(team_id, {$pull: {members: user_id}}, {new: true});
+      team = await parse.team.leader(team);
+      team = await parse.team.members(team);
+      team = await parse.team.requests(team);
+      team = await wrap.team(team);
+      return res.status(200).send({team})
+    } catch (error) {
       next(error);
     }
   });
