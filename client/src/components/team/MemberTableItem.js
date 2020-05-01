@@ -39,15 +39,20 @@ const MemberTableItem = props => {
       <td>{moment(props.member.join_date).format('YYYY/MM/DD')}</td>
       <td>{props.member.leave_date ? moment(props.member.leave_date).format('YYYY/MM/DD') : "-"}</td>
       <td>{props.member.kick_reason ? props.member.kick_reason : "-"}</td>
-      <td className="fit p-0" style={{verticalAlign: 'middle'}}>
-        <button className={classes.btnFunc} data-toggle="modal" data-target="#editMemberModal" style={btnStyles} onClick={() => props.setMemberClicked(props.member)}><Edit></Edit></button>
-          {
-            !props.member.leave_date ?
-            <button className={classes.btnFunc} data-toggle="modal" data-target="#kickMemberModal" style={btnStyles} onClick={() => props.setMemberClicked(props.member)}><UserX></UserX></button> :
-              ""
-          }
-        <button className={classes.btnFunc} data-toggle="modal" data-target="#deleteMemberModal" style={btnStyles} onClick={() => props.setMemberClicked(props.member)}><Trash2></Trash2></button>
-      </td>
+      {
+        props.role === "leader" || props.role === 'manager' ?
+        <td className="fit p-0" style={{verticalAlign: 'middle'}}>
+          <button className={classes.btnFunc} data-toggle="modal" data-target="#editMemberModal" style={btnStyles} onClick={() => props.setMemberClicked(props.member)}><Edit></Edit></button>
+            {
+              !props.member.leave_date ?
+              <button className={classes.btnFunc} data-toggle="modal" data-target="#kickMemberModal" style={btnStyles} onClick={() => props.setMemberClicked(props.member)}><UserX></UserX></button> :
+                ""
+            }
+          <button className={classes.btnFunc} data-toggle="modal" data-target="#deleteMemberModal" style={btnStyles} onClick={() => props.setMemberClicked(props.member)}><Trash2></Trash2></button>
+        </td> : 
+        null  
+      }
+      
     </tr>
   );
 };

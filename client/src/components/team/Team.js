@@ -9,6 +9,8 @@ import Requests from './Requests';
 const Team = () => {
   const {team_id} = useParams();
   const team = useSelector(state => state.teams).find(t => t._id === team_id);
+  const user = useSelector(state => state.user);
+  const role = team.users.leader._id === user._id ? 'leader' : team.users.managers.find(m => m._id === user._id) ? 'manager' : team.users.members.find(m => m._id === user._id) ? 'member' : null;
 
   const tabs = {
     MEMBERS: 'MEMBERS',
@@ -21,7 +23,7 @@ const Team = () => {
   const renderTab = () => {
     switch (tabSelected) {
       case tabs.MEMBERS:
-        return <Members></Members>;
+        return <Members role={role}></Members>;
       case tabs.PERMISSIONS:
         return <Permissions></Permissions>;
       case tabs.REQUESTS:
@@ -42,19 +44,25 @@ const Team = () => {
         <Nav variant="tabs" defaultActiveKey={tabs.MEMBERS} onSelect={eventKey => setTabSelected(eventKey)}>
           <Nav.Item>
             <Nav.Link as='span' eventKey={tabs.MEMBERS} style={{color: 'black', cursor: 'pointer'}}>
-              成員管理
+              {role === "leader" || role === 'manager' ? '成員管理' : '成員清單'}
             </Nav.Link>
           </Nav.Item>
-          <Nav.Item>
-            <Nav.Link as='span' eventKey={tabs.PERMISSIONS} style={{color: 'black', cursor: 'pointer'}}>
-              權限管理
-            </Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link as='span' eventKey={tabs.REQUESTS} style={{color: 'black', cursor: 'pointer'}}>
-              申請中
-            </Nav.Link>
-          </Nav.Item>
+          {
+            role === "leader" ?
+            <>
+            <Nav.Item>
+              <Nav.Link as='span' eventKey={tabs.PERMISSIONS} style={{color: 'black', cursor: 'pointer'}}>
+                權限管理
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link as='span' eventKey={tabs.REQUESTS} style={{color: 'black', cursor: 'pointer'}}>
+                申請中
+              </Nav.Link>
+            </Nav.Item>
+            </> : 
+            null
+          }
         </Nav>
         {renderTab()}
       </>

@@ -26,7 +26,7 @@ const memberFilters = {
   LEFT: 'LEFT'
 }
 
-const Members = () => {
+const Members = (props) => {
   const {team_id} = useParams();
   const isSignedIn = useSelector(state => state.auth.isSignedIn);
   const team = useSelector(state => state.teams).find(t => t._id === team_id);
@@ -41,9 +41,13 @@ const Members = () => {
         <KickMemberModal member={memberClicked}></KickMemberModal>
         <DeleteMemberModal member={memberClicked}></DeleteMemberModal>
         <div className="row">
-          <div className="col">
-            <button className="btn btn-primary" id="btnAddMember" data-toggle="modal" data-target="#addMemberModal">新增成員</button>
-          </div>
+          {
+            props.role === 'leader' || props.role === 'manager' ? 
+            <div className="col">
+              <button className="btn btn-primary" id="btnAddMember" data-toggle="modal" data-target="#addMemberModal">新增成員</button>
+            </div> :
+            null
+          }
           <div className="col text-right">
             <div className="btn-group" id="btnGroupFilter">
               <button type="button" id="btnFilterActive" className={"btn " + (memberFilter === memberFilters.ACTIVE ? "btn-success" : "btn-secondary")} name={memberFilters.ACTIVE} onClick={(evt) => setMemberFilter(evt.target.name)}>現役成員</button>
@@ -54,7 +58,7 @@ const Members = () => {
         </div>
         <div className="row">
           <div className="col">
-            <MemberTable members={getVisibleMembers(team.members, memberFilter)} setMemberClicked={setMemberClicked}></MemberTable>
+            <MemberTable members={getVisibleMembers(team.members, memberFilter)} setMemberClicked={setMemberClicked} role={props.role}></MemberTable>
           </div>
         </div>
       </div>
