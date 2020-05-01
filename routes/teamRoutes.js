@@ -80,8 +80,6 @@ module.exports = (app) => {
     const {team_id, user_id} = Object.filter(req.body, ['team_id', 'user_id']);
     try {
       await permission.checkIsLeader(req.session.user, team_id);
-      console.log(user_id);
-      
       let isRequesting = (await Teams.findById(team_id, 'requests')).requests.includes(user_id);
       if (!isRequesting)
         throw new PermissionError();
