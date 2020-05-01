@@ -46,6 +46,8 @@ module.exports = (app) => {
       let team = await Teams.findByIdAndUpdate(team_id, {$addToSet: {requests: user._id}}, {new: true});
       user = await parse.user.requests(user);
       team = await parse.team.leader(team);
+      team = await parse.team.members(team);
+      team = await parse.team.requests(team);
       team = await wrap.team(team);
       return res.status(200).send({ user, team })
     } catch (error) {
@@ -69,6 +71,8 @@ module.exports = (app) => {
       let team = await Teams.findByIdAndUpdate(team_id, {$pull: {requests: user_id}}, {new: true});
       user = await parse.user.requests(user);
       team = await parse.team.leader(team);
+      team = await parse.team.members(team);
+      team = await parse.team.requests(team);
       team = await wrap.team(team);
       return res.status(200).send({ user, team })
     } catch (error) {
@@ -116,6 +120,8 @@ module.exports = (app) => {
       await permission.checkIsLeader(req.session.user, _id);
       let team = await Teams.findByIdAndUpdate(_id, data, {new: true});
       team = await parse.team.leader(team);
+      team = await parse.team.members(team);
+      team = await parse.team.requests(team);
       team = await wrap.team(team);
       return res.status(200).send({team})
     } catch (error) {
