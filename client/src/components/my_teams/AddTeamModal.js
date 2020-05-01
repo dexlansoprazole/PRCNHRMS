@@ -62,7 +62,7 @@ const AddTeamModal = () => {
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" data-dismiss="modal">取消</button>
-                <button type="submit" className="btn btn-success">建立</button>
+                <button type="submit" className="btn btn-primary">建立</button>
               </div>
             </form>
           </div>
