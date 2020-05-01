@@ -21,7 +21,7 @@ const parseUserRequests = async (user) => {
   let requests = await Teams.find({requests: {$in: [user._id]}}, '_id name leader managers members requests');
   requests = await Promise.all(requests.map(async r => await parseTeamLeader(r)));
   requests = requests.map(r => ({_id: r._id, name: r.name, users: {leader: r.leader, managers: r.managers, members: r.members, requests: r.requests}}));
-  requests = await Promise.all(requests.map(async r => ({...r, members: await Players.find({team: r._id}, '_id')})));
+  requests = await Promise.all(requests.map(async r => ({...r, members: await Players.find({team: r._id, leave_date: {$eq: null}}, '_id')})));
   return {...(user.toObject ? user.toObject() : user), requests};
 }
 

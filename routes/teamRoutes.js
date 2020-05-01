@@ -73,7 +73,7 @@ module.exports = (app) => {
       team = await parse.team.leader(team);
       team = await parse.team.members(team);
       team = await parse.team.requests(team);
-      team = await wrap.team(team);
+      team = await wrap.team(team, data.user_id != null);
       return res.status(200).send({ user, team })
     } catch (error) {
       next(error);
@@ -91,7 +91,7 @@ module.exports = (app) => {
       team = await parse.team.leader(team);
       team = await parse.team.members(team);
       team = await parse.team.requests(team);
-      team = await wrap.team(team);
+      team = await wrap.team(team, true);
       return res.status(200).send({team})
     } catch (error) {
       next(error);
@@ -106,7 +106,7 @@ module.exports = (app) => {
       team = await parse.team.leader(team);
       team = await parse.team.members(team);
       team = await parse.team.requests(team);
-      team = await wrap.team(team);
+      team = await wrap.team(team, true);
       return res.status(200).send({team})
     } catch (error) {
       next(error);
@@ -122,7 +122,7 @@ module.exports = (app) => {
       team = await parse.team.leader(team);
       team = await parse.team.members(team);
       team = await parse.team.requests(team);
-      team = await wrap.team(team);
+      team = await wrap.team(team, true);
       return res.status(200).send({team})
     } catch (error) {
       next(error);
