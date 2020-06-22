@@ -5,17 +5,17 @@ import {useSelector, useDispatch} from 'react-redux';
 import {AppBar, Toolbar, IconButton, Typography, Drawer, Divider, List, ListItem, ListItemText, Collapse, Grid} from '@material-ui/core';
 import useStyles from './styles';
 import {Menu, ChevronLeft, ChevronDown, ChevronUp} from 'react-feather';
-import './App.scss';
-import './osTheme.scss';
+import './App.css';
+// import './osTheme.scss';
 import SelectTeamButton from './components/select_team/SelectTeamButton';
 import Home from './components/Home';
 import AccountDropdown from './components/AccountDropdown';
 import GoogleSignIn from './components/GoogleSignIn';
 import MemberManagement from './components/team/MemberManagement'
-import Team from './components/team/Team';
+// import Team from './components/team/Team';
 import LoadingOverlay from './components/LoadingOverlay';
 import ScrollBarAdapter from './components/ScrollBarAdapter';
-import Alerts from './components/Alerts'
+// import Alerts from './components/Alerts'
 import authActions from './actions/auth';
 
 const App = () => {
@@ -130,7 +130,6 @@ const App = () => {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Alerts></Alerts>
           <Switch>
             <Route exact path="/home" component={Home} />
             {initialized ? isSignedIn ? <Route path="/team/member/:team_id" component={MemberManagement} /> : null : <Route path="/team/member/:team_id" />}
