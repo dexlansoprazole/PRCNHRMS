@@ -1,8 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
+import {Box, Grid, TextField, Button} from '@material-ui/core';
 import {actionTypes} from '../../constants';
 import teamActions from '../../actions/team';
 import TeamTable from './TeamTable';
+import LoadingOverlay from '../LoadingOverlay';
+
 const SearchTeam = () => {
   const dispatch = useDispatch();
   const searchTeams = (query) => dispatch(teamActions.searchTeams(query));
@@ -27,21 +30,20 @@ const SearchTeam = () => {
   }
 
   return (
-    <div>
-      <div className="row">
-        <div className="col-4">
-          <input type="text" className="form-control" name="name" onChange={handleChange} value={inputTeamName} placeholder='戰隊名稱'></input>
-        </div>
-        <div className="col-auto">
-          <button type="button" className="btn btn-primary" onClick={() => searchTeams({name: inputTeamName})}>搜尋</button>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col">
-          <TeamTable teams={result} loading={loading}></TeamTable>
-        </div>
-      </div>
-    </div>
+    <Box height='100%' overflow='hidden'>
+      <LoadingOverlay loading={loading}></LoadingOverlay>
+      <Box p={2}>
+        <Grid container spacing={2} alignItems='center'>
+          <Grid item>
+            <TextField size='small' type="text" name="name" onChange={handleChange} value={inputTeamName} label='戰隊名稱' variant="outlined" />
+          </Grid>
+          <Grid item>
+            <Button variant="contained" disableElevation onClick={() => searchTeams({name: inputTeamName})}>搜尋</Button>
+          </Grid>
+        </Grid>
+      </Box>
+      <TeamTable teams={result} showFuncs />
+    </Box>
   );
 }
 

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Users = mongoose.model('users');
 const Teams = mongoose.model('teams');
 const Players = mongoose.model('players');
+const wrap = require('./wrap');
 
 const parseTeamLeader = async (team) => {
   return await {...(team.toObject ? team.toObject() : team), leader: await Users.findOne({_id: team.leader}, '_id name email pictureUrl')};
@@ -25,6 +26,15 @@ const parseUserRequests = async (user) => {
   return {...(user.toObject ? user.toObject() : user), requests};
 }
 
+const parseUserTeamSelected = async (user) => {
+  let teamSelected = await Teams.findById(user.teamSelected, '_id name leader managers members requests');
+  teamSelected = await parseTeamLeader(teamSelected);
+  teamSelected = await parseTeamMembers(teamSelected);
+  teamSelected = await parseTeamRequests(teamSelected);
+  teamSelected = await wrap.team(teamSelected, true);
+  return {...(user.toObject ? user.toObject() : user), teamSelected};
+}
+
 module.exports = {
   team: {
     leader: parseTeamLeader,
@@ -32,6 +42,7 @@ module.exports = {
     members: parseTeamMembers
   },
   user: {
-    requests: parseUserRequests
+    requests: parseUserRequests,
+    teamSelected: parseUserTeamSelected
   }
 }

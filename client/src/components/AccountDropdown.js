@@ -1,48 +1,85 @@
-import React, {useEffect, useRef} from 'react';
+import React from 'react';
+import {Box, Avatar, Popper, ClickAwayListener, Grow, Paper, IconButton, MenuList, Button, Divider} from '@material-ui/core';
+import useStyles from '../styles';
 import {useSelector} from 'react-redux';
-import SignOut from './SignOut';
+import {useDispatch} from 'react-redux';
+import authActions from '../actions/auth';
 
 const AccountDropdown = () => {
+  const classes = useStyles();
   const user = useSelector(state => state.user);
-  const dropdownMenuRef = useRef(null);
-  const dropdownRef = useRef(null);
+  const [open, setOpen] = React.useState(false);
+  const anchorRef = React.useRef(null);
 
-  useEffect(() => {
-    let $dropdown = window.$(dropdownRef.current);
-    let $menu = window.$(dropdownMenuRef.current);
-    positionMenu($menu);
+  const dispatch = useDispatch();
+  const signOut = () => dispatch(authActions.signOut());
 
-    $dropdown.on('show.bs.dropdown', function() {
-      $menu.stop(true, true).slideDown(100);
-    });
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
 
-    $dropdown.on('hide.bs.dropdown', function() {
-      $menu.stop(true, true).slideUp(100);
-    });
-  }, []);
-  
-  const positionMenu = ($menu) => {
-    let t = $menu.parent().offset().top + $menu.parent().outerHeight(true) + 4;
-    let l = $menu.parent().outerHeight(true) - parseInt($menu.outerWidth(true));
-    $menu.css('top', t);
-    $menu.css('left', l);
+  const handleClose = (event) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return;
+    }
+    setOpen(false);
+  };
+
+  function handleListKeyDown(event) {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      setOpen(false);
+    }
   }
 
+  // return focus to the button when we transitioned from !open -> open
+  const prevOpen = React.useRef(open);
+  React.useEffect(() => {
+    if (prevOpen.current === true && open === false) {
+      anchorRef.current.focus();
+    }
+
+    prevOpen.current = open;
+  }, [open]);
+
   return (
-    <div className="dropdown d-inline-block" ref={dropdownRef}>
-      <img className="dropdown-toggle" data-toggle="dropdown" src={user.pictureUrl} style={{verticalAlign: 'middle', width: 36, height: 36, borderRadius: '50%', cursor: 'pointer'}} alt=''></img>
-      <div className="dropdown-menu p-2 m-0" ref={dropdownMenuRef}>
-        <div className="d-flex align-items-center text-nowrap">
-          <img src={user.pictureUrl} style={{verticalAlign: 'middle', width: 40, height: 40, borderRadius: '50%'}} alt=''></img>
-          <div className='text-left ml-2 align-text-top w-25'>
-            <h5 className='mb-1'>{user.name}</h5>
-            <small className='text-secondary'>{user.email}</small>
-          </div>
-        </div>
-        <div className="dropdown-divider"></div>
-        <SignOut></SignOut>
-      </div>
-    </div>
+    <>
+      <IconButton
+        ref={anchorRef}
+        onClick={handleToggle}
+      >
+        <Avatar src={user.pictureUrl}/>
+      </IconButton>
+      
+      <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
+        {({TransitionProps, placement}) => (
+          <Grow
+            {...TransitionProps}
+            style={{transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom'}}
+          >
+            <Paper>
+              <ClickAwayListener onClickAway={handleClose}>
+                <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown} className={classes.noOutline}>
+                  <Box px={2} py={1} className={classes.noOutline}>
+                    <Box display='flex' alignItems="center" mb={2}>
+                      <img src={user.pictureUrl} style={{verticalAlign: 'middle', width: 40, height: 40, borderRadius: '50%'}} alt=''></img>
+                      <Box ml={2}>
+                        <Box fontSize={18} fontWeight="fontWeightBold">{user.name}</Box>
+                        <Box fontSize={12} color='text.secondary'>{user.email}</Box>
+                      </Box>
+                    </Box>
+                    <Divider></Divider>
+                    <Box mt={2} display="flex" justifyContent="flex-end">
+                      <Button size="small" variant="contained" disableElevation onClick={signOut}>登出</Button>
+                    </Box>
+                  </Box>
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
+    </>
   );
 }
  

@@ -2,9 +2,9 @@ import axios from 'axios';
 import handleResponse from './resHandler';
 
 export default {
-  patch: async (id, data) => {
+  patch: async (data) => {
     try {
-      const res = await axios.patch(`/api/user/` + id, data);
+      const res = await axios.patch(`/api/user/`, data);
       return handleResponse(res);
     }
     catch (err) {

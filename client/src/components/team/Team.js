@@ -2,34 +2,35 @@ import React, {useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {Nav} from 'react-bootstrap';
-import Members from './Members';
+import MemberManagement from './MemberManagement';
 import Permissions from './Permissions';
 import Requests from './Requests';
+
+const tabs = {
+  MEMBERS: 'MEMBERS',
+  PERMISSIONS: 'PERMISSIONS',
+  REQUESTS: 'REQUESTS'
+}
 
 const Team = () => {
   const {team_id} = useParams();
   const team = useSelector(state => state.teams).find(t => t._id === team_id);
   const user = useSelector(state => state.user);
-  const role = team.users.leader._id === user._id ? 'leader' : team.users.managers.find(m => m._id === user._id) ? 'manager' : team.users.members.find(m => m._id === user._id) ? 'member' : null;
-
-  const tabs = {
-    MEMBERS: 'MEMBERS',
-    PERMISSIONS: 'PERMISSIONS',
-    REQUESTS: 'REQUESTS'
-  }
-
   const [tabSelected, setTabSelected] = useState(tabs.MEMBERS);
+  if (!team)
+    return null;
+  const role = team.users.leader._id === user._id ? 'leader' : team.users.managers.find(m => m._id === user._id) ? 'manager' : team.users.members.find(m => m._id === user._id) ? 'member' : null;
 
   const renderTab = () => {
     switch (tabSelected) {
       case tabs.MEMBERS:
-        return <Members role={role}></Members>;
+        return <MemberManagement role={role}></MemberManagement>;
       case tabs.PERMISSIONS:
         return <Permissions></Permissions>;
       case tabs.REQUESTS:
         return <Requests></Requests>;
       default:
-        return <Members></Members>;
+        return <MemberManagement></MemberManagement>;
     }
   }
 

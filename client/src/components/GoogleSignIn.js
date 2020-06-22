@@ -1,9 +1,12 @@
 import React, {useState, useEffect} from 'react';
+import {Button} from '@material-ui/core';
+import useStyles from '../styles';
 import {useDispatch} from 'react-redux';
 import authActions from '../actions/auth';
 import {IconNormal, IconPressed} from './GoogleSignInIcon';
 
 const GoogleSignIn = () => {
+  const classes = useStyles();
   const dispatch = useDispatch();
   const initGoogleSignIn = () => dispatch(authActions.initGoogleSignIn());
   const [isSignInHover, setisSignInHover] = useState(false);
@@ -24,12 +27,15 @@ const GoogleSignIn = () => {
   }
 
   return (
-    <div id="signIn" className="nav-item align-items-center d-flex">
-      <button className="btn btn-sm text-dark align-items-center w-100 h-100 d-flex" style={signInStyle} onMouseEnter={() => setisSignInHover(true)} onMouseLeave={() => setisSignInHover(false)}>
-        {isSignInHover ? (<IconPressed></IconPressed>) : (<IconNormal></IconNormal>) }
-        <span style={{paddingLeft: "7px"}}>以 Google 登入</span>
-      </button>
-    </div>
+    <Button
+      id="signIn"
+      className={classes.googleSignIn}
+      onMouseEnter={() => setisSignInHover(true)}
+      onMouseLeave={() => setisSignInHover(false)}
+    >
+      {isSignInHover ? (<IconPressed></IconPressed>) : (<IconNormal></IconNormal>)}
+      <span style={{paddingLeft: "7px"}}>以 Google 登入</span>
+    </Button>
   );
 }
  

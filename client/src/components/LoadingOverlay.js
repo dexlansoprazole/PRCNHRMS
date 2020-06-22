@@ -1,9 +1,10 @@
-import React, {useEffect, useRef} from 'react';
+import React from 'react';
+import {Box, CircularProgress} from '@material-ui/core';
 
 const LoadingOverlay = (props) => {
-  const overlayRef = useRef(null);
+  const overlayRef = React.useRef(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     let $overlay = window.$(overlayRef.current);
     $overlay.css('opacity', props.loading ? 1 : 0);
     $overlay.css('pointer-events', props.loading ? 'auto' : 'none');
@@ -24,19 +25,23 @@ const LoadingOverlay = (props) => {
     position: 'absolute',
     zIndex: props.global ? 9999 : 1031,
     opacity: 0,
-    background: props.global ? 'rgba(39, 42, 43, 0.5)' : 'rgba(255, 255, 255, 0.8)',
+    background: 'rgba(39, 42, 43, 0.6)',
     transition: 'opacity 200ms ease-in-out',
-    borderRadius: '4px',
+    borderRadius: props.round ? '4px' : '0px',
     margin: '0 0 0 0',
-    boxSizing: 'border-box'
+    boxSizing: 'border-box',
+    color: '#fff',
+    pointerEvents: 'none'
   }
 
   return (
-    <div className='text-light' ref={overlayRef} style={overlayStyle}>
-      <div className='text-center'>
-        <div className={"spinner-border text-" + (props.global ? 'light' : 'primary')} role="status"></div>
-        {props.global ? <h3>Loading... </h3> : null}
-      </div>
+    <div ref={overlayRef} style={overlayStyle}>
+      <Box>
+        <Box display='flex' justifyContent="center" alignItems="center">
+          <CircularProgress color="inherit" />
+        </Box>
+        {props.global ? <Box mt={1} fontSize={24} fontWeight="fontWeightBold">Loading...</Box> : null}
+      </Box>
     </div>
   );
 }

@@ -28,7 +28,7 @@ const signIn = (googleUser) => {
   }
 
   function request() {return {type: googleUser ? actionTypes.LOGIN_REQUEST : actionTypes.TRY_LOGIN_REQUEST}}
-  function success(res) {return {type: googleUser ? actionTypes.LOGIN_SUCCESS : actionTypes.TRY_LOGIN_SUCCESS, user: res.user, teams: res.teams}}
+  function success(res) {return {type: googleUser ? actionTypes.LOGIN_SUCCESS : actionTypes.TRY_LOGIN_SUCCESS, user: res.user, teams: res.teams, teamSelected: res.teamSelected}}
   function failure() {return {type: googleUser ? actionTypes.LOGIN_FAILURE : actionTypes.TRY_LOGIN_FAILURE}}
 }
 

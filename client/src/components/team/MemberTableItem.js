@@ -1,59 +1,88 @@
 import React, {useState} from 'react';
+import {IconButton, TableCell, TableRow, Link} from '@material-ui/core';
 import {Edit, UserX, Trash2} from 'react-feather';
-import {createUseStyles} from 'react-jss'
+import useStyles from '../../styles';
 
 var moment = require('moment');
 
 const MemberTableItem = props => {
-
+  const classes = useStyles();
   const [isHovered, setIsHovered] = useState(false);
+  const [openEditMemberDialog, setOpenEditMemberDialog] = React.useState(false);
+  const [openDeleteMemberDialog, setOpenDeleteMemberDialog] = React.useState(false);
+  const [openKickMemberDialog, setOpenKickMemberDialog] = React.useState(false);
 
   const btnStyles = {
     opacity: isHovered ? 1 : 0
   }
 
-  const classes = createUseStyles({
-    btnFunc: {
-      transition: "opacity .2s",
-      backgroundColor: "transparent",
-      border: '1px solid transparent',
-      borderRadius: 4,
-      padding: "4px",
-      margin: "0px 8px 0px 8px",
-      '&:focus': {
-        outline: 'none',
-        boxShadow: 'none'
-      },
-      '&:hover': {
-        border: '1px solid #ccc',
-        backgroundColor: '#ddd'
-      }
+  const handleFuncClick = (e) => {
+    e.stopPropagation();
+    switch (e.target.name) {
+      case 'edit':
+        setOpenEditMemberDialog(true);
+        break;
+      case 'kick':
+        setOpenKickMemberDialog(true);
+        break;
+      case 'delete':
+        setOpenDeleteMemberDialog(true);
+        break;
+      default:
+        break;
     }
-  })();
+  }
 
   return (
-    <tr onMouseOver={() => {setIsHovered(true)}} onMouseLeave={() => {setIsHovered(false)}}>
-      <td className="fit">{props.index}</td>
-      <td className="fit">{props.member.id}</td>
-      <td>{props.member.name}</td>
-      <td>{moment(props.member.join_date).format('YYYY/MM/DD')}</td>
-      <td>{props.member.leave_date ? moment(props.member.leave_date).format('YYYY/MM/DD') : "-"}</td>
-      <td>{props.member.kick_reason ? props.member.kick_reason : "-"}</td>
+    <TableRow
+      hover
+      onMouseOver={() => {setIsHovered(true)}}
+      onMouseLeave={() => {setIsHovered(false)}}
+    >
+      <TableCell>{props.index}</TableCell>
+      <TableCell>{props.member.id}</TableCell>
+      <TableCell>{props.member.name}</TableCell>
+      <TableCell>{moment(props.member.join_date).format('YYYY/MM/DD')}</TableCell>
+      <TableCell>{props.member.leave_date ? moment(props.member.leave_date).format('YYYY/MM/DD') : "-"}</TableCell>
+      <TableCell>{props.member.kick_reason ? props.member.kick_reason : "-"}</TableCell>
       {
         props.role === "leader" || props.role === 'manager' ?
-        <td className="fit p-0" style={{verticalAlign: 'middle'}}>
-          <button className={classes.btnFunc} data-toggle="modal" data-target="#editMemberModal" style={btnStyles} onClick={() => props.setMemberClicked(props.member)}><Edit></Edit></button>
+          <TableCell style={{verticalAlign: 'middle'}}>
+            <IconButton
+              className={classes.btnFunc}
+              name='edit'
+              style={btnStyles}
+              onClick={handleFuncClick}
+              disableRipple
+            >
+              <Edit />
+            </IconButton>
             {
               !props.member.leave_date ?
-              <button className={classes.btnFunc} data-toggle="modal" data-target="#kickMemberModal" style={btnStyles} onClick={() => props.setMemberClicked(props.member)}><UserX></UserX></button> :
-                ""
+                <IconButton
+                  className={classes.btnFunc}
+                  name='kick'
+                  style={btnStyles}
+                  onClick={handleFuncClick}
+                  disableRipple
+                >
+                  <UserX />
+                </IconButton>
+                : null
             }
-          <button className={classes.btnFunc} data-toggle="modal" data-target="#deleteMemberModal" style={btnStyles} onClick={() => props.setMemberClicked(props.member)}><Trash2></Trash2></button>
-        </td> : 
-        null  
+            <IconButton
+              className={classes.btnFunc}
+              name='delete'
+              style={btnStyles}
+              onClick={handleFuncClick}
+              disableRipple
+            >
+              <Trash2 />
+            </IconButton>
+          </TableCell>
+          : null
       }
-      
-    </tr>
+    </TableRow>
   );
 };
 

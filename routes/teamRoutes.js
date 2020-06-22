@@ -45,6 +45,7 @@ module.exports = (app) => {
         throw new PermissionError();
       let team = await Teams.findByIdAndUpdate(team_id, {$addToSet: {requests: user._id}}, {new: true});
       user = await parse.user.requests(user);
+      user = await parse.user.teamSelected(user);
       team = await parse.team.leader(team);
       team = await parse.team.members(team);
       team = await parse.team.requests(team);
@@ -70,6 +71,7 @@ module.exports = (app) => {
       
       let team = await Teams.findByIdAndUpdate(team_id, {$pull: {requests: user_id}}, {new: true});
       user = await parse.user.requests(user);
+      user = await parse.user.teamSelected(user);
       team = await parse.team.leader(team);
       team = await parse.team.members(team);
       team = await parse.team.requests(team);

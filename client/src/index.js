@@ -5,7 +5,7 @@ import {render} from 'react-dom'
 import {Provider} from 'react-redux'
 import {createStore, applyMiddleware} from 'redux'
 import thunkMiddleware from 'redux-thunk'
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import 'overlayscrollbars/css/OverlayScrollbars.css';
 import './index.css';
 import rootReducer from './reducers'

@@ -4,8 +4,9 @@ import user from './user';
 import team from './team';
 import teams from './teams';
 import loading from './loading';
-import initialized from './initialized'
-import notification from './notification'
+import initialized from './initialized';
+import notification from './notification';
+import teamSelected from './teamSelected';
 
 const rootReducer = combineReducers({
   initialized,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
   auth,
   user,
   team,
-  teams
+  teams,
+  teamSelected
 });
 
 export default rootReducer;
