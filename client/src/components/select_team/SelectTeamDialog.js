@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {useSelector, useDispatch} from 'react-redux';
 import {Box, Button, Dialog, DialogTitle, AppBar, Tab, Tabs} from '@material-ui/core';
+import {Plus} from 'react-feather';
 import AddTeamDialog from './AddTeamDialog';
 import SearchTeam from './SearchTeam';
 import TeamTable from './TeamTable';
@@ -30,8 +31,10 @@ const SelectTeamDialog = props => {
   };
 
   const handleSelect = async () => {
-    handleClose();
-    patchUser({teamSelected: teamSelected._id});
+    if (teamSelected && teamSelected._id) {
+      handleClose();
+      patchUser({teamSelected: teamSelected._id});
+    }
   };
 
   const renderTab = () => {
@@ -44,7 +47,7 @@ const SelectTeamDialog = props => {
               <Button onClick={handleClose}>
                 取消
               </Button>
-              <Button onClick={handleSelect} color="primary">
+              <Button onClick={handleSelect} color="primary" disabled={!teamSelected || !teamSelected._id}>
                 選擇
               </Button>
             </Box>
@@ -65,11 +68,16 @@ const SelectTeamDialog = props => {
       maxWidth={'md'}
       open={props.open}
       onClose={handleClose}
+      disableBackdropClick={props.disableBackdropClick}
+      disableEscapeKeyDown={props.disableEscapeKeyDown}
     >
       <DialogTitle>
         <Box display='flex'>
-          <Box flexGrow={1}>我的戰隊</Box>
-          <Button onClick={() => setOpenAddTeamDialog(true)}>
+          <Box flexGrow={1}>選擇戰隊</Box>
+          <Button
+            startIcon={<Plus />}
+            onClick={() => setOpenAddTeamDialog(true)} color='primary'
+          >
             建立戰隊
           </Button>
           <AddTeamDialog open={openAddTeamDialog} setOpen={setOpenAddTeamDialog} />
@@ -93,7 +101,9 @@ const SelectTeamDialog = props => {
 
 SelectTeamDialog.propTypes = {
   open: PropTypes.bool.isRequired,
-  setOpen: PropTypes.func.isRequired
+  setOpen: PropTypes.func.isRequired,
+  disableBackdropClick: PropTypes.bool,
+  disableEscapeKeyDown: PropTypes.bool
 }
 
 export default SelectTeamDialog;

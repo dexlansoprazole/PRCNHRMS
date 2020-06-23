@@ -5,7 +5,6 @@ import {render} from 'react-dom'
 import {Provider} from 'react-redux'
 import {createStore, applyMiddleware} from 'redux'
 import thunkMiddleware from 'redux-thunk'
-// import 'bootstrap/dist/css/bootstrap.min.css';
 import 'overlayscrollbars/css/OverlayScrollbars.css';
 import './index.css';
 import rootReducer from './reducers'
@@ -14,6 +13,11 @@ import * as serviceWorker from './serviceWorker';
 import {composeWithDevTools} from 'redux-devtools-extension/developmentOnly';
 import callAPIMiddleware from './callAPIMiddleware';
 import {CookiesProvider} from 'react-cookie';
+
+Object.filter = (obj, predicate) =>
+  Object.keys(obj)
+    .filter(key => predicate.includes(key))
+    .reduce((res, key) => (res[key] = obj[key], res), {});
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(
   thunkMiddleware, callAPIMiddleware, LogRocket.reduxMiddleware()

@@ -12,7 +12,7 @@ const tabs = {
   REQUESTS: 'REQUESTS'
 }
 
-const Team = () => {
+const TeamManagement = () => {
   const {team_id} = useParams();
   const team = useSelector(state => state.teams).find(t => t._id === team_id);
   const user = useSelector(state => state.user);
@@ -72,4 +72,4 @@ const Team = () => {
     return null;
 }
 
-export default Team;
+export default TeamManagement;

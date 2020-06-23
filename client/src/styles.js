@@ -8,7 +8,7 @@ export default makeStyles((theme) => ({
   },
   appBar: {
     boxShadow: '0 0 0 0 rgba(0, 0, 0, 0)',
-    backgroundColor: '#f381a7',
+    backgroundColor: theme.palette.primary,
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
@@ -91,16 +91,7 @@ export default makeStyles((theme) => ({
   btnTableItemFunc: {
     transition: "opacity .2s",
     backgroundColor: "transparent",
-    border: '1px solid transparent',
-    borderRadius: 4,
-    padding: "4px",
-    margin: "0px 8px 0px 8px",
-    '&:focus': {
-      outline: 'none',
-      boxShadow: 'none'
-    },
-    '&:hover': {
-      backgroundColor: '#ddd'
-    }
+    padding: theme.spacing(1),
+    margin: "0px 0px 0px 0px",
   }
 }));

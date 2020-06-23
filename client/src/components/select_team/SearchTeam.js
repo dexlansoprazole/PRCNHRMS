@@ -38,7 +38,7 @@ const SearchTeam = () => {
             <TextField size='small' type="text" name="name" onChange={handleChange} value={inputTeamName} label='戰隊名稱' variant="outlined" />
           </Grid>
           <Grid item>
-            <Button variant="contained" disableElevation onClick={() => searchTeams({name: inputTeamName})}>搜尋</Button>
+            <Button variant="contained" color='primary' disableElevation onClick={() => searchTeams({name: inputTeamName})}>搜尋</Button>
           </Grid>
         </Grid>
       </Box>

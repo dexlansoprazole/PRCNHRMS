@@ -11,17 +11,25 @@ const SelectTeamButton = () => {
   const [openSelectTeamDialog, setOpenSelectTeamDialog] = React.useState(false);
 
   React.useEffect(() => {
-    setOpenSelectTeamDialog(false);
-    history.push('/team/member/' + team._id);
+    if (!team._id)
+      setOpenSelectTeamDialog(true);
+    else {
+      setOpenSelectTeamDialog(false);
+      history.push('/team/member/' + team._id);
+    }
   }, [team]);
 
   return (
     <Box>
-      <SelectTeamDialog open={openSelectTeamDialog} setOpen={setOpenSelectTeamDialog} />
+      <SelectTeamDialog
+        open={openSelectTeamDialog}
+        setOpen={setOpenSelectTeamDialog}
+        disableBackdropClick={team._id ? false : true}
+        disableEscapeKeyDown={team._id ? false : true} />
       <Button size='large' color='inherit' onClick={() => setOpenSelectTeamDialog(true)} style={{textTransform: 'none'}}>
         <Grid container spacing={1} alignItems='center'>
           <Grid item>
-            {team.name}
+            {team.name ? team.name : '我的戰隊'}
           </Grid>
           <Grid item>
             <ChevronDown display='block' />

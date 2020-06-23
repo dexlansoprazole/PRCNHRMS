@@ -22,7 +22,6 @@ const EditMemberDialog = (props) => {
   });
 
   React.useEffect(() => {
-    console.log(member);
     setMemberData({
       id: member.id,
       name: member.name,

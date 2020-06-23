@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import {useSelector, useDispatch} from 'react-redux';
-import {IconButton, TableCell, TableRow, Link, Chip} from '@material-ui/core';
+import {IconButton, TableCell, TableRow, Link, Chip, Grid} from '@material-ui/core';
 import {Edit, Trash2, PlusSquare, XSquare} from 'react-feather';
 import AlertDialog from '../AlertDialog';
 import EditTeamDialog from './EditTeamDialog';
@@ -32,7 +32,7 @@ const TeamTableItem = props => {
     opacity: isHovered ? 1 : 0
   }
 
-  const renderBadge = (text, color) => {
+  const renderBadge = (text, color, outline) => {
     return (
       <Chip
         size="small"
@@ -69,7 +69,7 @@ const TeamTableItem = props => {
   return (
     <TableRow
       hover
-      style={{cursor: props.showPosition ? 'pointer' : 'normal', height: '47px'}}
+      style={{cursor: props.showPosition ? 'pointer' : 'normal', height: '48px'}}
       onMouseOver={() => {setIsHovered(true)}}
       onMouseLeave={() => {setIsHovered(false)}}
       onClick={handleClick}
@@ -84,56 +84,62 @@ const TeamTableItem = props => {
       {
         props.showPosition ?
           <TableCell>
-            {isLeader ? renderBadge('隊長', 'primary') : null}
-            {isManager ? renderBadge('管理員', 'success') : null}
-            {isMember ? renderBadge('成員', 'default') : null}
+            {isLeader ? <Chip label='隊長' size='small' color='secondary' /> : null}
+            {isManager ? <Chip label='管理員' size='small' color='secondary' /> : null}
+            {isMember ? <Chip label='成員' size='small' color='default' /> : null}
           </TableCell>
           : null
       }
-      <TableCell style={{verticalAlign: 'middle'}}>
-        {isLeader ?
-          <IconButton
-            className={classes.btnTableItemFunc}
-            style={btnFuncStyles}
-            name='edit'
-            onClick={handleFuncClick}
-            disableRipple
-          >
-            <Edit></Edit>
-          </IconButton> :
-          null
-        }
-        {isLeader ?
-          <IconButton
-            className={classes.btnTableItemFunc}
-            style={btnFuncStyles}
-            name='delete'
-            onClick={handleFuncClick}
-            disableRipple
-          >
-            <Trash2></Trash2>
-          </IconButton> :
-          null
-        }
-        {!(isLeader || isManager || isMember) ? isRequested ?
-          <IconButton
-            className={classes.btnTableItemFunc}
-            style={btnFuncStyles}
-            onClick={() => deleteJoinRequest(props.team._id)}
-            disableRipple
-          >
-            <XSquare></XSquare>
-          </IconButton> :
-          <IconButton
-            className={classes.btnTableItemFunc}
-            style={btnFuncStyles}
-            onClick={() => addJoinRequest(props.team._id)}
-            disableRipple
-          >
-            <PlusSquare></PlusSquare>
-          </IconButton> :
-          null
-        }
+      <TableCell style={{verticalAlign: 'middle'}} padding='none'>
+        <Grid container>
+          {isLeader ?
+            <Grid item>
+              <IconButton
+                className={classes.btnTableItemFunc}
+                style={btnFuncStyles}
+                name='edit'
+                onClick={handleFuncClick}
+              >
+                <Edit></Edit>
+              </IconButton>
+            </Grid> :
+            null
+          }
+          {isLeader ?
+            <Grid item>
+              <IconButton
+                className={classes.btnTableItemFunc}
+                style={btnFuncStyles}
+                name='delete'
+                onClick={handleFuncClick}
+              >
+                <Trash2></Trash2>
+              </IconButton>
+            </Grid> :
+            null
+          }
+          {!(isLeader || isManager || isMember) ? isRequested ?
+            <Grid item>
+              <IconButton
+                className={classes.btnTableItemFunc}
+                style={btnFuncStyles}
+                onClick={() => deleteJoinRequest(props.team._id)}
+              >
+                <XSquare></XSquare>
+              </IconButton>
+            </Grid> :
+            <Grid item>
+              <IconButton
+                className={classes.btnTableItemFunc}
+                style={btnFuncStyles}
+                onClick={() => addJoinRequest(props.team._id)}
+              >
+                <PlusSquare></PlusSquare>
+              </IconButton>
+            </Grid> :
+            null
+          }
+        </Grid>
       </TableCell>
 
       <AlertDialog
