@@ -8,7 +8,7 @@ module.exports = (app) => {
     try {
       for (q of req.body)
         await permission.checkIsLeader(req.session.user, q.team);
-      let members = await Players.find({$or: req.body.map(q => Object.filter(q, ['team']))});
+      let members = await Players.find({$or: req.body.map(q => Object.filter(q, ['team']))}, {select: '-__v'});
       return res.status(200).send({members});
     } catch (error) {
       next(err);
@@ -16,7 +16,7 @@ module.exports = (app) => {
   });
 
   app.post(`/api/member`, async (req, res, next) => {
-    const newMember = Object.filter(req.body, ['id', 'name', 'join_date', 'team']);
+    const newMember = Object.filter(req.body, ['id', 'name', 'join_date', 'leave_date', 'kick_reason', 'team']);
     try {
       await permission.checkIsLeader(req.session.user, newMember.team);
       const player = await Players.create(newMember)
@@ -32,7 +32,7 @@ module.exports = (app) => {
     try {
       let player = await Players.findById(player_id);
       await permission.checkIsLeader(req.session.user, player.team.toString());
-      player = await Players.findByIdAndUpdate(player_id, data, {new: true});
+      player = await Players.findByIdAndUpdate(player_id, data, {new: true, select: '-__v'});
       return res.status(200).send({member: player});
     } catch (error) {
       next(error);
@@ -44,7 +44,7 @@ module.exports = (app) => {
     try {
       let player = await Players.findById(player_id);
       await permission.checkIsLeader(req.session.user, player.team.toString());
-      player = await Players.findByIdAndDelete(player_id)
+      player = await Players.findByIdAndDelete(player_id, {select: '-__v'})
       return res.status(200).send({member: player})
     } catch (error) {
       next(error);

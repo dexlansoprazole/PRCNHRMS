@@ -28,6 +28,8 @@ const parseUserRequests = async (user) => {
 
 const parseUserTeamSelected = async (user) => {
   let teamSelected = await Teams.findById(user.teamSelected, '_id name leader managers members requests');
+  if (teamSelected == null)
+    return {...(user.toObject ? user.toObject() : user), teamSelected: null};
   teamSelected = await parseTeamLeader(teamSelected);
   teamSelected = await parseTeamMembers(teamSelected);
   teamSelected = await parseTeamRequests(teamSelected);

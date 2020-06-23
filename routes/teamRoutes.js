@@ -50,7 +50,7 @@ module.exports = (app) => {
       team = await parse.team.members(team);
       team = await parse.team.requests(team);
       team = await wrap.team(team);
-      return res.status(200).send({ user, team })
+      return res.status(200).send({user, team})
     } catch (error) {
       next(error);
     }
@@ -68,7 +68,7 @@ module.exports = (app) => {
         await permission.checkIsLeader(user, team_id);
         user_id = data.user_id;
       }
-      
+
       let team = await Teams.findByIdAndUpdate(team_id, {$pull: {requests: user_id}}, {new: true});
       user = await parse.user.requests(user);
       user = await parse.user.teamSelected(user);
@@ -76,7 +76,7 @@ module.exports = (app) => {
       team = await parse.team.members(team);
       team = await parse.team.requests(team);
       team = await wrap.team(team, data.user_id != null);
-      return res.status(200).send({ user, team })
+      return res.status(200).send({user, team})
     } catch (error) {
       next(error);
     }
@@ -109,6 +109,7 @@ module.exports = (app) => {
       team = await parse.team.members(team);
       team = await parse.team.requests(team);
       team = await wrap.team(team, true);
+      // TODO: Update teamSelected if deleted
       return res.status(200).send({team})
     } catch (error) {
       next(error);
@@ -143,15 +144,33 @@ module.exports = (app) => {
       let members = await Players.find({team: _id}, '_id');
       if (members.length > 0)
         await Players.deleteMany({$or: members}, {session});
-      
+
       // Pull requests for deleted team
       let or = team.requests.map(r => ({_id: r}));
       if (or.length > 0)
         await Users.updateMany({$or: or}, {$pull: {requests: team._id}}, {session});
-      
+
+      // Update teamSelected if deleted
+      let user = await Users.findById(req.session.user._id).session(session);
+      let newTeamSelected = null;
+      if (user.teamSelected.toString() === team._id.toString()) {
+        let teams = await Teams.find({$or: [{leader: user._id}, {managers: {$in: [user._id]}}, {members: {$in: [user._id]}}]}, '-__v').session(session);
+        if (teams.length > 0) {
+          newTeamSelected = await parse.team.leader(teams[0]);
+          newTeamSelected = await parse.team.requests(newTeamSelected);
+          newTeamSelected = await parse.team.members(newTeamSelected);
+          newTeamSelected = await wrap.team(newTeamSelected, true);
+          user.teamSelected = newTeamSelected._id;
+        }
+        else
+          user.teamSelected = null; 
+      }
+      else
+        newTeamSelected = user.teamSelected.toString();
+      await user.save();
       await session.commitTransaction();
       session.endSession();
-      return res.status(200).send({team, members});
+      return res.status(200).send({team, members, teamSelected: newTeamSelected});
     } catch (error) {
       await session.abortTransaction();
       session.endSession();
