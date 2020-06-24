@@ -48,7 +48,7 @@ export default makeStyles((theme) => ({
   drawerBackdrop: {
     zIndex: theme.zIndex.drawer - 1,
     top: '64px',
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       display: 'none'
     }
   },
