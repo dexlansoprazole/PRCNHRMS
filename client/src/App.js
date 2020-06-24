@@ -42,13 +42,17 @@ const App = () => {
   const loading = useSelector(state => state.loading);
   const isSignedIn = useSelector(state => state.auth.isSignedIn);
   const teamSelected = useSelector(state => state.teamSelected);
-  const refLink = React.forwardRef((props, ref) => <div ref={ref}><Link {...props} /></div>);
+  const refLink = React.forwardRef((props, ref) => <div ref={ref} onClick={width < theme.breakpoints.values.md ? handleDrawerClose : null}><Link {...props} /></div>);
 
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [teamCollapseOpen, setTeamCollapseOpen] = React.useState(true);
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
+  }
+
+  const handleDrawerClose = () => {
+    setDrawerOpen(false);
   }
 
   const handleCollapseClick = () => {
@@ -141,7 +145,7 @@ const App = () => {
             width < theme.breakpoints.values.md ?
               <Backdrop
                 open={drawerOpen}
-                onClick={handleDrawerToggle}
+                onClick={handleDrawerClose}
                 classes={{
                   root: classes.drawerBackdrop
                 }}
