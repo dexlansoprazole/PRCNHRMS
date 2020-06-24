@@ -14,6 +14,7 @@ import MemberManagement from './components/team/MemberManagement'
 import LoadingOverlay from './components/LoadingOverlay';
 import ScrollBarAdapter from './components/ScrollBarAdapter';
 import authActions from './actions/auth';
+import {useWindowResize} from './components/useWindowResize';
 
 const theme = createMuiTheme({
   palette: {
@@ -33,6 +34,7 @@ const theme = createMuiTheme({
 });
 
 const App = () => {
+  const {width} = useWindowResize();
   const classes = useStyles(theme);
   const dispatch = useDispatch();
   const signIn = () => dispatch(authActions.signIn());
@@ -40,9 +42,9 @@ const App = () => {
   const loading = useSelector(state => state.loading);
   const isSignedIn = useSelector(state => state.auth.isSignedIn);
   const teamSelected = useSelector(state => state.teamSelected);
-  const refLink = React.forwardRef((props, ref) => <div ref={ref}><Link {...props} /></div>)
+  const refLink = React.forwardRef((props, ref) => <div ref={ref}><Link {...props} /></div>);
 
-  const [drawerOpen, setDrawerOpen] = React.useState(true);
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [teamCollapseOpen, setTeamCollapseOpen] = React.useState(true);
 
   const handleDrawerToggle = () => {
@@ -56,6 +58,10 @@ const App = () => {
   React.useEffect(() => {
     signIn();
   }, []);
+
+  React.useLayoutEffect(() => {
+    setDrawerOpen(width > theme.breakpoints.values.md ? true : false);
+  }, [width]);
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -131,13 +137,17 @@ const App = () => {
                 : null}
             </List>
           </Drawer>
-          <Backdrop
-            open={drawerOpen}
-            onClick={handleDrawerToggle}
-            classes={{
-              root: classes.drawerBackdrop
-            }}
-          />
+          {
+            width < theme.breakpoints.values.md ?
+              <Backdrop
+                open={drawerOpen}
+                onClick={handleDrawerToggle}
+                classes={{
+                  root: classes.drawerBackdrop
+                }}
+              />
+              : null
+          }
           <main className={classes.content}>
             <div className={classes.toolbar} />
             <Switch>
