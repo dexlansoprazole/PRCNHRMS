@@ -2,9 +2,9 @@ import React from 'react';
 import clsx from 'clsx';
 import {BrowserRouter, Switch, Route, Redirect, Link} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
-import {AppBar, Toolbar, IconButton, Typography, Drawer, Divider, List, ListItem, ListItemText, Collapse, Grid, createMuiTheme, MuiThemeProvider} from '@material-ui/core';
+import {AppBar, Toolbar, IconButton, Typography, Drawer, Backdrop, List, ListItem, ListItemText, Collapse, Grid, createMuiTheme, MuiThemeProvider} from '@material-ui/core';
 import useStyles from './styles';
-import {Menu, ChevronLeft, ChevronDown, ChevronUp} from 'react-feather';
+import {Menu, ChevronDown, ChevronUp} from 'react-feather';
 import './App.css';
 import SelectTeamButton from './components/select_team/SelectTeamButton';
 import Home from './components/Home';
@@ -45,12 +45,10 @@ const App = () => {
   const [drawerOpen, setDrawerOpen] = React.useState(true);
   const [teamCollapseOpen, setTeamCollapseOpen] = React.useState(true);
 
-  const handleDrawerOpen = () => {
-    setDrawerOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setDrawerOpen(false);
-  };
+  const handleDrawerToggle = () => {
+    setDrawerOpen(!drawerOpen);
+  }
+
   const handleCollapseClick = () => {
     setTeamCollapseOpen(!teamCollapseOpen);
   };
@@ -67,28 +65,24 @@ const App = () => {
 
           <AppBar
             position="fixed"
-            className={clsx(classes.appBar, {
-              [classes.appBarShift]: drawerOpen,
-            })}
+            className={classes.appBar}
           >
             <Toolbar>
               <IconButton
                 edge="start"
                 color="inherit"
-                onClick={handleDrawerOpen}
-                className={clsx(classes.menuButton, {
-                  [classes.hide]: drawerOpen,
-                })}
+                onClick={handleDrawerToggle}
+                className={classes.menuButton}
               >
                 <Menu />
               </IconButton>
-              <Grid container alignItems='center' justify="space-between" spacing={3}>
+              <Grid container alignItems='center' justify="space-between" spacing={3} wrap='nowrap'>
                 <Grid item>
-                  <Grid container alignItems='center' spacing={2}>
+                  <Grid container alignItems='center' spacing={2} wrap='nowrap'>
                     <Grid item>
                       <Typography variant="h6">
                         PRCNHRMS
-                    </Typography>
+                      </Typography>
                     </Grid>
                     <Grid item>
                       {initialized ? isSignedIn ? <SelectTeamButton /> : null : null}
@@ -109,18 +103,12 @@ const App = () => {
               [classes.drawerClose]: !drawerOpen,
             })}
             classes={{
-              paper: clsx({
+              paper: clsx(classes.drawerPaper, {
                 [classes.drawerOpen]: drawerOpen,
                 [classes.drawerClose]: !drawerOpen,
               }),
             }}
           >
-            <div className={classes.toolbar}>
-              <IconButton onClick={handleDrawerClose}>
-                <ChevronLeft></ChevronLeft>
-              </IconButton>
-            </div>
-            <Divider />
             <List>
               <ListItem button component={refLink} to='/home'>
                 <ListItemText primary='Home' />
@@ -143,6 +131,13 @@ const App = () => {
                 : null}
             </List>
           </Drawer>
+          <Backdrop
+            open={drawerOpen}
+            onClick={handleDrawerToggle}
+            classes={{
+              root: classes.drawerBackdrop
+            }}
+          />
           <main className={classes.content}>
             <div className={classes.toolbar} />
             <Switch>
@@ -154,7 +149,7 @@ const App = () => {
         </BrowserRouter>
         <ScrollBarAdapter></ScrollBarAdapter>
       </div>
-    </MuiThemeProvider>
+    </MuiThemeProvider >
   );
 }
 

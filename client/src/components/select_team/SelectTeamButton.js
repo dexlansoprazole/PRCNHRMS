@@ -27,7 +27,7 @@ const SelectTeamButton = () => {
         disableBackdropClick={team._id ? false : true}
         disableEscapeKeyDown={team._id ? false : true} />
       <Button size='large' color='inherit' onClick={() => setOpenSelectTeamDialog(true)} style={{textTransform: 'none'}}>
-        <Grid container spacing={1} alignItems='center'>
+        <Grid container spacing={1} alignItems='center' wrap='nowrap'>
           <Grid item>
             {team.name ? team.name : '我的戰隊'}
           </Grid>

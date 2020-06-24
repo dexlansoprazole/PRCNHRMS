@@ -1,4 +1,5 @@
 import {makeStyles, useTheme} from '@material-ui/core/styles';
+import zIndex from '@material-ui/core/styles/zIndex';
 
 const drawerWidth = 200;
 
@@ -10,18 +11,6 @@ export default makeStyles((theme) => ({
     boxShadow: '0 0 0 0 rgba(0, 0, 0, 0)',
     backgroundColor: theme.palette.primary,
     zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -30,27 +19,38 @@ export default makeStyles((theme) => ({
     display: 'none',
   },
   drawer: {
+    [theme.breakpoints.down('sm')]: {
+      position: 'fixed',
+    },
+    zIndex: theme.zIndex.drawer,
     width: drawerWidth,
     flexShrink: 0,
-    whiteSpace: 'nowrap',
+    whiteSpace: 'nowrap'
   },
   drawerOpen: {
-    width: drawerWidth,
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+    width: drawerWidth,
   },
   drawerClose: {
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
+      duration: theme.transitions.duration.enteringScreen,
     }),
     overflowX: 'hidden',
-    width: theme.spacing(7) + 1,
+    width: 0,
+  },
+  drawerPaper: {
+    top: 64,
+  },
+  drawerBackdrop: {
+    zIndex: theme.zIndex.drawer - 1,
+    top: '64px',
     [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9) + 1,
-    },
+      display: 'none'
+    }
   },
   toolbar: {
     display: 'flex',
