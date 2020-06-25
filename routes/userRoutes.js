@@ -20,9 +20,7 @@ module.exports = (app) => {
       if (!teams.map(t => t._id).find(id => id.toString() === req.body.teamSelected))
         throw new PermissionError();
       
-      let user = await Users.findByIdAndUpdate(req.session.user._id, req.body, {new: true, select: '-__v'}).catch(err => {
-        next(err);
-      });
+      let user = await Users.findByIdAndUpdate(req.session.user._id, req.body, {new: true, select: '-__v'});
       user = await parse.user.requests(user);
       user = await parse.user.teamSelected(user);
       return res.status(200).send({user, teamSelected: user.teamSelected})

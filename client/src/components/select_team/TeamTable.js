@@ -1,83 +1,108 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Table, TableBody, TableCell, TableHead, TableRow, Box} from '@material-ui/core';
-import TeamTableItem from './TeamTableItem';
-import {OverlayScrollbarsComponent} from 'overlayscrollbars-react';
-import LoadingOverlay from '../LoadingOverlay';
+import {Box, useTheme} from '@material-ui/core';
+import {useSelector} from 'react-redux';
+import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
+import MaterialTable from "material-table";
+import tableIcons from '../tableIcons';
+import deepEqual from 'deep-equal';
 
 const TeamTable = props => {
-  const divRef = React.useRef(null);
-  const colCount = 4 +
-    (props.showPosition ? 1 : 0) +
-    (props.showFuncs ? 1 : 0 )
-
-  React.useEffect(() => {
-    let $div = window.$(divRef.current);
-    let height = $div.parent().parent().parent().parent().parent().parent().height();
-    $div.css('max-height', height);
-    $div.css('height', height);
-    window.$(window).resize(() => {
-      let height = $div.parent().parent().parent().parent().parent().parent().height();
-      $div.css('max-height', height);
-      $div.css('height', height);
-    });
-  }, [props]);
+  const loading = useSelector(state => state.loading || state.team.search.loading);
+  const selectable = Object.keys(props).find(k => k === 'teamSelected') ? true : false;
+  const globalTheme = useTheme();
+  const tableTheme = createMuiTheme(
+    {
+      overrides: {
+        MuiTableRow: {
+          root: {
+            transition: 'all 0s !important',
+            "&:hover": {
+              backgroundColor: "#f8f8f8",
+            }
+          }
+        }
+      }
+    },
+    globalTheme
+  );
 
   return (
-    <Box height='100%' overflow='hidden'>
-      <Box height='100%'>
-        <OverlayScrollbarsComponent
-          className='os-theme-custom'
-          options={{scrollbars: {autoHide: 'move'}}}
-        >
-          <LoadingOverlay loading={props.loading}></LoadingOverlay>
-          <div ref={divRef}>
-            <Table size="small" stickyHeader>
-              <TableHead>
-                <TableRow>
-                  <TableCell>#</TableCell>
-                  <TableCell>名稱</TableCell>
-                  <TableCell>隊長</TableCell>
-                  <TableCell>成員數</TableCell>
-                  {props.showPosition ? <TableCell>職位</TableCell> : null}
-                  {props.showFuncs ? <TableCell></TableCell> : null}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {(props.teams && props.teams.length > 0) ? (
-                  props.teams.map((team, index) =>
-                    <TeamTableItem
-                      key={index}
-                      team={team}
-                      index={index + 1}
-                      link={props.link}
-                      setTeamSelected={props.setTeamSelected}
-                      selected={props.teamSelected ? (team._id === props.teamSelected._id) : false}
-                      showPosition={props.showPosition}
-                      showFuncs={props.showFuncs}
-                    />
-                  )
-                ) : (
-                    <TableRow>
-                      <TableCell colSpan={colCount}>查無戰隊</TableCell>
-                    </TableRow>
-                  )}
-              </TableBody>
-            </Table>
-          </div>
-        </OverlayScrollbarsComponent>
-      </Box>
-    </Box>
+    <MuiThemeProvider theme={tableTheme}>
+      <MaterialTable
+        icons={tableIcons}
+        isLoading={loading}
+        components={{
+          Container: Box
+        }}
+        columns={props.columns}
+        data={props.data}
+        onRowClick={selectable ? (e, rowData) => props.setTeamSelected(rowData.teamData) : null}
+        actions={props.actions}
+        editable={props.editable}
+        options={{
+          actionsColumnIndex: -1,
+          paging: false,
+          maxBodyHeight: props.maxBodyHeight,
+          headerStyle: {position: 'sticky', top: 0, whiteSpace: 'nowrap'},
+          addRowPosition: 'first',
+          rowStyle: rowData => {
+            const hexToRgb = hex =>
+              hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
+                , (m, r, g, b) => '#' + r + r + g + g + b + b)
+                .substring(1).match(/.{2}/g)
+                .map(x => parseInt(x, 16))
+            const rgb = hexToRgb(tableTheme.palette.secondary.main);
+            return {
+              cursor: selectable ? 'pointer' : 'auto',
+              height: '48px',
+              ...(selectable && props.teamSelected._id === rowData.teamData._id && {
+                backgroundColor: 'rgba(' + rgb[0] + ', ' + rgb[1] + ', ' + rgb[2] + ', 0.1)'
+              })
+            }
+          },
+          showTitle: false,
+          toolbar: props.toolbar
+        }}
+        localization={{
+          header: {
+            actions: ''
+          },
+          toolbar: {
+            searchTooltip: '搜尋',
+            searchPlaceholder: '搜尋',
+          },
+          body: {
+            emptyDataSourceMessage: '查無戰隊',
+            addTooltip: '建立戰隊',
+            deleteTooltip: '刪除',
+            editTooltip: '編輯',
+            editRow: {
+              deleteText: '確定要刪除此戰隊?',
+              cancelTooltip: '取消',
+              saveTooltip: '完成'
+            }
+          }
+        }}
+      />
+    </MuiThemeProvider>
   );
 }
 
 TeamTable.propTypes = {
-  teams: PropTypes.array.isRequired,
-  link: PropTypes.bool,
-  showPosition: PropTypes.bool,
-  showFuncs: PropTypes.bool,
+  data: PropTypes.array,
+  columns: PropTypes.array,
+  actions: PropTypes.array,
+  editable: PropTypes.object,
+  teamSelected: PropTypes.object,
   setTeamSelected: PropTypes.func,
-  loading: PropTypes.bool
+  toolbar: PropTypes.bool,
+  maxBodyHeight: PropTypes.any
 };
 
-export default TeamTable;
+TeamTable.defaultProps = {
+  toolbar: true,
+  maxBodyHeight: 'calc(50vh - 48px)'
+}
+
+export default React.memo(TeamTable, (prevProps, nextProps) => deepEqual(prevProps, nextProps));

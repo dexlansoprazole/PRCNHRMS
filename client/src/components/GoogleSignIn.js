@@ -15,17 +15,6 @@ const GoogleSignIn = () => {
     initGoogleSignIn();
   }, []);
 
-  const signInStyle = {
-    paddingTop: '4px',
-    paddingRight: '11px',
-    paddingBottom: '4px',
-    paddingLeft: '4px',
-    border: "0",
-    fontFamily: "Roboto",
-    backgroundColor: isSignInHover ? "#EEEEEE" : "#FFFFFF",
-    transition: 'none'
-  }
-
   return (
     <Button
       id="signIn"

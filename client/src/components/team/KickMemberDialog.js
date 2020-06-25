@@ -87,6 +87,7 @@ const KickMemberDialog = (props) => {
               name="kick_reason"
               label="踢除原因"
               fullWidth
+              autoFocus
               multiline
               value={kickData.kick_reason}
               onChange={handleChange}

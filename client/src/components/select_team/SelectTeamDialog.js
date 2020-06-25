@@ -1,17 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {useSelector, useDispatch} from 'react-redux';
-import {Box, Button, Dialog, DialogTitle, AppBar, Tab, Tabs} from '@material-ui/core';
+import {useHistory, useLocation} from 'react-router-dom';
+import {Box, Button, Dialog, DialogTitle, DialogActions, AppBar, Tab, Tabs} from '@material-ui/core';
 import {Plus} from 'react-feather';
 import AddTeamDialog from './AddTeamDialog';
 import SearchTeam from './SearchTeam';
-import TeamTable from './TeamTable';
+import MyTeamTable from './MyTeamTable';
+import MyRequestTable from './MyRequestTable';
 import userActions from '../../actions/user';
 
 const SelectTeamDialog = props => {
+  const history = useHistory();
+  const location = useLocation();
   const team = useSelector(state => state.teamSelected);
-  const teams = useSelector(state => state.teams);
-  const requests = useSelector(state => state.user.requests);
   const [openAddTeamDialog, setOpenAddTeamDialog] = React.useState(false);
   const [tabSelected, setTabSelected] = React.useState(0);
   const [teamSelected, setTeamSelected] = React.useState(null);
@@ -20,6 +22,7 @@ const SelectTeamDialog = props => {
 
   React.useEffect(() => {
     setTeamSelected(team);
+    history.push(location.pathname.split('/').slice(0, -1).join('/') + '/' + team._id);
   }, [team]);
 
   const handleChange = (event, newValue) => {
@@ -30,35 +33,34 @@ const SelectTeamDialog = props => {
     props.setOpen(false);
   };
 
-  const handleSelect = async () => {
+  const handleExited = () => {
+    setTabSelected(0);
+  }
+
+  const handleSelect = () => {
     if (teamSelected && teamSelected._id) {
       handleClose();
       patchUser({teamSelected: teamSelected._id});
     }
   };
 
+  const handleLinkClick = (teamData) => {
+    if (teamData) {
+      handleClose();
+      patchUser({teamSelected: teamData._id});
+    }
+  }
+
   const renderTab = () => {
     switch (tabSelected) {
       case 0:
-        return (
-          <>
-            <TeamTable teams={teams} teamSelected={teamSelected} setTeamSelected={setTeamSelected} showPosition showFuncs link/>
-            <Box p={1} display='flex' justifyContent='flex-end'>
-              <Button onClick={handleClose}>
-                取消
-              </Button>
-              <Button onClick={handleSelect} color="primary" disabled={!teamSelected || !teamSelected._id}>
-                選擇
-              </Button>
-            </Box>
-          </>
-        );
+        return <MyTeamTable teamSelected={teamSelected} setTeamSelected={setTeamSelected} onLinkClick={handleLinkClick} toolbar={false} />;
       case 1:
         return <SearchTeam />;
       case 2:
-        return <TeamTable teams={requests} showFuncs></TeamTable>;
+        return <MyRequestTable toolbar={false} />;
       default:
-        return <TeamTable teams={teams} showPosition showFuncs />;
+        return <MyTeamTable teamSelected={teamSelected} setTeamSelected={setTeamSelected} onLinkClick={handleLinkClick} toolbar={false} />;
     }
   }
 
@@ -68,6 +70,7 @@ const SelectTeamDialog = props => {
       maxWidth={'md'}
       open={props.open}
       onClose={handleClose}
+      onExited={handleExited}
       disableBackdropClick={props.disableBackdropClick}
       disableEscapeKeyDown={props.disableEscapeKeyDown}
     >
@@ -95,6 +98,18 @@ const SelectTeamDialog = props => {
         </Box>
         {renderTab()}
       </Box>
+      <DialogActions>
+        {tabSelected === 0 ?
+          <Box p={1} display='flex' justifyContent='flex-end'>
+            <Button onClick={handleClose}>
+              取消
+              </Button>
+            <Button onClick={handleSelect} color="primary" disabled={!teamSelected || !teamSelected._id}>
+              選擇
+              </Button>
+          </Box>
+          : <Box height={52} />}
+      </DialogActions>
     </Dialog>
   );
 }
@@ -103,7 +118,11 @@ SelectTeamDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
   disableBackdropClick: PropTypes.bool,
-  disableEscapeKeyDown: PropTypes.bool
+  disableEscapeKeyDown: PropTypes.bool,
+}
+
+SelectTeamDialog.defaultProps = {
+  open: true,
 }
 
 export default SelectTeamDialog;

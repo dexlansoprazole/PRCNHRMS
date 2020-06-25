@@ -25,14 +25,31 @@ module.exports = (app) => {
 
   app.post(`/api/team/`, async (req, res, next) => {
     const newTeam = Object.filter(req.body, ['name', 'leader']);
+    const session = await Teams.startSession();
+    session.startTransaction();
     try {
       if (!req.session.user)
         throw new PermissionError();
-      let team = await Teams.create(newTeam);
-      team = await parse.team.leader(team);
+      let team = await Teams.create([newTeam], {session: session});
+      team = await parse.team.leader(team[0]);
       team = await wrap.team(team);
-      return res.status(200).send({team})
+      let user = await Users.findById(req.session.user._id).session(session);
+      let teamSelected = await Teams.findById(user.teamSelected).session(session);
+      if (user.teamSelected) {
+        teamSelected = await parse.team.leader(user.teamSelected);
+        teamSelected = await wrap.team(teamSelected, true);
+      }
+      else {
+        user.teamSelected = team._id;
+        teamSelected = team
+      }
+      await user.save();
+      await session.commitTransaction();
+      session.endSession();
+      return res.status(200).send({team, teamSelected})
     } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
       next(error);
     }
   })
@@ -126,7 +143,13 @@ module.exports = (app) => {
       team = await parse.team.members(team);
       team = await parse.team.requests(team);
       team = await wrap.team(team, true);
-      return res.status(200).send({team})
+
+      let user = await Users.findById(req.session.user._id);
+      let teamSelected = await Teams.findById(user.teamSelected);
+      if (user.teamSelected.toString() === team._id.toString())
+        teamSelected = team;
+
+      return res.status(200).send({team, teamSelected})
     } catch (error) {
       next(error);
     }
@@ -152,21 +175,24 @@ module.exports = (app) => {
 
       // Update teamSelected if deleted
       let user = await Users.findById(req.session.user._id).session(session);
-      let newTeamSelected = null;
-      if (user.teamSelected.toString() === team._id.toString()) {
+      let newTeamSelected = await Teams.findById(user.teamSelected).session(session);
+      if (user.teamSelected && user.teamSelected.toString() === team._id.toString()) {
         let teams = await Teams.find({$or: [{leader: user._id}, {managers: {$in: [user._id]}}, {members: {$in: [user._id]}}]}, '-__v').session(session);
-        if (teams.length > 0) {
-          newTeamSelected = await parse.team.leader(teams[0]);
-          newTeamSelected = await parse.team.requests(newTeamSelected);
-          newTeamSelected = await parse.team.members(newTeamSelected);
-          newTeamSelected = await wrap.team(newTeamSelected, true);
-          user.teamSelected = newTeamSelected._id;
+        if (teams.length > 0)
+          newTeamSelected = teams[0];
+        else {
+          newTeamSelected = null;
+          user.teamSelected = null;
         }
-        else
-          user.teamSelected = null; 
       }
-      else
-        newTeamSelected = user.teamSelected.toString();
+      if (newTeamSelected) {
+        newTeamSelected = await parse.team.leader(newTeamSelected);
+        newTeamSelected = await parse.team.requests(newTeamSelected);
+        newTeamSelected = await parse.team.members(newTeamSelected);
+        newTeamSelected = await wrap.team(newTeamSelected, true);
+        user.teamSelected = newTeamSelected._id;
+      }
+
       await user.save();
       await session.commitTransaction();
       session.endSession();

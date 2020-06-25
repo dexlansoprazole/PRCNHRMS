@@ -1,7 +1,9 @@
 import React from 'react';
 import {Box, CircularProgress} from '@material-ui/core';
+import {useTheme} from '@material-ui/core/styles';
 
 const LoadingOverlay = (props) => {
+  const theme = useTheme();
   const overlayRef = React.useRef(null);
 
   React.useEffect(() => {
@@ -10,8 +12,8 @@ const LoadingOverlay = (props) => {
     $overlay.css('pointer-events', props.loading ? 'auto' : 'none');
     let h = $overlay.parent().outerHeight();
     let w = $overlay.parent().outerWidth();
-    $overlay.css('height', props.global ? '100%' : h);
-    $overlay.css('width', props.global ? '100%' : w);
+    $overlay.css('height', h);
+    $overlay.css('width', props.global ? null : w);
     if (props.global) {
       $overlay.css('margin-top', '-' + $overlay.parent().css('padding-top'));
       $overlay.css('margin-left', '-' + $overlay.parent().css('padding-left'));
@@ -23,19 +25,18 @@ const LoadingOverlay = (props) => {
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-    zIndex: props.global ? 9999 : 1031,
+    zIndex: props.global ? theme.zIndex.drawer - 1 : 1031,
     opacity: 0,
-    background: 'rgba(39, 42, 43, 0.6)',
-    transition: 'opacity 200ms ease-in-out',
+    background: theme.palette.common.white,
     borderRadius: props.round ? '4px' : '0px',
     margin: '0 0 0 0',
     boxSizing: 'border-box',
-    color: '#fff',
+    color: theme.palette.primary.main,
     pointerEvents: 'none'
   }
 
   return (
-    <div ref={overlayRef} style={overlayStyle}>
+    <div ref={overlayRef} style={overlayStyle} className={props.className}>
       <Box>
         <Box display='flex' justifyContent="center" alignItems="center">
           <CircularProgress color="inherit" />

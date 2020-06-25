@@ -5,16 +5,16 @@ import {useSelector, useDispatch} from 'react-redux';
 import {AppBar, Toolbar, IconButton, Typography, Drawer, Backdrop, List, ListItem, ListItemText, Collapse, Grid, createMuiTheme, MuiThemeProvider} from '@material-ui/core';
 import useStyles from './styles';
 import {Menu, ChevronDown, ChevronUp} from 'react-feather';
-import './App.css';
 import SelectTeamButton from './components/select_team/SelectTeamButton';
 import Home from './components/Home';
 import AccountDropdown from './components/AccountDropdown';
 import GoogleSignIn from './components/GoogleSignIn';
 import MemberManagement from './components/team/MemberManagement'
 import LoadingOverlay from './components/LoadingOverlay';
-import ScrollBarAdapter from './components/ScrollBarAdapter';
 import authActions from './actions/auth';
 import {useWindowResize} from './components/useWindowResize';
+import SelectTeamDialog from './components/select_team/SelectTeamDialog';
+import './App.css';
 
 const theme = createMuiTheme({
   palette: {
@@ -33,6 +33,14 @@ const theme = createMuiTheme({
   }
 });
 
+const usePrevious = (value) => {
+  const ref = React.useRef();
+  React.useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
+
 const App = () => {
   const {width} = useWindowResize();
   const classes = useStyles(theme);
@@ -46,6 +54,8 @@ const App = () => {
 
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [teamCollapseOpen, setTeamCollapseOpen] = React.useState(true);
+  const [openSelectTeamDialog, setOpenSelectTeamDialog] = React.useState(false);
+  const prevOpenSelectTeamDialog = usePrevious(openSelectTeamDialog);
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
@@ -53,6 +63,10 @@ const App = () => {
 
   const handleDrawerClose = () => {
     setDrawerOpen(false);
+  }
+
+  const handleSelectTeamButtonOpen = () => {
+    setOpenSelectTeamDialog(true);
   }
 
   const handleCollapseClick = () => {
@@ -63,6 +77,11 @@ const App = () => {
     signIn();
   }, []);
 
+  React.useEffect(() => {
+    setOpenSelectTeamDialog(prevOpenSelectTeamDialog ? prevOpenSelectTeamDialog : false);
+    if (typeof prevOpenSelectTeamDialog !== 'undefined' && !teamSelected._id) setOpenSelectTeamDialog(true);
+  }, [teamSelected]);
+
   React.useLayoutEffect(() => {
     setDrawerOpen(width > theme.breakpoints.values.md ? true : false);
   }, [width]);
@@ -71,8 +90,6 @@ const App = () => {
     <MuiThemeProvider theme={theme}>
       <div className={classes.root}>
         <BrowserRouter>
-          <LoadingOverlay loading={loading} global />
-
           <AppBar
             position="fixed"
             className={classes.appBar}
@@ -95,7 +112,20 @@ const App = () => {
                       </Typography>
                     </Grid>
                     <Grid item>
-                      {initialized ? isSignedIn ? <SelectTeamButton /> : null : null}
+                      {initialized ? isSignedIn ?
+                        <>
+                          <SelectTeamDialog
+                            open={openSelectTeamDialog}
+                            setOpen={setOpenSelectTeamDialog}
+                            disableBackdropClick={teamSelected._id ? false : true}
+                            disableEscapeKeyDown={teamSelected._id ? false : true}
+
+                          />
+                          <SelectTeamButton
+                            onClick={handleSelectTeamButtonOpen}
+                          />
+                        </>
+                        : null : null}
                     </Grid>
                   </Grid>
                 </Grid>
@@ -123,7 +153,7 @@ const App = () => {
               <ListItem button component={refLink} to='/home'>
                 <ListItemText primary='Home' />
               </ListItem>
-              {isSignedIn ?
+              {isSignedIn && teamSelected._id ?
                 <>
                   <ListItem button onClick={handleCollapseClick}>
                     <ListItemText primary="戰隊管理" />
@@ -152,16 +182,21 @@ const App = () => {
               />
               : null
           }
-          <main className={classes.content}>
-            <div className={classes.toolbar} />
-            <Switch>
-              <Route exact path="/home" component={Home} />
-              {initialized ? isSignedIn ? <Route path="/team/member/:team_id" component={MemberManagement} /> : null : <Route path="/team/member/:team_id" />}
-              <Redirect to="/home" />
-            </Switch>
-          </main>
+          <div style={{width: '100%'}}>
+            <LoadingOverlay global loading={loading} className={clsx({
+              [classes.loadingOverlayDrawerClose]: !drawerOpen,
+              [classes.loadingOverlayDrawerOpen]: drawerOpen,
+            })}/>
+            <main className={classes.content}>
+              <div className={classes.toolbar} />
+              <Switch>
+                <Route exact path="/home" component={Home} />
+                {initialized ? isSignedIn ? <Route path="/team/member/:team_id" component={MemberManagement} /> : null : <Route path="/team/member/:team_id" />}
+                <Redirect to="/home" />
+              </Switch>
+            </main>
+          </div>
         </BrowserRouter>
-        <ScrollBarAdapter></ScrollBarAdapter>
       </div>
     </MuiThemeProvider >
   );

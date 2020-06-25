@@ -26,7 +26,7 @@ const getVisibleMembers = (members, filter) => {
 
 const MemberManagement = (props) => {
   const {team_id} = useParams();
-  const history = useHistory();
+  // const history = useHistory();
   const isSignedIn = useSelector(state => state.auth.isSignedIn);
   const user = useSelector(state => state.user);
   const getTeamById = state => (id) => state.teams.find(t => t._id === id);

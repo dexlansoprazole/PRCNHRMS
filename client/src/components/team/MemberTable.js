@@ -1,83 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {TextField} from '@material-ui/core';
-import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
+import {createMuiTheme, MuiThemeProvider, useTheme} from '@material-ui/core/styles';
 import {useDispatch} from 'react-redux';
 import {useWindowResize} from '../useWindowResize';
 import MaterialTable from "material-table";
 import tableIcons from '../tableIcons';
 import {UserX} from 'react-feather';
-import moment from 'moment';
 import deepEqual from 'deep-equal';
-import {MuiPickersUtilsProvider, KeyboardDatePicker} from '@material-ui/pickers';
-import MomentUtils from '@date-io/moment';
-import "moment/locale/zh-tw";
+import TableEditField from '../TableEditField';
 import KickMemberDialog from './KickMemberDialog';
 import memberActions from '../../actions/member';
-moment.locale("zh-tw")
-
-const tableTheme = createMuiTheme({
-  overrides: {
-    MuiTableRow: {
-      root: {
-        transition: 'all 0s !important',
-        "&:hover": {
-          backgroundColor: "#f8f8f8",
-        }
-      }
-    }
-  }
-});
-
-const MemberTableEditField = props => {
-  let isValid = null;
-  let helperText = '';
-  // TODO: Fix default error message
-  switch (props.type) {
-    case 'text':
-      let isValids = props.reValidators.map(r => r.exec(props.value) ? true : false);
-      isValid = !(props.required && !props.value) && Object.values(isValids).every((v) => v === true);
-      props.validRef.current = {...props.validRef.current, [props.columnDef.field]: isValid}
-      helperText = !isValid ? props.helperTexts[isValids.findIndex(v => v === false)] : '';
-      if (props.required && !props.value) helperText = '必填';
-      return (
-        <TextField
-          multiline={props.multiline}
-          value={props.value ? props.value : ''}
-          onChange={(e) => props.onChange(e.target.value)}
-          error={!isValid}
-          helperText={helperText}
-        />
-      )
-    case 'date':
-      let required = props.required;
-      if (props.requiredDependentOn)
-        required = props.required || props.rowData[props.requiredDependentOn] ? true : false;
-      isValid = (value) => !(required && !value) && (moment(value, "YYYY/MM/DD", true).isValid() || !value);
-      let value = props.value ? props.value : required && props.value === undefined ? props.onChange(moment().format("YYYY/MM/DD")) : null;
-      props.validRef.current = {...props.validRef.current, [props.columnDef.field]: isValid(value)}
-      helperText = !isValid(value) ? '錯誤的日期格式' : '';
-      if (required && !value) helperText = '必填';
-      return (
-        <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
-          <KeyboardDatePicker
-            disableToolbar
-            fullWidth
-            autoOk
-            variant="inline"
-            format="YYYY/MM/DD"
-            margin="normal"
-            value={value}
-            onChange={(date, value) => props.onChange(value)}
-            error={!isValid(value)}
-            helperText={helperText}
-          />
-        </MuiPickersUtilsProvider>
-      )
-    default:
-      return null;
-  }
-}
+import moment from 'moment';
 
 const MemberTable = props => {
   const dispatch = useDispatch();
@@ -88,10 +21,22 @@ const MemberTable = props => {
   const [memberClicked, setMemberClicked] = React.useState({});
   const [openKickMemberDialog, setOpenKickEditMemberDialog] = React.useState(false);
   const validRef = React.useRef({});
-  const canAdd = props.role === 'leader' || props.role === 'manager';
-  const canEdit = props.role === 'leader' || props.role === 'manager';
-  const canKick = props.role === 'leader' || props.role === 'manager';
-  const canDelete = props.role === 'leader' || props.role === 'manager';
+  const globalTheme = useTheme();
+  const tableTheme = createMuiTheme(
+    {
+      overrides: {
+        MuiTableRow: {
+          root: {
+            transition: 'all 0s !important',
+            "&:hover": {
+              backgroundColor: "#f8f8f8",
+            }
+          }
+        }
+      }
+    },
+    globalTheme
+  );
 
   const members = props.members.map((m, i) => {
     let member = {
@@ -113,9 +58,10 @@ const MemberTable = props => {
     },
     {
       title: "ID", field: "id", editComponent: props =>
-        <MemberTableEditField
+        <TableEditField
           {...props}
           type='text'
+          autoFocus
           required
           reValidators={[(/^\d{9}$/)]}
           helperTexts={['必須為9位數字']}
@@ -124,7 +70,7 @@ const MemberTable = props => {
     },
     {
       title: "暱稱", field: "name", editComponent: props =>
-        <MemberTableEditField
+        <TableEditField
           {...props}
           type='text'
           required
@@ -135,7 +81,7 @@ const MemberTable = props => {
     },
     {
       title: "加入日期", field: "join_date", editComponent: props =>
-        <MemberTableEditField
+        <TableEditField
           {...props}
           required
           type='date'
@@ -146,7 +92,7 @@ const MemberTable = props => {
   if (props.showLeaveDate) columns.push(
     {
       title: "退出日期", field: "leave_date", editComponent: props =>
-        <MemberTableEditField
+        <TableEditField
           {...props}
           requiredDependentOn='kick_reason'
           type='date'
@@ -157,7 +103,7 @@ const MemberTable = props => {
   if (props.showKickReason) columns.push(
     {
       title: "踢除原因", field: "kick_reason", editComponent: props =>
-        <MemberTableEditField
+        <TableEditField
           {...props}
           type='text'
           multiline
@@ -176,11 +122,7 @@ const MemberTable = props => {
         icons={tableIcons}
         columns={columns}
         data={members}
-        onOrderChange={(orderBy, orderDir) => {
-          console.log(orderBy, orderDir);
-          
-        }}
-        actions={props.showLeaveDate || props.showKickReason || !canKick ? [] : [
+        actions={props.showLeaveDate || props.showKickReason || !(props.role === 'leader' || props.role === 'manager') ? [] : [
           {
             icon: () => <UserX />,
             tooltip: '踢除',
@@ -191,42 +133,47 @@ const MemberTable = props => {
           }
         ]}
         editable={{
-          onRowAdd: canAdd ? oldData =>
+          isAddHidden: rowData => props.role !== 'leader' && props.role !== 'manager',
+          isEditHidden: rowData => props.role !== 'leader' && props.role !== 'manager',
+          isDeleteHidden: rowData => props.role !== 'leader' && props.role !== 'manager',
+          onRowAdd: newData =>
             new Promise((resolve, reject) => {
               if (!Object.values(validRef.current).every((v) => v === true)) {
                 reject();
                 return;
               }
-              let newMember = {...oldData, team: props.team._id}
+              let newMember = {...newData, team: props.team._id}
               addMember(newMember);
+              validRef.current = {};
               resolve();
-            }) : null,
-          onRowUpdate: canEdit ? (newData, oldData) =>
+            }),
+          onRowUpdate: (newData, oldData) =>
             new Promise((resolve, reject) => {
               if (!Object.values(validRef.current).every((v) => v === true)) {
                 reject();
                 return;
               }
-              if (deepEqual(oldData, newData)) {
+              let oldMember = Object.filter(oldData, ['id', 'name', 'join_date', 'leave_date', 'kick_reason']);
+              let newMember = Object.filter(newData, ['id', 'name', 'join_date', 'leave_date', 'kick_reason']);
+              if (deepEqual(oldMember, newMember)) {
                 resolve();
                 return;
               }
-              let newMember = Object.filter(newData, ['id', 'name', 'join_date', 'leave_date', 'kick_reason']);
               patchMember(oldData._id, newMember);
               validRef.current = {};
               reject();
-            }) : null,
-          onRowDelete: canDelete ? oldData =>
+            }),
+          onRowDelete: oldData =>
             new Promise((resolve, reject) => {
               deleteMember(oldData._id);
               reject();
-            }) : null,
+            }),
         }}
         options={{
           actionsColumnIndex: -1,
           paging: false,
           maxBodyHeight: height - 300,
-          headerStyle: {position: 'sticky', top: 0},
+          headerStyle: {position: 'sticky', top: 0, whiteSpace: 'nowrap'},
           addRowPosition: 'first'
         }}
         localization={{

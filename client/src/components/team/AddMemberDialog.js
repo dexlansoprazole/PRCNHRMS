@@ -13,12 +13,16 @@ const AddMemberDialog = (props) => {
   const addMember = newMember => dispatch(memberActions.addMember(newMember));
   const team = props.team;
 
-  const [newMember, setNewMember] = React.useState({
-    id: "",
-    name: "",
-    team: team._id,
-    join_date: moment().format("YYYY/MM/DD")
-  });
+  const [newMember, setNewMember] = React.useState({});
+
+  React.useEffect(() => {
+    setNewMember({
+      id: "",
+      name: "",
+      team: team._id,
+      join_date: moment().format("YYYY/MM/DD")
+    });
+  }, [team]);
 
   const handleChange = (evt) => {
     const target = evt.target;
@@ -70,6 +74,7 @@ const AddMemberDialog = (props) => {
                 name="id"
                 label="ID"
                 fullWidth
+                autoFocus
                 required
                 value={newMember.id}
                 onChange={handleChange}

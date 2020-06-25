@@ -1,23 +1,22 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
+import {Add} from '@material-ui/icons';
 import {useSelector, useDispatch} from 'react-redux';
 import {Box, Grid, TextField, Button} from '@material-ui/core';
 import {actionTypes} from '../../constants';
 import teamActions from '../../actions/team';
 import TeamTable from './TeamTable';
-import LoadingOverlay from '../LoadingOverlay';
 
 const SearchTeam = () => {
   const dispatch = useDispatch();
   const searchTeams = (query) => dispatch(teamActions.searchTeams(query));
   const setSearchTeamResult = (result) => dispatch({type: actionTypes.SET_SEARCH_TEAM_RESULT, result});
-  const loading = useSelector(state => state.team.search.loading);
+  const addJoinRequest = (id) => dispatch(teamActions.addJoinRequest(id));
   const myTeams = useSelector(state => state.teams);
   const requests = useSelector(state => state.user.requests);
   const result = useSelector(state => state.team.search.result).filter(t => !(myTeams.find(mt => mt._id === t._id) || requests.find(r => r._id === t._id)));
+  const [inputTeamName, setInputTeamName] = React.useState('');
 
-  const [inputTeamName, setInputTeamName] = useState('');
-
-  useEffect(() => {
+  React.useEffect(() => {
     return () => {
       setSearchTeamResult([]);
     };
@@ -29,9 +28,33 @@ const SearchTeam = () => {
     setInputTeamName(value);
   }
 
+  const actionAddJoinRequest = {
+    icon: Add,
+    tooltip: '申請加入',
+    onClick: (event, rowData) => {
+      addJoinRequest(rowData.teamData._id);
+    }
+  }
+
+  const data = result.map((t, i) => {
+    let team = {
+      name: t.name,
+      leader: t.users.leader.name,
+      member_count: t.members.filter(m => m.leave_date == null).length + "/30",
+      teamData: t
+    }
+    return team;
+  });
+
+  const columns = [
+    {title: "#", render: rowData => rowData ? rowData.tableData.id + 1 : '', width: '1%'},
+    {title: "名稱", field: "name"},
+    {title: "隊長", field: "leader"},
+    {title: "成員數", field: "member_count"},
+  ]
+
   return (
     <Box height='100%' overflow='hidden'>
-      <LoadingOverlay loading={loading}></LoadingOverlay>
       <Box p={2}>
         <Grid container spacing={2} alignItems='center'>
           <Grid item>
@@ -42,7 +65,13 @@ const SearchTeam = () => {
           </Grid>
         </Grid>
       </Box>
-      <TeamTable teams={result} showFuncs />
+      <TeamTable
+        data={data}
+        columns={columns}
+        actions={[actionAddJoinRequest]}
+        toolbar={false}
+        maxBodyHeight='calc(50vh - 120px)'
+      />
     </Box>
   );
 }

@@ -1,11 +1,25 @@
-import {makeStyles, useTheme} from '@material-ui/core/styles';
-import zIndex from '@material-ui/core/styles/zIndex';
+import {makeStyles} from '@material-ui/core/styles';
 
 const drawerWidth = 200;
 
 export default makeStyles((theme) => ({
   root: {
     display: 'flex',
+    height: '100%',
+  },
+  loadingOverlayDrawerClose: {
+    transition: theme.transitions.create(['width', 'opacity'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    width: '100vw'
+  },
+  loadingOverlayDrawerOpen: {
+    transition: theme.transitions.create(['width', 'opacity'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    width: 'calc(100vw - ' + drawerWidth + 'px)'
   },
   appBar: {
     boxShadow: '0 0 0 0 rgba(0, 0, 0, 0)',
@@ -37,7 +51,7 @@ export default makeStyles((theme) => ({
   drawerClose: {
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
+      duration: theme.transitions.duration.leavingScreen,
     }),
     overflowX: 'hidden',
     width: 0,
@@ -88,10 +102,4 @@ export default makeStyles((theme) => ({
   nested: {
     paddingLeft: theme.spacing(4),
   },
-  btnTableItemFunc: {
-    transition: "opacity .2s",
-    backgroundColor: "transparent",
-    padding: theme.spacing(1),
-    margin: "0px 0px 0px 0px",
-  }
 }));

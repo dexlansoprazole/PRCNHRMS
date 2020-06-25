@@ -58,6 +58,7 @@ const AddTeamDialog = props => {
             name="name"
             label="戰隊名稱"
             fullWidth
+            autoFocus
             value={newTeam.name}
             onChange={handleChange}
             validators={['required', 'matchRegexp:^.{2,10}$']}
