@@ -19,7 +19,10 @@ export default makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    width: 'calc(100vw - ' + drawerWidth + 'px)'
+    width: 'calc(100vw - ' + drawerWidth + 'px)',
+    [theme.breakpoints.down('sm')]: {
+      width: '100vw',
+    },
   },
   appBar: {
     boxShadow: '0 0 0 0 rgba(0, 0, 0, 0)',

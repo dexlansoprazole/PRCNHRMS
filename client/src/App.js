@@ -183,7 +183,7 @@ const App = () => {
               : null
           }
           <div style={{width: '100%'}}>
-            <LoadingOverlay global loading={loading} className={clsx({
+            <LoadingOverlay global loading={true} className={clsx({
               [classes.loadingOverlayDrawerClose]: !drawerOpen,
               [classes.loadingOverlayDrawerOpen]: drawerOpen,
             })}/>
