@@ -188,7 +188,6 @@ const App = () => {
               [classes.loadingOverlayDrawerOpen]: drawerOpen,
             })}/>
             <main className={classes.content}>
-              <div className={classes.toolbar} />
               <Switch>
                 <Route exact path="/home" component={Home} />
                 {initialized ? isSignedIn ? <Route path="/team/member/:team_id" component={MemberManagement} /> : null : <Route path="/team/member/:team_id" />}
