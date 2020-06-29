@@ -133,10 +133,9 @@ const MemberTable = props => {
           }
         ]}
         editable={{
-          isAddHidden: rowData => props.role !== 'leader' && props.role !== 'manager',
           isEditHidden: rowData => props.role !== 'leader' && props.role !== 'manager',
           isDeleteHidden: rowData => props.role !== 'leader' && props.role !== 'manager',
-          onRowAdd: newData =>
+          onRowAdd: props.role === 'leader' || props.role === 'manager' ? newData =>
             new Promise((resolve, reject) => {
               if (!Object.values(validRef.current).every((v) => v === true)) {
                 reject();
@@ -146,7 +145,7 @@ const MemberTable = props => {
               addMember(newMember);
               validRef.current = {};
               resolve();
-            }),
+            }) : null,
           onRowUpdate: (newData, oldData) =>
             new Promise((resolve, reject) => {
               if (!Object.values(validRef.current).every((v) => v === true)) {
