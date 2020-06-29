@@ -55,7 +55,7 @@ const KickMemberDialog = (props) => {
       onExited={handleExited}
     >
       <DialogTitle>
-        編輯成員
+        踢除成員
       </DialogTitle>
       <ValidatorForm onSubmit={handleSubmit}>
         <Box px={3} py={1}>
