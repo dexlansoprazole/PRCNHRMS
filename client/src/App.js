@@ -187,7 +187,10 @@ const App = () => {
               [classes.loadingOverlayDrawerClose]: !drawerOpen,
               [classes.loadingOverlayDrawerOpen]: drawerOpen,
             })}/>
-            <main className={classes.content}>
+            <main className={clsx({
+              [classes.contentDrawerClose]: !drawerOpen,
+              [classes.contentDrawerOpen]: drawerOpen,
+            })}>
               <Switch>
                 <Route exact path="/home" component={Home} />
                 {initialized ? isSignedIn ? <Route path="/team/member/:team_id" component={MemberManagement} /> : null : <Route path="/team/member/:team_id" />}

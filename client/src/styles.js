@@ -69,10 +69,27 @@ export default makeStyles((theme) => ({
       display: 'none'
     }
   },
-  content: {
+  contentDrawerOpen: {
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
     position: 'fixed',
     top: 64,
-    flexGrow: 1,
+    width: 'calc(100% - ' + drawerWidth + 'px - ' + theme.spacing(3) * 2 + 'px)',
+    padding: theme.spacing(3),
+    [theme.breakpoints.down('sm')]: {
+      width: 'calc(100% - ' + theme.spacing(3) * 2 + 'px)',
+    },
+  },
+  contentDrawerClose: {
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    position: 'fixed',
+    top: 64,
+    width: 'calc(100% - ' + theme.spacing(3)*2  + 'px)',
     padding: theme.spacing(3),
   },
   noOutline: {
