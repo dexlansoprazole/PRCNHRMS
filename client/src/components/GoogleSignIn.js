@@ -3,7 +3,7 @@ import {Button} from '@material-ui/core';
 import useStyles from '../styles';
 import {useDispatch} from 'react-redux';
 import authActions from '../actions/auth';
-import {IconNormal, IconPressed} from './GoogleSignInIcon';
+import GoogleSignInIcon from './GoogleSignInIcon';
 
 const GoogleSignIn = () => {
   const classes = useStyles();
@@ -21,8 +21,9 @@ const GoogleSignIn = () => {
       className={classes.googleSignIn}
       onMouseEnter={() => setisSignInHover(true)}
       onMouseLeave={() => setisSignInHover(false)}
+      onFocus={() => setisSignInHover(true)}
     >
-      {isSignInHover ? (<IconPressed></IconPressed>) : (<IconNormal></IconNormal>)}
+      <GoogleSignInIcon></GoogleSignInIcon>
       <span style={{paddingLeft: "7px"}}>以 Google 登入</span>
     </Button>
   );
