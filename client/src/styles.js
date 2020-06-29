@@ -70,7 +70,7 @@ export default makeStyles((theme) => ({
     }
   },
   content: {
-    position: 'relative',
+    position: 'fixed',
     top: 64,
     flexGrow: 1,
     padding: theme.spacing(3),
