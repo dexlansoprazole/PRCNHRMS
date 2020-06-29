@@ -35,6 +35,7 @@ const SelectTeamDialog = props => {
 
   const handleExited = () => {
     setTabSelected(0);
+    setTeamSelected(team);
   }
 
   const handleSelect = () => {
