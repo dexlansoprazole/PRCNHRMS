@@ -48,7 +48,7 @@ module.exports = (app) => {
         teams = await Promise.all(teams.map(async t => await parse.team.members(t)));
         teams = await Promise.all(teams.map(async t => await wrap.team(t, true)));
       }
-      return res.status(200).send({user, teams, teamSelected: user.teamSelected})
+      return res.status(200).send({user, teams, teamSelected: user ? user.teamSelected : null})
     } catch (error) {
       next(error);
     }
