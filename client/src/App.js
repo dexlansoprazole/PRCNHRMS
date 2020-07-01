@@ -23,9 +23,24 @@ const theme = createMuiTheme({
       main: "#1565c0",
     },
     secondary: {
-      main: "#29b6f6",
+      main: "#f06292",
       contrastText: '#fff'
     }
+  },
+  typography: {
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+      'Microsoft JhengHei'
+    ].join(','),
   },
   props: {
     MuiButtonBase: {
