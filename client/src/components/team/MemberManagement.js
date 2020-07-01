@@ -14,13 +14,13 @@ const memberFilters = {
 const getVisibleMembers = (members, filter) => {
   switch (filter) {
     case memberFilters.ALL:
-      return members;
+      return members.slice();
     case memberFilters.ACTIVE:
       return members.filter(m => (!m.leave_date && !m.kick_reason));
     case memberFilters.LEFT:
       return members.filter(m => (m.leave_date ? true : false || m.kick_reason ? true : false));
     default:
-      return members;
+      return members.slice();
   }
 }
 
@@ -29,8 +29,7 @@ const MemberManagement = (props) => {
   // const history = useHistory();
   const isSignedIn = useSelector(state => state.auth.isSignedIn);
   const user = useSelector(state => state.user);
-  const getTeamById = state => (id) => state.teams.find(t => t._id === id);
-  const team = useSelector(state => team_id ? getTeamById(state)(team_id) : state.teamSelected);
+  const team = useSelector(state => team_id ? state.teams.find(t => t._id === team_id) : state.teamSelected);
   const [memberFilter, setMemberFilter] = React.useState(memberFilters.ACTIVE);
   const [openAddMemberDialog, setOpenAddMemberDialog] = React.useState(false);
 
