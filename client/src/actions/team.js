@@ -64,6 +64,13 @@ const deleteMember = (team_id, user_id) => {
   }
 }
 
+const leaveTeam = (team_id, user_id) => {
+  return {
+    types: [actionTypes.LEAVE_TEAM_REQUEST, actionTypes.LEAVE_TEAM_SUCCESS, actionTypes.LEAVE_TEAM_FAILURE],
+    callAPI: () => teamService.member.delete(team_id, user_id)
+  }
+}
+
 export default {
   getTeams,
   addTeam,
@@ -73,5 +80,6 @@ export default {
   addJoinRequest,
   deleteJoinRequest,
   addMember,
-  deleteMember
+  deleteMember,
+  leaveTeam
 };

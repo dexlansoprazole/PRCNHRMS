@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {ExitToApp} from '@material-ui/icons';
 import {Chip, Link} from '@material-ui/core';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTheme, makeStyles} from '@material-ui/core/styles';
 import TeamTable from './TeamTable';
 import TableEditField from '../TableEditField';
+import AlertDialog from '../AlertDialog';
 import teamActions from '../../actions/team';
 import deepEqual from 'deep-equal';
 
@@ -16,7 +18,10 @@ const MyTeamTable = props => {
   const addTeam = (newTeam) => dispatch(teamActions.addTeam(newTeam));
   const patchTeam = (id, teamData) => dispatch(teamActions.patchTeam(id, teamData));
   const deleteTeam = id => dispatch(teamActions.deleteTeam(id));
+  const leaveTeam = (team_id, user_id) => dispatch(teamActions.leaveTeam(team_id, user_id));
   const validRef = React.useRef({});
+  const [openLeaveTeamAlertDialog, setOpenLeaveTeamAlertDialog] = React.useState(false);
+  const [teamClicked, setTeamClicked] = React.useState({});
 
   const classes = makeStyles((theme) => ({
     listName: {
@@ -63,15 +68,21 @@ const MyTeamTable = props => {
       reject();
     })
 
+  const actionLeaveTeam = rowData => rowData.teamData.users.leader._id !== user._id ? ({
+    icon: ExitToApp,
+    tooltip: '退出',
+    onClick: (event, rowData) => {
+      setTeamClicked(rowData.teamData);
+      setOpenLeaveTeamAlertDialog(true);
+    }
+  }) : null;
+
   const data = teams.map((t, i) => {
     let team = {
       name: t.name,
       leader: t.users.leader.name,
       member_count: t.members.filter(m => m.leave_date == null).length + "/30",
-      isLeader: t.users.leader._id === user._id,
-      isManager: t.users.managers.find(m => m._id === user._id) ? true : false,
-      isMember: t.users.members.find(m => m._id === user._id) ? true : false,
-      isRequested: t.users.requests.find(r => r === user._id) ? true : false,
+      role: t.users.leader._id === user._id ? 'leader' : t.users.managers.find(m => m._id === user._id) ? 'manager' : t.users.members.find(m => m._id === user._id) ? 'member' : null,
       teamData: t
     }
     return team;
@@ -110,32 +121,50 @@ const MyTeamTable = props => {
     {
       title: "職位", field: "role", editable: 'never',
       render: rowData => {
-        return rowData ? (
-          <>
-            {rowData.isLeader ? <Chip label='隊長' size='small' color='secondary' /> : null}
-            {rowData.isManager ? <Chip label='管理員' size='small' color='secondary' /> : null}
-            {rowData.isMember ? <Chip label='成員' size='small' color='default' /> : null}
-          </>
-        ) : <Chip label='隊長' size='small' color='secondary' />
+        if (rowData) {
+          switch (rowData.role) {
+            case 'leader':
+              return <Chip label='隊長' size='small' color='secondary' />;
+            case 'manager':
+              return <Chip label='管理員' size='small' color='secondary' />;
+            case 'member':
+              return <Chip label='成員' size='small' color='default' />;
+            default:
+              return null;
+          }
+        }
+        else
+          return <Chip label='隊長' size='small' color='secondary' />;
       }
     }
   ]
 
   return (
-    <TeamTable
-      data={data}
-      columns={columns}
-      editable={{
-        isEditHidden: rowData => !rowData.isLeader,
-        isDeleteHidden: rowData => !rowData.isLeader,
-        onRowAdd: handleTeamAdd,
-        onRowUpdate: handleTeamUpdate,
-        onRowDelete: handleTeamDelete,
-      }}
-      teamSelected={props.teamSelected}
-      setTeamSelected={props.setTeamSelected}
-      toolbar={props.toolbar}
-    />
+    <>
+      <AlertDialog
+        open={openLeaveTeamAlertDialog}
+        setOpen={setOpenLeaveTeamAlertDialog}
+        title={'退出戰隊'}
+        content={'確定要退出 ' + teamClicked.name + ' 嗎?'}
+        action={() => leaveTeam(teamClicked._id, user._id)}
+      />
+      <TeamTable
+        data={data}
+        columns={columns}
+        actions={[actionLeaveTeam]}
+        editable={{
+          isEditHidden: rowData => rowData.role !== 'leader' && rowData.role !== 'manager',
+          isDeleteHidden: rowData => rowData.role !== 'leader' && rowData.role !== 'manager',
+          onRowAdd: handleTeamAdd,
+          onRowUpdate: handleTeamUpdate,
+          onRowDelete: handleTeamDelete,
+        }}
+        teamSelected={props.teamSelected}
+        setTeamSelected={props.setTeamSelected}
+        toolbar={props.toolbar}
+        padding='dense'
+      />
+    </>
   );
 }
 

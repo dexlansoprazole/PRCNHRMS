@@ -120,7 +120,11 @@ module.exports = (app) => {
   app.patch(`/api/team/member/delete`, async (req, res, next) => {
     const {team_id, user_id} = Object.filter(req.body, ['team_id', 'user_id']);
     try {
-      await permission.checkIsLeader(req.session.user, team_id);
+      let user = req.session.user;
+      if (!user)
+        throw new PermissionError();
+      if (user._id !== user_id)
+        await permission.checkIsLeader(req.session.user, team_id);
       let team = await Teams.findByIdAndUpdate(team_id, {$pull: {members: user_id}}, {new: true});
       team = await parse.team.leader(team);
       team = await parse.team.members(team);

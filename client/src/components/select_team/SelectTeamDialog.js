@@ -55,13 +55,13 @@ const SelectTeamDialog = props => {
   const renderTab = () => {
     switch (tabSelected) {
       case 0:
-        return <MyTeamTable teamSelected={teamSelected} setTeamSelected={setTeamSelected} onLinkClick={handleLinkClick} toolbar={false} />;
+        return <MyTeamTable teamSelected={teamSelected} setTeamSelected={setTeamSelected} onLinkClick={handleLinkClick} toolbar={false}/>;
       case 1:
         return <SearchTeam />;
       case 2:
         return <MyRequestTable toolbar={false} />;
       default:
-        return <MyTeamTable teamSelected={teamSelected} setTeamSelected={setTeamSelected} onLinkClick={handleLinkClick} toolbar={false} />;
+        return <MyTeamTable teamSelected={teamSelected} setTeamSelected={setTeamSelected} onLinkClick={handleLinkClick} toolbar={false}/>;
     }
   }
 

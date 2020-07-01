@@ -173,7 +173,8 @@ const MemberTable = props => {
           paging: false,
           maxBodyHeight: height - 300,
           headerStyle: {position: 'sticky', top: 0, whiteSpace: 'nowrap'},
-          addRowPosition: 'first'
+          addRowPosition: 'first',
+          padding: props.padding
         }}
         localization={{
           header: {
@@ -204,12 +205,14 @@ MemberTable.propTypes = {
   members: PropTypes.array.isRequired,
   role: PropTypes.string,
   showLeaveDate: PropTypes.bool,
-  showKickReason: PropTypes.bool
+  showKickReason: PropTypes.bool,
+  padding: PropTypes.string
 };
 
 MemberTable.defaultProps = {
   showLeaveDate: true,
-  showKickReason: true
+  showKickReason: true,
+  padding: 'default'
 }
 
 export default React.memo(MemberTable, (prevProps, nextProps) => deepEqual(prevProps, nextProps));

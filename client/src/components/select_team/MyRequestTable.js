@@ -42,6 +42,7 @@ const MyRequestTeamTable = props => {
       columns={columns}
       actions={[actionDeleteJoinRequest]}
       toolbar={props.toolbar}
+      padding='dense'
     />
   );
 }

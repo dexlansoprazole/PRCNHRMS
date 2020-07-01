@@ -13,6 +13,7 @@ function teams(state = initialState, action) {
       teams.push(action.res.team);
       return teams;
     case actionTypes.DELETE_TEAM_SUCCESS:
+    case actionTypes.LEAVE_TEAM_SUCCESS:
       teams = teams.filter(t => t._id !== action.res.team._id);
       return teams;
     case actionTypes.PATCH_TEAM_SUCCESS:

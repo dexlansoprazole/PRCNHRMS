@@ -9,7 +9,8 @@ import SelectTeamButton from './components/select_team/SelectTeamButton';
 import Home from './components/Home';
 import AccountDropdown from './components/AccountDropdown';
 import GoogleSignIn from './components/GoogleSignIn';
-import MemberManagement from './components/team/MemberManagement'
+import MemberManagement from './components/team/MemberManagement';
+import PermissionManagement from './components/team/PermissionManagement';
 import LoadingOverlay from './components/LoadingOverlay';
 import authActions from './actions/auth';
 import {useWindowResize} from './components/useWindowResize';
@@ -194,6 +195,7 @@ const App = () => {
               <Switch>
                 <Route exact path="/home" component={Home} />
                 {initialized ? isSignedIn ? <Route path="/team/member/:team_id" component={MemberManagement} /> : null : <Route path="/team/member/:team_id" />}
+                {initialized ? isSignedIn ? <Route path="/team/permission/:team_id" component={PermissionManagement} /> : null : <Route path="/team/permission/:team_id" />}
                 <Redirect to="/home" />
               </Switch>
             </main>

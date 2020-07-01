@@ -71,6 +71,7 @@ const SearchTeam = () => {
         actions={[actionAddJoinRequest]}
         toolbar={false}
         maxBodyHeight='calc(50vh - 120px)'
+        padding='dense'
       />
     </Box>
   );

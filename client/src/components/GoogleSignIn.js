@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {Button} from '@material-ui/core';
 import useStyles from '../styles';
 import {useDispatch} from 'react-redux';
@@ -9,9 +9,8 @@ const GoogleSignIn = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const initGoogleSignIn = () => dispatch(authActions.initGoogleSignIn());
-  const [isSignInHover, setisSignInHover] = useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     initGoogleSignIn();
   }, []);
 
@@ -19,11 +18,8 @@ const GoogleSignIn = () => {
     <Button
       id="signIn"
       className={classes.googleSignIn}
-      onMouseEnter={() => setisSignInHover(true)}
-      onMouseLeave={() => setisSignInHover(false)}
-      onFocus={() => setisSignInHover(true)}
     >
-      <GoogleSignInIcon></GoogleSignInIcon>
+      <GoogleSignInIcon />
       <span style={{paddingLeft: "7px"}}>以 Google 登入</span>
     </Button>
   );

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useSelector} from 'react-redux';
 import {useParams, useHistory} from 'react-router-dom';
 import {Container, Grid, Button, ButtonGroup} from '@material-ui/core';
@@ -31,8 +31,8 @@ const MemberManagement = (props) => {
   const user = useSelector(state => state.user);
   const getTeamById = state => (id) => state.teams.find(t => t._id === id);
   const team = useSelector(state => team_id ? getTeamById(state)(team_id) : state.teamSelected);
-  const [memberFilter, setMemberFilter] = useState(memberFilters.ACTIVE);
-  const [openAddMemberDialog, setOpenAddMemberDialog] = useState(false);
+  const [memberFilter, setMemberFilter] = React.useState(memberFilters.ACTIVE);
+  const [openAddMemberDialog, setOpenAddMemberDialog] = React.useState(false);
 
   if (!team) {
     // history.push('/home');
