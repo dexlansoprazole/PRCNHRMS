@@ -97,13 +97,13 @@ export default makeStyles((theme) => ({
     outline: 'none'
   },
   googleSignIn: {
-    paddingTop: '4px',
-    paddingRight: '11px',
-    paddingBottom: '4px',
-    paddingLeft: '4px',
-    border: "0",
-    fontFamily: "Roboto",
-    backgroundColor: "#FFFFFF",
+    paddingTop: '4px !important',
+    paddingRight: '11px !important',
+    paddingBottom: '4px !important',
+    paddingLeft: '4px !important',
+    border: "0 !important",
+    fontFamily: "Roboto !important",
+    backgroundColor: "#FFFFFF !important",
     transition: 'none !important',
     '&:hover': {
       backgroundColor: "#EEEEEE !important"
