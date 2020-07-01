@@ -104,9 +104,9 @@ export default makeStyles((theme) => ({
     border: "0",
     fontFamily: "Roboto",
     backgroundColor: "#FFFFFF",
-    transition: 'none',
+    transition: 'none !important',
     '&:hover': {
-      backgroundColor: "#EEEEEE"
+      backgroundColor: "#EEEEEE !important"
     }
   },
   backdrop: {
