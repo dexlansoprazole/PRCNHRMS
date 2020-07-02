@@ -19,6 +19,7 @@ function loading(state = initialState, action) {
     case actionTypes.ADD_TEAM_MEMBER_REQUEST:
     case actionTypes.DELETE_TEAM_MEMBER_REQUEST:
     case actionTypes.PATCH_USER_REQUEST:
+    case actionTypes.LEAVE_TEAM_REQUEST:
       return true;
     case actionTypes.INIT_GOOGLESIGNIN_SUCCESS:
     case actionTypes.INIT_GOOGLESIGNIN_FAILURE:
@@ -50,6 +51,8 @@ function loading(state = initialState, action) {
     case actionTypes.DELETE_TEAM_MEMBER_FAILURE:
     case actionTypes.PATCH_USER_SUCCESS:
     case actionTypes.PATCH_USER_FAILURE:
+    case actionTypes.LEAVE_TEAM_SUCCESS:
+    case actionTypes.LEAVE_TEAM_FAILURE:
       return false;
     default:
       return state;
