@@ -1,12 +1,14 @@
 import React from 'react';
 import clsx from 'clsx';
-import {BrowserRouter, Switch, Route, Redirect, Link} from 'react-router-dom';
+import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
-import {AppBar, Toolbar, IconButton, Typography, Drawer, Backdrop, List, ListItem, ListItemText, Collapse, Grid, createMuiTheme, MuiThemeProvider} from '@material-ui/core';
+import {AppBar, Toolbar, IconButton, Typography, Grid, createMuiTheme, MuiThemeProvider} from '@material-ui/core';
 import useStyles from './styles';
-import {Menu, ChevronDown, ChevronUp} from 'react-feather';
+import {useWindowResize} from './components/useWindowResize';
+import {Menu} from 'react-feather';
 import MuiAlert from './components/Alert';
 import SelectTeamButton from './components/select_team/SelectTeamButton';
+import Drawer from './components/Drawer';
 import Home from './components/Home';
 import AccountDropdown from './components/AccountDropdown';
 import GoogleSignIn from './components/GoogleSignIn';
@@ -14,17 +16,19 @@ import MemberManagement from './components/team/MemberManagement';
 import PermissionManagement from './components/team/PermissionManagement';
 import LoadingOverlay from './components/LoadingOverlay';
 import authActions from './actions/auth';
-import {useWindowResize} from './components/useWindowResize';
 import SelectTeamDialog from './components/select_team/SelectTeamDialog';
+import {blue, pink} from '@material-ui/core/colors';
 import './App.css';
 
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: "#1565c0",
+      main: blue[800],
+      lighter: blue[50]
     },
     secondary: {
-      main: "#f06292",
+      main: pink[300],
+      lighter: pink[50],
       contrastText: '#fff'
     }
   },
@@ -59,18 +63,16 @@ const usePrevious = (value) => {
 }
 
 const App = () => {
-  const {width} = useWindowResize();
   const classes = useStyles(theme);
+  const {width} = useWindowResize();
   const dispatch = useDispatch();
   const signIn = () => dispatch(authActions.signIn());
   const initialized = useSelector(state => state.initialized);
   const loading = useSelector(state => state.loading);
   const isSignedIn = useSelector(state => state.auth.isSignedIn);
   const teamSelected = useSelector(state => state.teamSelected);
-  const refLink = React.forwardRef((props, ref) => <div ref={ref} onClick={width < theme.breakpoints.values.md ? handleDrawerClose : null}><Link {...props} /></div>);
 
   const [drawerOpen, setDrawerOpen] = React.useState(false);
-  const [teamCollapseOpen, setTeamCollapseOpen] = React.useState(true);
   const [openSelectTeamDialog, setOpenSelectTeamDialog] = React.useState(false);
   const prevOpenSelectTeamDialog = usePrevious(openSelectTeamDialog);
 
@@ -85,10 +87,6 @@ const App = () => {
   const handleSelectTeamButtonOpen = () => {
     setOpenSelectTeamDialog(true);
   }
-
-  const handleCollapseClick = () => {
-    setTeamCollapseOpen(!teamCollapseOpen);
-  };
 
   React.useEffect(() => {
     signIn();
@@ -137,7 +135,6 @@ const App = () => {
                             setOpen={setOpenSelectTeamDialog}
                             disableBackdropClick={teamSelected._id ? false : true}
                             disableEscapeKeyDown={teamSelected._id ? false : true}
-
                           />
                           <SelectTeamButton
                             onClick={handleSelectTeamButtonOpen}
@@ -155,51 +152,9 @@ const App = () => {
             </Toolbar>
           </AppBar>
           <Drawer
-            variant="permanent"
-            className={clsx(classes.drawer, {
-              [classes.drawerOpen]: drawerOpen,
-              [classes.drawerClose]: !drawerOpen,
-            })}
-            classes={{
-              paper: clsx(classes.drawerPaper, {
-                [classes.drawerOpen]: drawerOpen,
-                [classes.drawerClose]: !drawerOpen,
-              }),
-            }}
-          >
-            <List>
-              <ListItem button component={refLink} to='/home'>
-                <ListItemText primary='Home' />
-              </ListItem>
-              {isSignedIn && teamSelected._id ?
-                <>
-                  <ListItem button onClick={handleCollapseClick}>
-                    <ListItemText primary="戰隊管理" />
-                    {teamCollapseOpen ? <ChevronUp /> : <ChevronDown />}
-                  </ListItem>
-                  <Collapse in={teamCollapseOpen} timeout="auto" unmountOnExit>
-                    <ListItem button component={refLink} to={'/team/member/' + teamSelected._id} className={classes.nested}>
-                      <ListItemText primary='成員管理' />
-                    </ListItem>
-                    <ListItem button component={refLink} to={'/team/permission/' + teamSelected._id} className={classes.nested}>
-                      <ListItemText primary='權限管理' />
-                    </ListItem>
-                  </Collapse>
-                </>
-                : null}
-            </List>
-          </Drawer>
-          {
-            width < theme.breakpoints.values.md ?
-              <Backdrop
-                open={drawerOpen}
-                onClick={handleDrawerClose}
-                classes={{
-                  root: classes.drawerBackdrop
-                }}
-              />
-              : null
-          }
+            open={drawerOpen}
+            onClose={handleDrawerClose}
+          />
           <div style={{width: '100%', backgroundColor: theme.palette.background.default}}>
             <LoadingOverlay global loading={loading} className={clsx({
               [classes.loadingOverlayDrawerClose]: !drawerOpen,
@@ -211,8 +166,8 @@ const App = () => {
             })}>
               <Switch>
                 <Route exact path="/home" component={Home} />
-                {initialized ? isSignedIn ? <Route path="/team/member/:team_id" component={MemberManagement} /> : null : <Route path="/team/member/:team_id" />}
-                {initialized ? isSignedIn ? <Route path="/team/permission/:team_id" component={PermissionManagement} /> : null : <Route path="/team/permission/:team_id" />}
+                {initialized ? isSignedIn ? <Route path="/team/member" component={MemberManagement} /> : null : <Route path="/team/member" />}
+                {initialized ? isSignedIn ? <Route path="/team/permission" component={PermissionManagement} /> : null : <Route path="/team/permission" />}
                 <Redirect to="/home" />
               </Switch>
             </main>

@@ -27,7 +27,7 @@ const MyTeamTable = props => {
     listName: {
       color: theme.palette.common.black,
       '&:hover': {
-        color: theme.palette.info.dark
+        color: theme.palette.secondary.dark
       }
     }
   }))(theme);
@@ -97,7 +97,7 @@ const MyTeamTable = props => {
           style={{
             ...(rowData.teamData._id === props.teamSelected._id && {
               textDecoration: 'underline',
-              color: theme.palette.info.dark,
+              color: theme.palette.secondary.dark,
             })
           }}
           className={classes.listName}

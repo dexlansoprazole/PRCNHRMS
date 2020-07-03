@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {useSelector, useDispatch} from 'react-redux';
-import {useHistory, useLocation} from 'react-router-dom';
 import {Box, Button, Dialog, DialogTitle, DialogActions, AppBar, Tab, Tabs} from '@material-ui/core';
 import {Plus} from 'react-feather';
 import AddTeamDialog from './AddTeamDialog';
@@ -11,8 +10,6 @@ import MyRequestTable from './MyRequestTable';
 import userActions from '../../actions/user';
 
 const SelectTeamDialog = props => {
-  const history = useHistory();
-  const location = useLocation();
   const team = useSelector(state => state.teamSelected);
   const [openAddTeamDialog, setOpenAddTeamDialog] = React.useState(false);
   const [tabSelected, setTabSelected] = React.useState(0);
@@ -22,7 +19,6 @@ const SelectTeamDialog = props => {
 
   React.useEffect(() => {
     setTeamSelected(team);
-    history.push(location.pathname.split('/').slice(0, -1).join('/') + '/' + team._id);
   }, [team]);
 
   const handleChange = (event, newValue) => {

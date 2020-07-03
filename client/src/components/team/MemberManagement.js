@@ -1,6 +1,5 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
-import {useParams, useHistory} from 'react-router-dom';
 import {Container, Grid, Button, ButtonGroup} from '@material-ui/core';
 import MemberTable from './MemberTable';
 import AddMemberDialog from './AddMemberDialog';
@@ -25,16 +24,13 @@ const getVisibleMembers = (members, filter) => {
 }
 
 const MemberManagement = (props) => {
-  const {team_id} = useParams();
-  // const history = useHistory();
   const isSignedIn = useSelector(state => state.auth.isSignedIn);
   const user = useSelector(state => state.user);
-  const team = useSelector(state => team_id ? state.teams.find(t => t._id === team_id) : state.teamSelected);
+  const team = useSelector(state => state.teamSelected);
   const [memberFilter, setMemberFilter] = React.useState(memberFilters.ACTIVE);
   const [openAddMemberDialog, setOpenAddMemberDialog] = React.useState(false);
 
   if (!team) {
-    // history.push('/home');
     return null;
   }
   const role = team.users.leader._id === user._id ? 'leader' : team.users.managers.find(m => m._id === user._id) ? 'manager' : team.users.members.find(m => m._id === user._id) ? 'member' : null;

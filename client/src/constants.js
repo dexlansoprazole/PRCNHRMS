@@ -81,3 +81,10 @@ export const actionTypes = {
 
   SET_ALERT: 'SET_ALERT'
 };
+
+export const routeNameMap = {
+  '/home': 'Home',
+  '/team': '戰隊管理',
+  '/team/member': '成員管理',
+  '/team/permission': '權限管理',
+};
