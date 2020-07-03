@@ -34,9 +34,10 @@ module.exports = (app) => {
       team = await parse.team.leader(team[0]);
       team = await wrap.team(team);
       let user = await Users.findById(req.session.user._id).session(session);
-      let teamSelected = await Teams.findById(user.teamSelected).session(session);
+      let teamSelected = null;
       if (user.teamSelected) {
-        teamSelected = await parse.team.leader(user.teamSelected);
+        teamSelected = await Teams.findById(user.teamSelected).session(session);
+        teamSelected = await parse.team.leader(teamSelected);
         teamSelected = await wrap.team(teamSelected, true);
       }
       else {
