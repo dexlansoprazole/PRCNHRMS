@@ -1,14 +1,9 @@
 import {actionTypes} from '../constants';
 
-const removeToast = (index) => {
-  return {type: actionTypes.REMOVE_TOAST, index};
-}
-
-const removeAlert = (index) => {
-  return {type: actionTypes.REMOVE_ALERT, index};
+const setAlert = (alert) => {
+  return {type: actionTypes.SET_ALERT, alert};
 }
 
 export default {
-  removeToast,
-  removeAlert
+  setAlert
 };

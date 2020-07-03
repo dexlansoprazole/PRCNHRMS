@@ -5,6 +5,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {AppBar, Toolbar, IconButton, Typography, Drawer, Backdrop, List, ListItem, ListItemText, Collapse, Grid, createMuiTheme, MuiThemeProvider} from '@material-ui/core';
 import useStyles from './styles';
 import {Menu, ChevronDown, ChevronUp} from 'react-feather';
+import MuiAlert from './components/Alert';
 import SelectTeamButton from './components/select_team/SelectTeamButton';
 import Home from './components/Home';
 import AccountDropdown from './components/AccountDropdown';
@@ -105,6 +106,7 @@ const App = () => {
   return (
     <MuiThemeProvider theme={theme}>
       <div className={classes.root}>
+        <MuiAlert />
         <BrowserRouter>
           <AppBar
             position="fixed"
