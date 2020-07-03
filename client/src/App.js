@@ -200,7 +200,7 @@ const App = () => {
               />
               : null
           }
-          <div style={{width: '100%'}}>
+          <div style={{width: '100%', backgroundColor: theme.palette.background.default}}>
             <LoadingOverlay global loading={loading} className={clsx({
               [classes.loadingOverlayDrawerClose]: !drawerOpen,
               [classes.loadingOverlayDrawerOpen]: drawerOpen,
