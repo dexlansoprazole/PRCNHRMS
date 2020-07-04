@@ -22,7 +22,6 @@ module.exports = (app) => {
       
       let user = await Users.findByIdAndUpdate(req.session.user._id, req.body, {new: true, select: '-__v'});
       user = await parse.user.requests(user);
-      user = await parse.user.teamSelected(user);
       return res.status(200).send({user, teamSelected: user.teamSelected})
     } catch (error) {
       next(error);

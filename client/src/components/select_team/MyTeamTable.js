@@ -95,7 +95,7 @@ const MyTeamTable = props => {
       render: rowData =>
         <Link
           style={{
-            ...(rowData.teamData._id === props.teamSelected._id && {
+            ...(props.teamSelected && rowData.teamData._id === props.teamSelected._id && {
               textDecoration: 'underline',
               color: theme.palette.secondary.dark,
             })

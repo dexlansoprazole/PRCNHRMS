@@ -94,7 +94,7 @@ const App = () => {
 
   React.useEffect(() => {
     setOpenSelectTeamDialog(prevOpenSelectTeamDialog ? prevOpenSelectTeamDialog : false);
-    if (typeof prevOpenSelectTeamDialog !== 'undefined' && !teamSelected._id) setOpenSelectTeamDialog(true);
+    if (typeof prevOpenSelectTeamDialog !== 'undefined' && !teamSelected) setOpenSelectTeamDialog(true);
   }, [teamSelected]);
 
   React.useLayoutEffect(() => {
@@ -133,8 +133,8 @@ const App = () => {
                           <SelectTeamDialog
                             open={openSelectTeamDialog}
                             setOpen={setOpenSelectTeamDialog}
-                            disableBackdropClick={teamSelected._id ? false : true}
-                            disableEscapeKeyDown={teamSelected._id ? false : true}
+                            disableBackdropClick={teamSelected ? false : true}
+                            disableEscapeKeyDown={teamSelected ? false : true}
                           />
                           <SelectTeamButton
                             onClick={handleSelectTeamButtonOpen}

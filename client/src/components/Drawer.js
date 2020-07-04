@@ -69,7 +69,7 @@ const Drawer = (props) => {
               selected: classes.drawerListItemSelected
             }}
           />
-          {isSignedIn && teamSelected._id ?
+          {isSignedIn && teamSelected ?
             <>
               <ListItem button onClick={handleCollapseClick}>
                 <ListItemText primary="戰隊管理" />

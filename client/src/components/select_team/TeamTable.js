@@ -9,7 +9,7 @@ import deepEqual from 'deep-equal';
 
 const TeamTable = props => {
   const loading = useSelector(state => state.loading || state.team.search.loading);
-  const selectable = Object.keys(props).find(k => k === 'teamSelected') ? true : false;
+  const selectable = props.teamSelected ? true : false;
   const globalTheme = useTheme();
   const tableTheme = createMuiTheme(
     {

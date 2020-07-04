@@ -5,14 +5,14 @@ import {Box, Grid, Button} from '@material-ui/core';
 import {ChevronDown} from 'react-feather';
 
 const SelectTeamButton = props => {
-  const team = useSelector(state => state.teamSelected);
+  const team = useSelector(state => state.teams.find(t => t._id === state.teamSelected));
 
   return (
     <Box>
       <Button size='large' color='inherit' onClick={props.onClick} style={{textTransform: 'none'}}>
         <Grid container spacing={1} alignItems='center' wrap='nowrap'>
           <Grid item>
-            {team.name ? team.name : '我的戰隊'}
+            {team ? team.name : '我的戰隊'}
           </Grid>
           <Grid item>
             <ChevronDown display='block' />

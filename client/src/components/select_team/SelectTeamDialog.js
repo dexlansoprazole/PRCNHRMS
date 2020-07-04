@@ -10,7 +10,7 @@ import MyRequestTable from './MyRequestTable';
 import userActions from '../../actions/user';
 
 const SelectTeamDialog = props => {
-  const team = useSelector(state => state.teamSelected);
+  const team = useSelector(state => state.teams.find(t => t._id === state.teamSelected));
   const [openAddTeamDialog, setOpenAddTeamDialog] = React.useState(false);
   const [tabSelected, setTabSelected] = React.useState(0);
   const [teamSelected, setTeamSelected] = React.useState(null);
@@ -101,7 +101,7 @@ const SelectTeamDialog = props => {
             <Button onClick={handleClose}>
               取消
               </Button>
-            <Button onClick={handleSelect} color="primary" disabled={!teamSelected || !teamSelected._id}>
+            <Button onClick={handleSelect} color="primary" disabled={!teamSelected}>
               選擇
               </Button>
           </Box>
