@@ -62,7 +62,7 @@ const AccountDropdown = () => {
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown} className={classes.accountMenuList}>
                   <Box p={1.5} className={classes.noOutline}>
-                    <Grid container direction='column' spacing={3}>
+                    <Grid container direction='column' spacing={1}>
                       <Grid container item direction='row' justify='center' spacing={1}>
                         <Grid item>
                           <img src={user.pictureUrl} style={{verticalAlign: 'middle', width: 40, height: 40, borderRadius: '50%'}} alt='' />
@@ -72,7 +72,9 @@ const AccountDropdown = () => {
                           <Box fontSize={10} color='text.secondary'>{user.email}</Box>
                         </Grid>
                       </Grid>
-                      <Divider />
+                      <Grid item>
+                        <Divider />
+                      </Grid>
                       <Grid item>
                         <ButtonBase
                           focusRipple
