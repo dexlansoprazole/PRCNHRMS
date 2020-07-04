@@ -129,7 +129,7 @@ export default makeStyles((theme) => ({
     color: '#fff',
   },
   nested: {
-    paddingLeft: theme.spacing(4) + ' !important',
+    paddingLeft: theme.spacing(4) + 'px !important',
   },
   drawerListItemSelected: {
     backgroundColor: theme.palette.primary.lighter + ' !important',
