@@ -93,7 +93,7 @@ export default makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   accountMenuList: {
-    padding: 0,
+    padding: "0px !important",
     boxShadow: '0 0 0 0 rgba(0, 0, 0, 0)',
     outline: 'none'
   },
