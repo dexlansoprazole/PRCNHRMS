@@ -73,7 +73,7 @@ const AccountDropdown = () => {
                         </Grid>
                       </Grid>
                       <Divider />
-                      <Grid item display="flex" justifyContent="flex-end">
+                      <Grid item>
                         <ButtonBase
                           focusRipple
                           onClick={signOut}
