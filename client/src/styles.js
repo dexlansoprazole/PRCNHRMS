@@ -60,11 +60,11 @@ export default makeStyles((theme) => ({
     width: 0,
   },
   drawerPaper: {
-    top: 64,
+    top: '64px !important',
   },
   drawerBackdrop: {
-    zIndex: theme.zIndex.drawer - 1,
-    top: '64px',
+    zIndex: theme.zIndex.drawer - 1 + ' !important',
+    top: '64px !important',
     [theme.breakpoints.up('md')]: {
       display: 'none'
     }
@@ -129,7 +129,7 @@ export default makeStyles((theme) => ({
     color: '#fff',
   },
   nested: {
-    paddingLeft: theme.spacing(4),
+    paddingLeft: theme.spacing(4) + ' !important',
   },
   drawerListItemSelected: {
     backgroundColor: theme.palette.primary.lighter + ' !important',

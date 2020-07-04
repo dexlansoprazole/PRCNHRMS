@@ -22,6 +22,7 @@ import './App.css';
 
 const theme = createMuiTheme({
   palette: {
+    type: 'dark',
     primary: {
       main: blue[800],
       lighter: blue[50]
