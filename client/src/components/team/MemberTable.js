@@ -29,7 +29,7 @@ const MemberTable = props => {
           root: {
             transition: 'all 0s !important',
             "&:hover": {
-              backgroundColor: "#f8f8f8",
+              backgroundColor: globalTheme.palette.action.hover,
             }
           }
         }

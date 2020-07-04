@@ -1,5 +1,6 @@
 import React from 'react';
-import {Box, Avatar, Popper, ClickAwayListener, Grow, Paper, IconButton, MenuList, Button, Divider} from '@material-ui/core';
+import {Box, Avatar, Popper, ClickAwayListener, Paper, IconButton, MenuList, Divider, ButtonBase, Collapse, Grid, Typography} from '@material-ui/core';
+import {ExitToApp} from '@material-ui/icons';
 import useStyles from '../styles';
 import {useSelector} from 'react-redux';
 import {useDispatch} from 'react-redux';
@@ -48,39 +49,52 @@ const AccountDropdown = () => {
         ref={anchorRef}
         onClick={handleToggle}
       >
-        <Avatar src={user.pictureUrl}/>
+        <Avatar src={user.pictureUrl} />
       </IconButton>
-      
-      <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
-        {({TransitionProps, placement}) => (
-          <Grow
+
+      <Popper open={open} anchorEl={anchorRef.current} placement='bottom-end' transition keepMounted>
+        {({TransitionProps}) => (
+          <Collapse
             {...TransitionProps}
-            style={{transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom'}}
+            timeout={150}
           >
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
-                <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown} className={classes.noOutline}>
-                  <Box px={2} py={1} className={classes.noOutline}>
-                    <Box display='flex' alignItems="center" mb={2}>
-                      <img src={user.pictureUrl} style={{verticalAlign: 'middle', width: 40, height: 40, borderRadius: '50%'}} alt=''></img>
-                      <Box ml={2}>
-                        <Box fontSize={18} fontWeight="fontWeightBold">{user.name}</Box>
-                        <Box fontSize={12} color='text.secondary'>{user.email}</Box>
-                      </Box>
-                    </Box>
-                    <Divider></Divider>
-                    <Box mt={2} display="flex" justifyContent="flex-end">
-                      <Button size="small" variant="contained" disableElevation onClick={signOut}>登出</Button>
-                    </Box>
+                <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown} className={classes.accountMenuList}>
+                  <Box p={1.5} className={classes.noOutline}>
+                    <Grid container direction='column' spacing={3}>
+                      <Grid container item direction='row' justify='center' spacing={1}>
+                        <Grid item>
+                          <img src={user.pictureUrl} style={{verticalAlign: 'middle', width: 40, height: 40, borderRadius: '50%'}} alt='' />
+                        </Grid>
+                        <Grid item>
+                          <Box fontSize={16} fontWeight="fontWeightBold">{user.name}</Box>
+                          <Box fontSize={10} color='text.secondary'>{user.email}</Box>
+                        </Grid>
+                      </Grid>
+                      <Divider />
+                      <Grid item display="flex" justifyContent="flex-end">
+                        <ButtonBase
+                          focusRipple
+                          onClick={signOut}
+                          className={classes.accountMenuButton}
+                        >
+                          <ExitToApp style={{paddingRight: 5}} />
+                          <Typography variant="button">
+                            登出
+                          </Typography>
+                        </ButtonBase>
+                      </Grid>
+                    </Grid>
                   </Box>
                 </MenuList>
               </ClickAwayListener>
             </Paper>
-          </Grow>
+          </Collapse>
         )}
       </Popper>
     </>
   );
 }
- 
+
 export default AccountDropdown;

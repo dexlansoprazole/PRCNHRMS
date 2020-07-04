@@ -92,6 +92,21 @@ export default makeStyles((theme) => ({
     width: 'calc(100% - ' + theme.spacing(3)*2  + 'px)',
     padding: theme.spacing(3),
   },
+  accountMenuList: {
+    padding: 0,
+    boxShadow: '0 0 0 0 rgba(0, 0, 0, 0)',
+    outline: 'none'
+  },
+  accountMenuButton: {
+    padding: theme.spacing(1),
+    width: '100%',
+    borderRadius: theme.spacing(.5),
+    justifyContent: 'start',
+    font: 'inherit',
+    '&:hover': {
+      backgroundColor: theme.palette.action.hover + " !important"
+    }
+  },
   noOutline: {
     boxShadow: '0 0 0 0 rgba(0, 0, 0, 0)',
     outline: 'none'
