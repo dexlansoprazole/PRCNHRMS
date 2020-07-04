@@ -26,7 +26,14 @@ const JoinedUserTable = (props) => {
   }));
 
   const columns = [
-    {title: "", render: rowData => <Avatar src={rowData.pictureUrl} />, width: '1%'},
+    {
+      title: "",
+      render: rowData => <Avatar src={rowData.pictureUrl} />,
+      cellStyle: {
+        padding: '12px'
+      },
+      width: '1%'
+    },
     {title: "名稱", field: "name"},
     {title: "電子信箱", field: "email"},
     {
