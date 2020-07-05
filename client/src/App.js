@@ -36,7 +36,7 @@ const App = () => {
   const signIn = () => dispatch(authActions.signIn());
   const setIsDarkMode = (value) => dispatch({type: actionTypes.SET_IS_DARK_MODE, value});
   const initialized = useSelector(state => state.initialized);
-  const loading = useSelector(state => ['LOGIN', 'TRY_LOGIN', 'PATCH_USER'].some(a => state.loading[a]));
+  const loading = useSelector(state => ['LOGIN', 'TRY_LOGIN', 'LOGOUT', 'PATCH_USER'].some(a => state.loading[a]));
   const isSignedIn = useSelector(state => state.auth.isSignedIn);
   const teamSelected = useSelector(state => state.teamSelected);
   const isDarkMode = useSelector(state => state.isDarkMode);
