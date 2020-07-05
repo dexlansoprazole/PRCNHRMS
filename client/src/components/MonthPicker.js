@@ -23,13 +23,11 @@ const MonthPicker = (props) => {
         TextFieldComponent={(TextFieldProps) => {
           const {inputRef, value, onClick} = TextFieldProps;
           return (
-            <Button ref={inputRef} onClick={onClick} style={{padding: 0}}>
+            <Button ref={inputRef} onClick={onClick} style={{padding: 0, whiteSpace: 'nowrap'}}>
               <Typography variant="h5">
                 <Grid container spacing={1} alignItems='center' wrap='nowrap'>
                   <Grid item>
-
                     {value}
-
                   </Grid>
                   <Grid item>
                     <ArrowDropDown display='block' />
