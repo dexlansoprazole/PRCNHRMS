@@ -8,7 +8,6 @@ function user(state = initialState, action) {
     case actionTypes.TRY_LOGIN_SUCCESS:
       return Object.assign({}, state, action.user);
     case actionTypes.LOGOUT_SUCCESS:
-      localStorage.clear();
       return initialState;
     case actionTypes.ADD_JOIN_TEAM_REQUEST_SUCCESS:
     case actionTypes.DELETE_JOIN_TEAM_REQUEST_SUCCESS:
