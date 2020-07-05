@@ -30,6 +30,7 @@ const UserTable = props => {
   return (
     <MuiThemeProvider theme={tableTheme}>
       <MaterialTable
+        title='權限管理'
         icons={{
           ...tableIcons,
           Delete: tableIcons.Clear
@@ -45,7 +46,6 @@ const UserTable = props => {
           maxBodyHeight: height - 300,
           headerStyle: {position: 'sticky', top: 0, whiteSpace: 'nowrap'},
           addRowPosition: 'first',
-          showTitle: false,
           toolbar: props.toolbar,
           padding: props.padding
         }}

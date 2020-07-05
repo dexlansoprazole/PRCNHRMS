@@ -119,7 +119,7 @@ const MemberTable = props => {
     <MuiThemeProvider theme={tableTheme}>
       <KickMemberDialog member={memberClicked} open={openKickMemberDialog} setOpen={setOpenKickMemberDialog} setLoading={setLoadingKickMember} />
       <MaterialTable
-        title="戰隊成員"
+        title="成員管理"
         icons={tableIcons}
         columns={columns}
         data={members}
