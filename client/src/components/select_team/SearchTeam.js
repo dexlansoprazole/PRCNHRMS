@@ -4,7 +4,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {Box, Grid, TextField, Button} from '@material-ui/core';
 import {actionTypes} from '../../constants';
 import teamActions from '../../actions/team';
-import TeamTable from './TeamTable';
+import TeamTable from '../TeamTable';
 
 const SearchTeam = () => {
   const dispatch = useDispatch();

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Close} from '@material-ui/icons';
 import {useDispatch, useSelector} from 'react-redux';
-import TeamTable from './TeamTable';
+import TeamTable from '../TeamTable';
 import teamActions from '../../actions/team';
 
 const MyRequestTeamTable = props => {

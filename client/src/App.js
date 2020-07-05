@@ -14,6 +14,7 @@ import AccountDropdown from './components/AccountDropdown';
 import GoogleSignIn from './components/GoogleSignIn';
 import MemberManagement from './components/team/MemberManagement';
 import PermissionManagement from './components/team/PermissionManagement';
+import Attendance from './components/clan_battle/Attendance';
 import LoadingOverlay from './components/LoadingOverlay';
 import authActions from './actions/auth';
 import SelectTeamDialog from './components/select_team/SelectTeamDialog';
@@ -142,6 +143,7 @@ const App = () => {
                 <Route exact path="/home" component={Home} />
                 {initialized ? isSignedIn ? <Route path="/team/member" component={MemberManagement} /> : null : <Route path="/team/member" />}
                 {initialized ? isSignedIn ? <Route path="/team/permission" component={PermissionManagement} /> : null : <Route path="/team/permission" />}
+                {initialized ? isSignedIn ? <Route path="/clan_battle/attendance" component={Attendance} /> : null : <Route path="/clan_battle/attendance" />}
                 <Redirect to="/home" />
               </Switch>
             </main>

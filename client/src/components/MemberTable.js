@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {createMuiTheme, MuiThemeProvider, useTheme} from '@material-ui/core/styles';
 import {useDispatch, useSelector} from 'react-redux';
-import {useWindowResize} from '../useWindowResize';
+import {useWindowResize} from './useWindowResize';
 import MaterialTable from "material-table";
-import tableIcons from '../tableIcons';
+import tableIcons from './tableIcons';
 import {UserX} from 'react-feather';
 import deepEqual from 'deep-equal';
-import TableEditField from '../TableEditField';
-import KickMemberDialog from './KickMemberDialog';
-import memberActions from '../../actions/member';
+import TableEditField from './TableEditField';
+import KickMemberDialog from './team/KickMemberDialog';
+import memberActions from '../actions/member';
 import moment from 'moment';
 
 const MemberTable = props => {

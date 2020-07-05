@@ -2,8 +2,7 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 import {Container, Grid, Button, ButtonGroup} from '@material-ui/core';
 import {useTheme} from '@material-ui/core/styles';
-import MemberTable from '../MemberTable';
-import AddMemberDialog from './AddMemberDialog';
+import AttendanceTable from '../AttendanceTable';
 
 const memberFilters = {
   ALL: 'ALL',
@@ -24,14 +23,13 @@ const getVisibleMembers = (members, filter) => {
   }
 }
 
-const MemberManagement = () => {
+const Attendance = () => {
   const theme = useTheme();
   const isSignedIn = useSelector(state => state.auth.isSignedIn);
   const user = useSelector(state => state.user);
-  const team = useSelector(state => state.teams.find(t => t._id === state.teamSelected));
-  const loading = useSelector(state => ['ADD_MEMBER', 'PATCH_MEMBER', 'DELETE_MEMBER', 'PATCH_USER'].some(a => state.loading[a]));
+  const teamSelected = useSelector(state => state.teamSelected);
+  const team = useSelector(state => state.teams).find(t => t._id === teamSelected);
   const [memberFilter, setMemberFilter] = React.useState(memberFilters.ACTIVE);
-  const [openAddMemberDialog, setOpenAddMemberDialog] = React.useState(false);
   if (!team)
     return null;
   const role = team.users.leader._id === user._id ? 'leader' : team.users.managers.find(m => m._id === user._id) ? 'manager' : team.users.members.find(m => m._id === user._id) ? 'member' : null;
@@ -43,17 +41,11 @@ const MemberManagement = () => {
   if (isSignedIn && team)
     return (
       <Container maxWidth='lg'>
-        <AddMemberDialog team={team} open={openAddMemberDialog} setOpen={setOpenAddMemberDialog}></AddMemberDialog>
         <Grid container direction='column' spacing={3}>
           <Grid container item justify='space-between'>
             <Grid item>
-              {
-                role === 'leader' || role === 'manager' ?
-                  <Button color='primary' variant='contained' disableElevation onClick={() => {setOpenAddMemberDialog(true)}} disabled={loading}>新增成員</Button>
-                  : null
-              }
             </Grid>
-            <Grid item>
+            <Grid item style={{display: 'flex', alignItems: 'flex-end'}}>
               <ButtonGroup disableRipple disableElevation variant='contained'>
                 <Button name={memberFilters.ACTIVE} onClick={handleFilterClick} style={{
                   backgroundColor: memberFilter === memberFilters.ACTIVE ? theme.palette.primary.main : theme.palette.background.paper,
@@ -74,11 +66,11 @@ const MemberManagement = () => {
             </Grid>
           </Grid>
           <Grid item>
-            <MemberTable
+            <AttendanceTable
               team={team}
               members={getVisibleMembers(team.members, memberFilter)}
               role={role}
-              loadingOn={['ADD_MEMBER', 'PATCH_USER']}
+              loadingOn={['PATCH_USER', 'ADD_MEMBER', 'PATCH_MEMBER', 'DELETE_MEMBER']}
               showLeaveDate={memberFilter !== memberFilters.ACTIVE}
               showKickReason={memberFilter !== memberFilters.ACTIVE}
             />
@@ -90,4 +82,4 @@ const MemberManagement = () => {
     return null;
 }
 
-export default MemberManagement;
+export default Attendance;

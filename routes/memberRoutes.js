@@ -16,7 +16,7 @@ module.exports = (app) => {
   });
 
   app.post(`/api/member`, async (req, res, next) => {
-    const newMember = Object.filter(req.body, ['id', 'name', 'join_date', 'leave_date', 'kick_reason', 'team']);
+    const newMember = Object.filter(req.body, ['id', 'name', 'join_date', 'leave_date', 'kick_reason', 'team', 'attendance']);
     try {
       await permission.checkIsLeader(req.session.user, newMember.team);
       const player = await Players.create(newMember)
@@ -28,7 +28,7 @@ module.exports = (app) => {
 
   app.patch(`/api/member/:id`, async (req, res, next) => {
     const player_id = req.params.id;
-    const data = Object.filter(req.body, ['id', 'name', 'join_date', 'leave_date', 'kick_reason']);
+    const data = Object.filter(req.body, ['id', 'name', 'join_date', 'leave_date', 'kick_reason', 'attendance']);
     try {
       let player = await Players.findById(player_id);
       await permission.checkIsLeader(req.session.user, player.team.toString());

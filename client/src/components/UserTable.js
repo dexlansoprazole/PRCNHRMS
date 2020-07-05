@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {useSelector} from 'react-redux';
 import {useTheme} from '@material-ui/core';
-import {useWindowResize} from '../useWindowResize';
+import {useWindowResize} from './useWindowResize';
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import MaterialTable from "material-table";
-import tableIcons from '../tableIcons';
+import tableIcons from './tableIcons';
 
 const UserTable = props => {
   const loading = useSelector(state => props.loadingOn.some(a => state.loading[a]));

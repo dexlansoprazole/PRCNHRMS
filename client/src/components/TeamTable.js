@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 import {Box, useTheme} from '@material-ui/core';
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import MaterialTable from "material-table";
-import tableIcons from '../tableIcons';
+import tableIcons from './tableIcons';
 import deepEqual from 'deep-equal';
 
 const TeamTable = props => {

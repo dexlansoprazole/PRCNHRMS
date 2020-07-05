@@ -4,7 +4,7 @@ import {ExitToApp} from '@material-ui/icons';
 import {Chip, Link} from '@material-ui/core';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTheme, makeStyles} from '@material-ui/core/styles';
-import TeamTable from './TeamTable';
+import TeamTable from '../TeamTable';
 import TableEditField from '../TableEditField';
 import AlertDialog from '../AlertDialog';
 import teamActions from '../../actions/team';

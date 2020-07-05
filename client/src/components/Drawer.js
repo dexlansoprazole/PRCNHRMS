@@ -19,9 +19,14 @@ const Drawer = (props) => {
   const isSignedIn = useSelector(state => state.auth.isSignedIn);
   const teamSelected = useSelector(state => state.teamSelected);
   const [teamCollapseOpen, setTeamCollapseOpen] = React.useState(true);
+  const [clanBattleCollapseOpen, setClanBattleCollapseOpen] = React.useState(true);
 
-  const handleCollapseClick = () => {
+  const handleTeamCollapseClick = () => {
     setTeamCollapseOpen(!teamCollapseOpen);
+  };
+
+  const handleClanBattleCollapseClick = () => {
+    setClanBattleCollapseOpen(!clanBattleCollapseOpen);
   };
 
   const handleItemClick = (index) => {
@@ -71,7 +76,7 @@ const Drawer = (props) => {
           />
           {isSignedIn && teamSelected ?
             <>
-              <ListItem button onClick={handleCollapseClick}>
+              <ListItem button onClick={handleTeamCollapseClick}>
                 <ListItemText primary="戰隊管理" />
                 {teamCollapseOpen ? <ChevronUp /> : <ChevronDown />}
               </ListItem>
@@ -85,6 +90,19 @@ const Drawer = (props) => {
                 />
                 <ListItemLink
                   to={'/team/permission'}
+                  classes={{
+                    root: classes.nested,
+                    selected: classes.drawerListItemSelected
+                  }}
+                />
+              </Collapse>
+              <ListItem button onClick={handleClanBattleCollapseClick}>
+                <ListItemText primary="戰隊戰" />
+                {clanBattleCollapseOpen ? <ChevronUp /> : <ChevronDown />}
+              </ListItem>
+              <Collapse in={clanBattleCollapseOpen} timeout="auto" unmountOnExit>
+                <ListItemLink
+                  to='/clan_battle/attendance'
                   classes={{
                     root: classes.nested,
                     selected: classes.drawerListItemSelected

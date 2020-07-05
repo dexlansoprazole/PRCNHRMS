@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Chip, Avatar} from '@material-ui/core';
 import {useDispatch} from 'react-redux';
-import UserTable from './UserTable';
+import UserTable from '../UserTable';
 import teamActions from '../../actions/team';
 
 const JoinedUserTable = (props) => {

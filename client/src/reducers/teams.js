@@ -34,7 +34,7 @@ function teams(state = initialState, action) {
           team.members = team.members.filter(m => m._id !== action.res.member._id);
       });
       return teams;
-    case actionTypes.PATCH_MEMBER_SUCCESS:
+    case actionTypes.PATCH_MEMBER_SUCCESS:  
       teams.forEach(team => {
         if (team._id === action.res.member.team)
           team.members = team.members.map(m => (m._id === action.res.member._id) ? action.res.member : m);

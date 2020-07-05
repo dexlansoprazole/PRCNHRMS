@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {Avatar} from '@material-ui/core';
 import {Check} from '@material-ui/icons';
 import {useDispatch} from 'react-redux';
-import UserTable from './UserTable';
+import UserTable from '../UserTable';
 import teamActions from '../../actions/team';
 
 const RequestingUserTable = (props) => {

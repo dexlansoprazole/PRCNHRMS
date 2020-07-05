@@ -7,7 +7,8 @@ const playerSchema = new Schema({
   team: Schema.Types.ObjectId,
   join_date: Date,
   leave_date: Date,
-  kick_reason: String
+  kick_reason: String,
+  attendance: [Date]
 })
 
 mongoose.model('players', playerSchema);
