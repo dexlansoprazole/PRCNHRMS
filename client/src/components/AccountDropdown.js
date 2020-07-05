@@ -106,8 +106,8 @@ const AccountDropdown = () => {
                           <img src={user.pictureUrl} style={{verticalAlign: 'middle', width: 40, height: 40, borderRadius: '50%'}} alt='' />
                         </Grid>
                         <Grid item>
-                          <Box fontSize={16} fontWeight="fontWeightBold">{user.name}</Box>
-                          <Box fontSize={10} color='text.secondary'>{user.email}</Box>
+                          <Box fontSize={16} fontWeight="fontWeightBold" style={{whiteSpace: 'nowrap'}}>{user.name}</Box>
+                          <Box fontSize={10} color='text.secondary' style={{whiteSpace: 'nowrap'}}>{user.email}</Box>
                         </Grid>
                       </Grid>
                       <Grid item>
