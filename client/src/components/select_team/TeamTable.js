@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Box, useTheme} from '@material-ui/core';
 import {useSelector} from 'react-redux';
+import {Box, useTheme} from '@material-ui/core';
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import MaterialTable from "material-table";
 import tableIcons from '../tableIcons';
 import deepEqual from 'deep-equal';
 
 const TeamTable = props => {
-  const loading = useSelector(state => state.loading || state.team.search.loading);
+  const loading = useSelector(state => props.loadingOn.some(a => state.loading[a]));
   const selectable = props.teamSelected ? true : false;
   const globalTheme = useTheme();
   const tableTheme = createMuiTheme(
@@ -86,6 +86,7 @@ const TeamTable = props => {
 TeamTable.propTypes = {
   data: PropTypes.array,
   columns: PropTypes.array,
+  loadingOn: PropTypes.array,
   actions: PropTypes.array,
   editable: PropTypes.object,
   teamSelected: PropTypes.object,
@@ -98,6 +99,7 @@ TeamTable.propTypes = {
 };
 
 TeamTable.defaultProps = {
+  loadingOn: [],
   toolbar: true,
   maxBodyHeight: 'calc(50vh - 48px)',
   padding: 'default',

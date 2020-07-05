@@ -4,7 +4,6 @@ import {Close} from '@material-ui/icons';
 import {useDispatch, useSelector} from 'react-redux';
 import TeamTable from './TeamTable';
 import teamActions from '../../actions/team';
-import deepEqual from 'deep-equal';
 
 const MyRequestTeamTable = props => {
   const requests = useSelector(state => state.user.requests);
@@ -40,6 +39,7 @@ const MyRequestTeamTable = props => {
     <TeamTable
       data={data}
       columns={columns}
+      loadingOn={['ADD_JOIN_TEAM_REQUEST', 'DELETE_JOIN_TEAM_REQUEST']}
       actions={[actionDeleteJoinRequest]}
       toolbar={props.toolbar}
       padding='dense'
@@ -51,4 +51,4 @@ MyRequestTeamTable.defaultProps = {
   toolbar: PropTypes.bool
 }
 
-export default React.memo(MyRequestTeamTable, (prevProps, nextProps) => deepEqual(prevProps, nextProps));
+export default MyRequestTeamTable;

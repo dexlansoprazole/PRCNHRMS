@@ -1,7 +1,7 @@
 import React from 'react';
-import {Button} from '@material-ui/core';
+import {Button, CircularProgress} from '@material-ui/core';
 import useStyles from '../styles';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import authActions from '../actions/auth';
 import GoogleSignInIcon from './GoogleSignInIcon';
 
@@ -9,10 +9,13 @@ const GoogleSignIn = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const initGoogleSignIn = () => dispatch(authActions.initGoogleSignIn());
+  const loading = useSelector(state => ['INIT_GOOGLESIGNIN'].some(a => state.loading[a]));
 
   React.useEffect(() => {
     initGoogleSignIn();
   }, []);
+
+  if (loading) return <CircularProgress color='inherit' />;
 
   return (
     <Button
@@ -24,6 +27,6 @@ const GoogleSignIn = () => {
     </Button>
   );
 }
- 
+
 export default GoogleSignIn;
 

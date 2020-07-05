@@ -10,14 +10,14 @@ const JoinedUserTable = (props) => {
   const role = props.role;
   const users = [team.users.leader].concat(team.users.managers, team.users.members);
   const dispatch = useDispatch();
-  const deleteMember = (team_id, user_id) => dispatch(teamActions.deleteMember(team_id, user_id));
+  const deleteMember = async (team_id, user_id) => dispatch(teamActions.deleteMember(team_id, user_id));
 
   const handleKickUser = oldData =>
-    new Promise((resolve, reject) => {
+    new Promise(async (resolve, reject) => {
       if (oldData.role === 'member')
-        deleteMember(team._id, oldData._id);
+        await deleteMember(team._id, oldData._id);
       // TODO: delete manager
-      reject();
+      resolve();
     })
 
   const data = users.map(u => ({
@@ -61,6 +61,7 @@ const JoinedUserTable = (props) => {
     <UserTable
       data={data}
       columns={columns}
+      loadingOn={['ADD_TEAM_MEMBER', 'PATCH_USER']}
       editable={{
         isDeleteHidden: rowData => (role !== 'leader' && role !== 'manager') || rowData.role === 'leader' || rowData.role === role,
         onRowDelete: handleKickUser,

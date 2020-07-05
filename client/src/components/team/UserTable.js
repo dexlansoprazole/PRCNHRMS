@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {useSelector} from 'react-redux';
 import {useTheme} from '@material-ui/core';
 import {useWindowResize} from '../useWindowResize';
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import MaterialTable from "material-table";
 import tableIcons from '../tableIcons';
-import deepEqual from 'deep-equal';
 
 const UserTable = props => {
+  const loading = useSelector(state => props.loadingOn.some(a => state.loading[a]));
   const {height} = useWindowResize();
   const globalTheme = useTheme();
   const tableTheme = createMuiTheme(
@@ -35,6 +36,7 @@ const UserTable = props => {
         }}
         columns={props.columns}
         data={props.data}
+        isLoading={loading}
         actions={props.actions}
         editable={props.editable}
         options={{
@@ -73,6 +75,7 @@ const UserTable = props => {
 UserTable.propTypes = {
   data: PropTypes.array,
   columns: PropTypes.array,
+  loadingOn: PropTypes.array,
   actions: PropTypes.array,
   editable: PropTypes.object,
   toolbar: PropTypes.bool,
@@ -82,10 +85,11 @@ UserTable.propTypes = {
 };
 
 UserTable.defaultProps = {
+  loadingOn: [],
   toolbar: true,
   padding: 'default',
   deleteTooltip: '刪除',
   deleteText: '確定要刪除此使用者?'
 }
 
-export default React.memo(UserTable, (prevProps, nextProps) => deepEqual(prevProps, nextProps));
+export default UserTable;

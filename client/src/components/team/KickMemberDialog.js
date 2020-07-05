@@ -10,7 +10,7 @@ import memberActions from '../../actions/member';
 
 const KickMemberDialog = (props) => {
   const dispatch = useDispatch();
-  const patchMember = (id, data) => dispatch(memberActions.patchMember(id, data));
+  const patchMember = async (id, data) => dispatch(memberActions.patchMember(id, data));
   const member = props.member;
 
   const [kickData, setKickData] = useState({
@@ -41,9 +41,18 @@ const KickMemberDialog = (props) => {
   }
 
   const handleSubmit = (evt) => {
-    if (!moment(kickData.leave_date, "YYYY/MM/DD", true).isValid()) return;
-    patchMember(member._id, kickData);
-    handleClose();
+    new Promise(async (resolve, reject) => {
+      if (!moment(kickData.leave_date, "YYYY/MM/DD", true).isValid()) {
+        reject();
+        return;
+      }
+      handleClose();
+      props.setLoading(true);
+      await patchMember(member._id, kickData);
+      resolve();
+    }).then(() => {
+      props.setLoading(false);
+    }).catch(() => {});
   }
 
   return (
@@ -112,7 +121,8 @@ const KickMemberDialog = (props) => {
 KickMemberDialog.propTypes = {
   member: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
-  setOpen: PropTypes.func.isRequired
+  setOpen: PropTypes.func.isRequired,
+  setLoading: PropTypes.func
 }
 
 export default KickMemberDialog;

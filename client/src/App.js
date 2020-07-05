@@ -69,7 +69,7 @@ const App = () => {
   const dispatch = useDispatch();
   const signIn = () => dispatch(authActions.signIn());
   const initialized = useSelector(state => state.initialized);
-  const loading = useSelector(state => state.loading);
+  const loading = useSelector(state => ['LOGIN', 'TRY_LOGIN'].some(a => state.loading[a]));
   const isSignedIn = useSelector(state => state.auth.isSignedIn);
   const teamSelected = useSelector(state => state.teamSelected);
 

@@ -68,6 +68,7 @@ const SearchTeam = () => {
       <TeamTable
         data={data}
         columns={columns}
+        loadingOn={['SEARCH_TEAM', 'ADD_JOIN_TEAM_REQUEST']}
         actions={[actionAddJoinRequest]}
         toolbar={false}
         maxBodyHeight='calc(50vh - 120px)'

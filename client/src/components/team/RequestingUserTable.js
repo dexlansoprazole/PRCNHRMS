@@ -12,7 +12,7 @@ const RequestingUserTable = (props) => {
   const users = team.users.requests;
   const dispatch = useDispatch();
   const addMember = (team_id, user_id) => dispatch(teamActions.addMember(team_id, user_id));
-  const deleteJoinRequest = (team_id, user_id) => dispatch(teamActions.deleteJoinRequest(team_id, user_id));
+  const deleteJoinRequest = async (team_id, user_id) => dispatch(teamActions.deleteJoinRequest(team_id, user_id));
 
   const actionConfirm = role === 'leader' || role === 'manager' ? {
     icon: Check,
@@ -23,9 +23,9 @@ const RequestingUserTable = (props) => {
   } : null;
 
   const handleDeny = oldData =>
-    new Promise((resolve, reject) => {
-      deleteJoinRequest(team._id, oldData._id);
-      reject();
+    new Promise(async (resolve, reject) => {
+      await deleteJoinRequest(team._id, oldData._id);
+      resolve();
     })
 
   const data = users
@@ -47,6 +47,7 @@ const RequestingUserTable = (props) => {
     <UserTable
       data={data}
       columns={columns}
+      loadingOn={['ADD_TEAM_MEMBER', 'PATCH_USER']}
       actions={[actionConfirm]}
       editable={{
         isDeleteHidden: rowData => role !== 'leader' && role !== 'manager',

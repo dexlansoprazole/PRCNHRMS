@@ -15,10 +15,10 @@ const MyTeamTable = props => {
   const user = useSelector(state => state.user);
   const teams = useSelector(state => state.teams);
   const dispatch = useDispatch();
-  const addTeam = (newTeam) => dispatch(teamActions.addTeam(newTeam));
-  const patchTeam = (id, teamData) => dispatch(teamActions.patchTeam(id, teamData));
-  const deleteTeam = id => dispatch(teamActions.deleteTeam(id));
-  const leaveTeam = (team_id, user_id) => dispatch(teamActions.leaveTeam(team_id, user_id));
+  const addTeam = async (newTeam) => dispatch(teamActions.addTeam(newTeam));
+  const patchTeam = async (id, teamData) => dispatch(teamActions.patchTeam(id, teamData));
+  const deleteTeam = async id => dispatch(teamActions.deleteTeam(id));
+  const leaveTeam = async (team_id, user_id) => dispatch(teamActions.leaveTeam(team_id, user_id));
   const validRef = React.useRef({});
   const [openLeaveTeamAlertDialog, setOpenLeaveTeamAlertDialog] = React.useState(false);
   const [teamClicked, setTeamClicked] = React.useState({});
@@ -33,20 +33,20 @@ const MyTeamTable = props => {
   }))(theme);
 
   const handleTeamAdd = newData =>
-    new Promise((resolve, reject) => {
+    new Promise(async (resolve, reject) => {
       if (!Object.values(validRef.current).every((v) => v === true)) {
         reject();
         return;
       }
       let newTeam = Object.filter(newData, ['name']);
       newTeam = {...newTeam, leader: user._id}
-      addTeam(newTeam);
+      await addTeam(newTeam);
       validRef.current = {};
       resolve();
     })
 
   const handleTeamUpdate = (newData, oldData) =>
-    new Promise((resolve, reject) => {
+    new Promise(async (resolve, reject) => {
       if (!Object.values(validRef.current).every((v) => v === true)) {
         reject();
         return;
@@ -57,15 +57,15 @@ const MyTeamTable = props => {
         resolve();
         return;
       }
-      patchTeam(oldData.teamData._id, newTeam);
+      await patchTeam(oldData.teamData._id, newTeam);
       validRef.current = {};
-      reject();
+      resolve();
     })
 
   const handleTeamDelete = oldData =>
-    new Promise((resolve, reject) => {
-      deleteTeam(oldData.teamData._id);
-      reject();
+    new Promise(async (resolve, reject) => {
+      await deleteTeam(oldData.teamData._id);
+      resolve();
     })
 
   const actionLeaveTeam = rowData => rowData.teamData.users.leader._id !== user._id ? ({
@@ -152,6 +152,7 @@ const MyTeamTable = props => {
         data={data}
         columns={columns}
         actions={[actionLeaveTeam]}
+        loadingOn={['ADD_TEAM', 'DELETE_TEAM', 'LEAVE_TEAM', 'ADD_MEMBER', 'DELETE_MEMBER', 'PATCH_USER']}
         editable={{
           isEditHidden: rowData => rowData.role !== 'leader' && rowData.role !== 'manager',
           isDeleteHidden: rowData => rowData.role !== 'leader' && rowData.role !== 'manager',
@@ -175,4 +176,4 @@ MyTeamTable.propTypes = {
   toolbar: PropTypes.bool
 };
 
-export default React.memo(MyTeamTable, (prevProps, nextProps) => deepEqual(prevProps, nextProps));
+export default MyTeamTable

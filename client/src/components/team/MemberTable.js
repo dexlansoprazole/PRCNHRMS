@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {createMuiTheme, MuiThemeProvider, useTheme} from '@material-ui/core/styles';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useWindowResize} from '../useWindowResize';
 import MaterialTable from "material-table";
 import tableIcons from '../tableIcons';
@@ -13,13 +13,15 @@ import memberActions from '../../actions/member';
 import moment from 'moment';
 
 const MemberTable = props => {
+  const loading = useSelector(state => props.loadingOn.some(a => state.loading[a]));
   const dispatch = useDispatch();
-  const addMember = newMember => dispatch(memberActions.addMember(newMember));
-  const patchMember = (id, memberData) => dispatch(memberActions.patchMember(id, memberData));
-  const deleteMember = id => dispatch(memberActions.deleteMember(id));
+  const addMember = async newMember => dispatch(memberActions.addMember(newMember));
+  const patchMember = async (id, memberData) => dispatch(memberActions.patchMember(id, memberData));
+  const deleteMember = async id => dispatch(memberActions.deleteMember(id));
   const {height} = useWindowResize();
   const [memberClicked, setMemberClicked] = React.useState({});
-  const [openKickMemberDialog, setOpenKickEditMemberDialog] = React.useState(false);
+  const [openKickMemberDialog, setOpenKickMemberDialog] = React.useState(false);
+  const [loadingKickMember, setLoadingKickMember] = React.useState(false);
   const validRef = React.useRef({});
   const globalTheme = useTheme();
   const tableTheme = createMuiTheme(
@@ -61,7 +63,6 @@ const MemberTable = props => {
         <TableEditField
           {...props}
           type='text'
-          autoFocus
           required
           reValidators={[(/^\d{9}$/)]}
           helperTexts={['必須為9位數字']}
@@ -116,19 +117,20 @@ const MemberTable = props => {
 
   return (
     <MuiThemeProvider theme={tableTheme}>
-      <KickMemberDialog member={memberClicked} open={openKickMemberDialog} setOpen={setOpenKickEditMemberDialog} />
+      <KickMemberDialog member={memberClicked} open={openKickMemberDialog} setOpen={setOpenKickMemberDialog} setLoading={setLoadingKickMember} />
       <MaterialTable
         title="戰隊成員"
         icons={tableIcons}
         columns={columns}
         data={members}
+        isLoading={loading || loadingKickMember}
         actions={props.showLeaveDate || props.showKickReason || !(props.role === 'leader' || props.role === 'manager') ? [] : [
           {
             icon: () => <UserX />,
             tooltip: '踢除',
             onClick: (event, member) => {
               setMemberClicked(member);
-              setOpenKickEditMemberDialog(true);
+              setOpenKickMemberDialog(true);
             }
           }
         ]}
@@ -136,18 +138,18 @@ const MemberTable = props => {
           isEditHidden: rowData => props.role !== 'leader' && props.role !== 'manager',
           isDeleteHidden: rowData => props.role !== 'leader' && props.role !== 'manager',
           onRowAdd: props.role === 'leader' || props.role === 'manager' ? newData =>
-            new Promise((resolve, reject) => {
+            new Promise(async (resolve, reject) => {
               if (!Object.values(validRef.current).every((v) => v === true)) {
                 reject();
                 return;
               }
               let newMember = {...newData, team: props.team._id}
-              addMember(newMember);
+              await addMember(newMember);
               validRef.current = {};
               resolve();
             }) : null,
           onRowUpdate: (newData, oldData) =>
-            new Promise((resolve, reject) => {
+            new Promise(async (resolve, reject) => {
               if (!Object.values(validRef.current).every((v) => v === true)) {
                 reject();
                 return;
@@ -158,14 +160,14 @@ const MemberTable = props => {
                 resolve();
                 return;
               }
-              patchMember(oldData._id, newMember);
+              await patchMember(oldData._id, newMember);
               validRef.current = {};
-              reject();
+              resolve();
             }),
           onRowDelete: oldData =>
-            new Promise((resolve, reject) => {
-              deleteMember(oldData._id);
-              reject();
+            new Promise(async (resolve, reject) => {
+              await deleteMember(oldData._id);
+              resolve();
             }),
         }}
         options={{
@@ -204,6 +206,7 @@ const MemberTable = props => {
 MemberTable.propTypes = {
   members: PropTypes.array.isRequired,
   role: PropTypes.string,
+  loadingOn: PropTypes.array,
   showLeaveDate: PropTypes.bool,
   showKickReason: PropTypes.bool,
   padding: PropTypes.string
@@ -212,7 +215,8 @@ MemberTable.propTypes = {
 MemberTable.defaultProps = {
   showLeaveDate: true,
   showKickReason: true,
-  padding: 'default'
+  padding: 'default',
+  loadingOn: []
 }
 
 export default React.memo(MemberTable, (prevProps, nextProps) => deepEqual(prevProps, nextProps));

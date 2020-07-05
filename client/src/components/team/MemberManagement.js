@@ -27,6 +27,7 @@ const MemberManagement = (props) => {
   const isSignedIn = useSelector(state => state.auth.isSignedIn);
   const user = useSelector(state => state.user);
   const team = useSelector(state => state.teams.find(t => t._id === state.teamSelected));
+  const loading = useSelector(state => ['ADD_MEMBER', 'PATCH_MEMBER', 'DELETE_MEMBER', 'PATCH_USER'].some(a => state.loading[a]));
   const [memberFilter, setMemberFilter] = React.useState(memberFilters.ACTIVE);
   const [openAddMemberDialog, setOpenAddMemberDialog] = React.useState(false);
   if (!team)
@@ -46,7 +47,7 @@ const MemberManagement = (props) => {
             <Grid item>
               {
                 role === 'leader' || role === 'manager' ?
-                  <Button color='primary' variant='contained' disableElevation onClick={() => {setOpenAddMemberDialog(true)}}>新增成員</Button>
+                  <Button color='primary' variant='contained' disableElevation onClick={() => {setOpenAddMemberDialog(true)}} disabled={loading}>新增成員</Button>
                   : null
               }
             </Grid>
@@ -63,6 +64,7 @@ const MemberManagement = (props) => {
               team={team}
               members={getVisibleMembers(team.members, memberFilter)}
               role={role}
+              loadingOn={['ADD_MEMBER', 'PATCH_USER']}
               showLeaveDate={memberFilter !== memberFilters.ACTIVE}
               showKickReason={memberFilter !== memberFilters.ACTIVE}
             />

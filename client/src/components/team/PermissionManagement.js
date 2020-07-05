@@ -36,7 +36,7 @@ const PermissionManagement = () => {
       case 1:
         return <RequestingUserTable team={team} role={role} />;
       default:
-        return <JoinedUserTable team={team} role={role} />;
+        return null;
     }
   }
 
