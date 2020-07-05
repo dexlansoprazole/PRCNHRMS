@@ -15,7 +15,6 @@ function auth(state = initialState, action) {
         isSignedIn: true
       });
     case actionTypes.LOGOUT_SUCCESS:
-      localStorage.clear();
       return Object.assign({}, state,
         initialState
       );
