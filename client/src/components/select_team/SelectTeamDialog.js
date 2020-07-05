@@ -85,7 +85,7 @@ const SelectTeamDialog = props => {
       </DialogTitle>
       <Box height={'50vh'} display='flex' flexDirection='column'>
         <Box>
-          <AppBar position="static">
+          <AppBar position="static" style={{boxShadow: '0 0 0 0 rgba(0, 0, 0, 0)'}}>
             <Tabs value={tabSelected} onChange={handleChange}>
               <Tab label="我的戰隊" />
               <Tab label="尋找戰隊" />

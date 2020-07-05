@@ -1,6 +1,7 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 import {Container, Grid, Button, ButtonGroup} from '@material-ui/core';
+import {useTheme} from '@material-ui/core/styles';
 import MemberTable from './MemberTable';
 import AddMemberDialog from './AddMemberDialog';
 
@@ -23,7 +24,8 @@ const getVisibleMembers = (members, filter) => {
   }
 }
 
-const MemberManagement = (props) => {
+const MemberManagement = () => {
+  const theme = useTheme();
   const isSignedIn = useSelector(state => state.auth.isSignedIn);
   const user = useSelector(state => state.user);
   const team = useSelector(state => state.teams.find(t => t._id === state.teamSelected));
@@ -53,9 +55,21 @@ const MemberManagement = (props) => {
             </Grid>
             <Grid item>
               <ButtonGroup disableRipple disableElevation variant='contained'>
-                <Button name={memberFilters.ACTIVE} onClick={handleFilterClick} color={memberFilter === memberFilters.ACTIVE ? 'primary' : 'default'}>現役成員</Button>
-                <Button name={memberFilters.LEFT} onClick={handleFilterClick} color={memberFilter === memberFilters.LEFT ? 'primary' : 'default'}>已退出</Button>
-                <Button name={memberFilters.ALL} onClick={handleFilterClick} color={memberFilter === memberFilters.ALL ? 'primary' : 'default'}>全部成員</Button>
+                <Button name={memberFilters.ACTIVE} onClick={handleFilterClick} style={{
+                  backgroundColor: memberFilter === memberFilters.ACTIVE ? theme.palette.primary.main : theme.palette.background.paper,
+                  color: theme.palette.getContrastText(memberFilter === memberFilters.ACTIVE ? theme.palette.primary.main : theme.palette.background.paper),
+                  borderColor: theme.palette.type === 'dark' ? theme.palette.grey[700] : theme.palette.grey[300]
+                }}>現役成員</Button>
+                <Button name={memberFilters.LEFT} onClick={handleFilterClick} style={{
+                  backgroundColor: memberFilter === memberFilters.LEFT ? theme.palette.primary.main : theme.palette.background.paper,
+                  color: theme.palette.getContrastText(memberFilter === memberFilters.LEFT ? theme.palette.primary.main : theme.palette.background.paper),
+                  borderColor: theme.palette.type === 'dark' ? theme.palette.grey[700] : theme.palette.grey[300]
+                }}>已退出</Button>
+                <Button name={memberFilters.ALL} onClick={handleFilterClick} style={{
+                  backgroundColor: memberFilter === memberFilters.ALL ? theme.palette.primary.main : theme.palette.background.paper,
+                  color: theme.palette.getContrastText(memberFilter === memberFilters.ALL ? theme.palette.primary.main : theme.palette.background.paper),
+                  borderColor: theme.palette.type === 'dark' ? theme.palette.grey[700] : theme.palette.grey[300]
+                }}>全部成員</Button>
               </ButtonGroup>
             </Grid>
           </Grid>

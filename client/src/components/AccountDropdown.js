@@ -1,15 +1,53 @@
 import React from 'react';
-import {Box, Avatar, Popper, ClickAwayListener, Paper, IconButton, MenuList, Divider, ButtonBase, Collapse, Grid, Typography} from '@material-ui/core';
-import {ExitToApp} from '@material-ui/icons';
+import {Box, Avatar, Popper, ClickAwayListener, Paper, IconButton, MenuList, Divider, ButtonBase, Collapse, Grid, Typography, Switch} from '@material-ui/core';
+import {ExitToApp, Brightness2} from '@material-ui/icons';
 import useStyles from '../styles';
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import authActions from '../actions/auth';
+import {actionTypes} from '../constants';
+
+const DarkModeSwitch = () => {
+  const dispatch = useDispatch();
+  const setIsDarkMode = (value) => dispatch({type: actionTypes.SET_IS_DARK_MODE, value});
+  const isDarkMode = useSelector(state => state.isDarkMode);
+  const [check, setCheck] = React.useState(isDarkMode);
+
+  if (!window.localStorage) {
+    console.error('localstorage not supported');
+    return null;
+  }
+
+  const handleClick = () => {
+    let storage = window.localStorage;
+    setIsDarkMode(!check);
+    storage.setItem('isDarkMode', !check);
+    setCheck(!check);
+  }
+
+  return (
+    <Grid container item direction='row' justify="space-between" style={{padding: '0px 8px 0px 8px'}}>
+      <Grid item>
+        <Box display='flex' alignItems='center' height='100%'>
+          <Brightness2 style={{paddingRight: 5}} />
+          <Typography variant="button">深色主題</Typography>
+        </Box>
+      </Grid>
+      <Grid item>
+        <Switch
+          checked={check}
+          onClick={handleClick}
+          color="primary"
+        />
+      </Grid>
+    </Grid>
+  );
+}
 
 const AccountDropdown = () => {
   const classes = useStyles();
   const user = useSelector(state => state.user);
   const [open, setOpen] = React.useState(false);
+
   const anchorRef = React.useRef(null);
 
   const dispatch = useDispatch();
@@ -26,7 +64,7 @@ const AccountDropdown = () => {
     setOpen(false);
   };
 
-  function handleListKeyDown(event) {
+  const handleListKeyDown = (event) => {
     if (event.key === 'Tab') {
       event.preventDefault();
       setOpen(false);
@@ -71,6 +109,12 @@ const AccountDropdown = () => {
                           <Box fontSize={16} fontWeight="fontWeightBold">{user.name}</Box>
                           <Box fontSize={10} color='text.secondary'>{user.email}</Box>
                         </Grid>
+                      </Grid>
+                      <Grid item>
+                        <Divider />
+                      </Grid>
+                      <Grid item style={{padding: '4px'}}>
+                        <DarkModeSwitch />
                       </Grid>
                       <Grid item>
                         <Divider />

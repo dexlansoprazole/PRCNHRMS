@@ -133,6 +133,6 @@ export default makeStyles((theme) => ({
   },
   drawerListItemSelected: {
     backgroundColor: theme.palette.primary.lighter + ' !important',
-    color: theme.palette.primary.dark + ' !important',
+    color: theme.palette.primary.darker + ' !important',
   }
 }));

@@ -1,9 +1,11 @@
 import React from 'react';
 import {Box} from '@material-ui/core';
+import {useTheme} from '@material-ui/core/styles';
 
 function Home() {
+  const theme = useTheme();
   return (
-    <Box display='flex' justifyContent="center">
+    <Box display='flex' justifyContent="center" color={theme.palette.text.primary}>
         <pre>{`
   ///###(((((((((#%/   .(%###((###(#(####(((((((((((((((((###((((//(#%#(#(#*..##((//#(((((//(#%#((((((
   //##((((((((((##/   .(%####(#%#(###(##((((((((((((((((##%#(((((((#%#(((#*...(#((((##((((((/(##((((((

@@ -17,43 +17,9 @@ import PermissionManagement from './components/team/PermissionManagement';
 import LoadingOverlay from './components/LoadingOverlay';
 import authActions from './actions/auth';
 import SelectTeamDialog from './components/select_team/SelectTeamDialog';
-import {blue, pink} from '@material-ui/core/colors';
+import {actionTypes} from './constants';
+import {lightTheme, darkTheme} from './themes';
 import './App.css';
-
-const theme = createMuiTheme({
-  palette: {
-    type: 'light',
-    primary: {
-      main: blue[800],
-      lighter: blue[50]
-    },
-    secondary: {
-      main: pink[300],
-      lighter: pink[50],
-      contrastText: '#fff'
-    }
-  },
-  typography: {
-    fontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-      'Microsoft JhengHei'
-    ].join(','),
-  },
-  props: {
-    MuiButtonBase: {
-      disableRipple: false,
-    },
-  }
-});
 
 const usePrevious = (value) => {
   const ref = React.useRef();
@@ -64,18 +30,23 @@ const usePrevious = (value) => {
 }
 
 const App = () => {
-  const classes = useStyles(theme);
   const {width} = useWindowResize();
   const dispatch = useDispatch();
   const signIn = () => dispatch(authActions.signIn());
+  const setIsDarkMode = (value) => dispatch({type: actionTypes.SET_IS_DARK_MODE, value});
   const initialized = useSelector(state => state.initialized);
   const loading = useSelector(state => ['LOGIN', 'TRY_LOGIN'].some(a => state.loading[a]));
   const isSignedIn = useSelector(state => state.auth.isSignedIn);
   const teamSelected = useSelector(state => state.teamSelected);
+  const isDarkMode = useSelector(state => state.isDarkMode);
 
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [openSelectTeamDialog, setOpenSelectTeamDialog] = React.useState(false);
   const prevOpenSelectTeamDialog = usePrevious(openSelectTeamDialog);
+
+  const theme = createMuiTheme(isDarkMode ? darkTheme : lightTheme);
+
+  const classes = useStyles(theme);
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
@@ -90,6 +61,8 @@ const App = () => {
   }
 
   React.useEffect(() => {
+    const isDarkMode = window.localStorage ? (window.localStorage.getItem('isDarkMode') ? JSON.parse(window.localStorage.getItem('isDarkMode')) : false) : false;
+    setIsDarkMode(isDarkMode);
     signIn();
   }, []);
 

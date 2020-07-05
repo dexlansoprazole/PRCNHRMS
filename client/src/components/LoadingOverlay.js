@@ -27,7 +27,7 @@ const LoadingOverlay = (props) => {
     position: 'absolute',
     zIndex: props.global ? theme.zIndex.drawer - 1 : 1031,
     opacity: 0,
-    background: theme.palette.common.white,
+    background: theme.palette.background.default,
     borderRadius: props.round ? '4px' : '0px',
     margin: '0 0 0 0',
     boxSizing: 'border-box',

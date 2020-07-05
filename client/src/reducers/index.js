@@ -7,6 +7,7 @@ import loading from './loading';
 import initialized from './initialized';
 import notification from './notification';
 import teamSelected from './teamSelected';
+import isDarkMode from './isDarkMode'
 
 const rootReducer = combineReducers({
   initialized,
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
   user,
   team,
   teams,
-  teamSelected
+  teamSelected,
+  isDarkMode
 });
 
 export default rootReducer;
