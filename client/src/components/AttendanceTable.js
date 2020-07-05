@@ -14,7 +14,7 @@ import memberActions from '../actions/member';
 import moment from 'moment';
 
 const AttendanceCheckbox = (props) => {
-  const {member, date} = props;
+  const {member, role, date} = props;
   const attendance = member.attendance;
   const isPresent = member.isPresent;
   const selectedDate = moment(date).format('YYYY/MM');
@@ -30,13 +30,16 @@ const AttendanceCheckbox = (props) => {
     <Checkbox
       checked={checked}
       onChange={(event) => {
-        if (event.target.checked) {
-          if (!isPresent)
-            patchMember(member._id, {attendance: [...attendance, selectedDate]});
+        if (role === 'leader' || role === 'manager') {
+          if (event.target.checked) {
+            if (!isPresent)
+              patchMember(member._id, {attendance: [...attendance, selectedDate]});
+          }
+          else
+            patchMember(member._id, {attendance: attendance.filter(d => d !== selectedDate)});
         }
-        else
-          patchMember(member._id, {attendance: attendance.filter(d => d !== selectedDate)});
       }}
+      style={{pointerEvents: role === 'leader' || role === 'manager' ? 'all' : 'none'}}
     />
   );
 }
@@ -104,7 +107,7 @@ const AttendanceTable = props => {
       cellStyle: {
         padding: '4px',
       },
-      render: rowData => <AttendanceCheckbox member={rowData} date={selectedDate} />
+      render: rowData => <AttendanceCheckbox member={rowData} role={props.role} date={selectedDate} />
     }
   );
 
