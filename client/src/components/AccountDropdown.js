@@ -101,7 +101,7 @@ const AccountDropdown = () => {
                 <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown} className={classes.accountMenuList}>
                   <Box p={1.5} className={classes.noOutline}>
                     <Grid container direction='column' spacing={1}>
-                      <Grid container item direction='row' justify='center' spacing={1} style={{whiteSpace: 'nowrap'}}>
+                      <Grid container item direction='row' justify='center' spacing={1} wrap='nowrap'>
                         <Grid item>
                           <img src={user.pictureUrl} style={{verticalAlign: 'middle', width: 40, height: 40, borderRadius: '50%'}} alt='' />
                         </Grid>
