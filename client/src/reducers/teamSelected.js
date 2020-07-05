@@ -6,6 +6,8 @@ function teamSelected(state = initialState, action) {
   switch (action.type) {
     case actionTypes.LOGIN_SUCCESS:
     case actionTypes.TRY_LOGIN_SUCCESS:
+      if (!action.teamSelected)
+        return initialState;
       return action.teamSelected;
     case actionTypes.PATCH_USER_SUCCESS:
     case actionTypes.ADD_TEAM_SUCCESS:
