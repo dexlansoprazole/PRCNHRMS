@@ -97,7 +97,7 @@ const Drawer = (props) => {
                 />
               </Collapse>
               <ListItem button onClick={handleClanBattleCollapseClick}>
-                <ListItemText primary="戰隊戰" />
+                <ListItemText primary="戰隊競賽" />
                 {clanBattleCollapseOpen ? <ChevronUp /> : <ChevronDown />}
               </ListItem>
               <Collapse in={clanBattleCollapseOpen} timeout="auto" unmountOnExit>

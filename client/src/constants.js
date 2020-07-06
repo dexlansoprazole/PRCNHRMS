@@ -88,6 +88,6 @@ export const routeNameMap = {
   '/team': '戰隊管理',
   '/team/member': '成員管理',
   '/team/permission': '權限管理',
-  '/clan_battle': '戰隊戰',
+  '/clan_battle': '戰隊競賽',
   '/clan_battle/attendance': '出缺勤'
 };
