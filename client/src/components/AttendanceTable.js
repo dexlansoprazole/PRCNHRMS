@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Checkbox} from '@material-ui/core';
-import {createMuiTheme, MuiThemeProvider, useTheme} from '@material-ui/core/styles';
-import {useDispatch, useSelector} from 'react-redux';
-import {useWindowResize} from './useWindowResize';
-import MaterialTable from "material-table";
+import { Checkbox, Grid, Button, ButtonGroup } from '@material-ui/core';
+import { createMuiTheme, MuiThemeProvider, useTheme } from '@material-ui/core/styles';
+import { useDispatch, useSelector } from 'react-redux';
+import { useWindowResize } from './useWindowResize';
+import MaterialTable, { MTableAction } from "material-table";
 import tableIcons from './tableIcons';
-import {UserX} from 'react-feather';
+import { UserX } from 'react-feather';
 import deepEqual from 'deep-equal';
 import MonthPicker from './MonthPicker';
 import KickMemberDialog from './team/KickMemberDialog';
@@ -14,7 +14,7 @@ import memberActions from '../actions/member';
 import moment from 'moment';
 
 const AttendanceCheckbox = (props) => {
-  const {member, role, date} = props;
+  const { member, role, date } = props;
   const attendance = member.attendance;
   const isPresent = member.isPresent;
   const selectedDate = moment(date).format('YYYY/MM');
@@ -33,25 +33,26 @@ const AttendanceCheckbox = (props) => {
         if (role === 'leader' || role === 'manager') {
           if (event.target.checked) {
             if (!isPresent)
-              patchMember(member._id, {attendance: [...attendance, selectedDate]});
+              patchMember(member._id, { attendance: [...attendance, selectedDate] });
           }
           else
-            patchMember(member._id, {attendance: attendance.filter(d => d !== selectedDate)});
+            patchMember(member._id, { attendance: attendance.filter(d => d !== selectedDate) });
         }
       }}
       size='small'
-      style={{pointerEvents: role === 'leader' || role === 'manager' ? 'all' : 'none', padding: 5}}
+      style={{ pointerEvents: role === 'leader' || role === 'manager' ? 'all' : 'none', padding: 5 }}
     />
   );
 }
 
 const AttendanceTable = props => {
   const loading = useSelector(state => props.loadingOn.some(a => state.loading[a]));
-  const {height} = useWindowResize();
+  const { height } = useWindowResize();
   const [memberClicked, setMemberClicked] = React.useState({});
   const [openKickMemberDialog, setOpenKickMemberDialog] = React.useState(false);
   const [loadingKickMember, setLoadingKickMember] = React.useState(false);
   const [selectedDate, handleDateChange] = React.useState(new Date());
+  const [selectedFilter, setSelectedFilter] = React.useState(0);
   const globalTheme = useTheme();
   const tableTheme = createMuiTheme(
     {
@@ -73,7 +74,7 @@ const AttendanceTable = props => {
     },
   );
 
-  const members = props.members.map((m, i) => {
+  const members = props.members.map(m => {
     let member = {
       _id: m._id,
       id: m.id,
@@ -83,23 +84,23 @@ const AttendanceTable = props => {
       join_date: moment(m.join_date).format('YYYY/MM/DD')
     }
     if (props.showLeaveDate)
-      member = {...member, leave_date: m.leave_date ? moment(m.leave_date).format('YYYY/MM/DD') : null};
+      member = { ...member, leave_date: m.leave_date ? moment(m.leave_date).format('YYYY/MM/DD') : null };
     if (props.showKickReason)
-      member = {...member, kick_reason: m.kick_reason ? m.kick_reason : null};
+      member = { ...member, kick_reason: m.kick_reason ? m.kick_reason : null };
     return member;
-  });
+  }).filter(m => selectedFilter >= 0 ? selectedFilter ? m.isPresent : !m.isPresent : true);
 
   const columns = [
-    {title: "#", render: rowData => rowData ? rowData.tableData.id + 1 : '', editable: 'never', width: '1%'},
-    {title: "ID", field: "id"},
-    {title: "暱稱", field: "name"},
-    {title: "加入日期", field: "join_date"}
+    { title: "#", render: rowData => rowData ? rowData.tableData.id + 1 : '', editable: 'never', width: '1%' },
+    { title: "ID", field: "id" },
+    { title: "暱稱", field: "name" },
+    { title: "加入日期", field: "join_date" }
   ]
   if (props.showLeaveDate) columns.push(
-    {title: "退出日期", field: "leave_date"}
+    { title: "退出日期", field: "leave_date" }
   );
   if (props.showKickReason) columns.push(
-    {title: "踢除原因", field: "kick_reason"}
+    { title: "踢除原因", field: "kick_reason" }
   );
 
   columns.push(
@@ -111,6 +112,10 @@ const AttendanceTable = props => {
       render: rowData => <AttendanceCheckbox member={rowData} role={props.role} date={selectedDate} />
     }
   );
+
+  const handleFilterClick = (index) => {
+    setSelectedFilter(index);
+  }
 
   return (
     <MuiThemeProvider theme={tableTheme}>
@@ -126,21 +131,28 @@ const AttendanceTable = props => {
         columns={columns}
         data={members}
         isLoading={loading || loadingKickMember}
-        actions={props.showLeaveDate || props.showKickReason || !(props.role === 'leader' || props.role === 'manager') ? [] : [
-          {
-            icon: () => <UserX />,
-            tooltip: '踢除',
-            onClick: (event, member) => {
-              setMemberClicked(member);
-              setOpenKickMemberDialog(true);
-            }
-          }
-        ]}
+        actions={
+          [{
+            icon: () => null,
+            onClick: () => { },
+            isFreeAction: true
+          }].concat(
+            !(props.role === 'leader' || props.role === 'manager') ? [] :
+              [{
+                icon: () => <UserX />,
+                tooltip: '踢除',
+                onClick: (event, member) => {
+                  setMemberClicked(member);
+                  setOpenKickMemberDialog(true);
+                }
+              }]
+          )
+        }
         options={{
           actionsColumnIndex: -1,
           paging: false,
           maxBodyHeight: height - 300,
-          headerStyle: {position: 'sticky', top: 0, whiteSpace: 'nowrap'},
+          headerStyle: { position: 'sticky', top: 0, whiteSpace: 'nowrap' },
           addRowPosition: 'first',
           padding: 'dense',
         }}
@@ -161,6 +173,36 @@ const AttendanceTable = props => {
               deleteText: '確定要刪除此成員?',
               cancelTooltip: '取消',
               saveTooltip: '完成'
+            }
+          }
+        }}
+        components={{
+          Action: props => {
+            if (props.action.isFreeAction) {
+              return (
+                <ButtonGroup disableElevation variant='contained' style={{ padding: '12px' }}>
+                  <Button onClick={() => handleFilterClick(0)} style={{
+                    backgroundColor: selectedFilter === 0 ? globalTheme.palette.primary.main : globalTheme.palette.grey[700],
+                    color: globalTheme.palette.getContrastText(selectedFilter === 0 ? globalTheme.palette.primary.main : globalTheme.palette.background.paper),
+                    borderColor: globalTheme.palette.type === 'dark' ? globalTheme.palette.grey[600] : globalTheme.palette.grey[300]
+                  }}>未出勤</Button>
+                  <Button onClick={() => handleFilterClick(1)} style={{
+                    backgroundColor: selectedFilter === 1 ? globalTheme.palette.primary.main : globalTheme.palette.grey[700],
+                    color: globalTheme.palette.getContrastText(selectedFilter === 1 ? globalTheme.palette.primary.main : globalTheme.palette.background.paper),
+                    borderColor: globalTheme.palette.type === 'dark' ? globalTheme.palette.grey[600] : globalTheme.palette.grey[300]
+                  }}>已出勤</Button>
+                  <Button onClick={() => handleFilterClick(-1)} style={{
+                    backgroundColor: selectedFilter === -1 ? globalTheme.palette.primary.main : globalTheme.palette.grey[700],
+                    color: globalTheme.palette.getContrastText(selectedFilter === -1 ? globalTheme.palette.primary.main : globalTheme.palette.background.paper),
+                    borderColor: globalTheme.palette.type === 'dark' ? globalTheme.palette.grey[600] : globalTheme.palette.grey[300]
+                  }}>全部</Button>
+                </ButtonGroup>
+              )
+            }
+            else {
+              return (
+                <MTableAction {...props} />
+              )
             }
           }
         }}
