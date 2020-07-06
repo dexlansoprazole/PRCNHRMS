@@ -187,23 +187,21 @@ const AttendanceTable = props => {
         components={{
           Action: props => {
             if (props.action.isFreeAction) {
+              const getStyle = (targetFilter) => {
+                const backgroundColor = selectedFilter === targetFilter ? globalTheme.palette.primary.main : globalTheme.palette.type === 'dark' ? globalTheme.palette.grey[700] : globalTheme.palette.background.default;
+                const borderColor = globalTheme.palette.type === 'dark' ? globalTheme.palette.grey[600] : globalTheme.palette.grey[300];
+                return {
+                  backgroundColor: backgroundColor,
+                  color: globalTheme.palette.getContrastText(backgroundColor),
+                  borderColor: borderColor
+                }
+              }
+
               return (
                 <ButtonGroup disableElevation variant='contained' style={{ padding: '12px' }}>
-                  <Button onClick={() => handleFilterClick(0)} style={{
-                    backgroundColor: selectedFilter === 0 ? globalTheme.palette.primary.main : globalTheme.palette.grey[700],
-                    color: globalTheme.palette.getContrastText(selectedFilter === 0 ? globalTheme.palette.primary.main : globalTheme.palette.background.paper),
-                    borderColor: globalTheme.palette.type === 'dark' ? globalTheme.palette.grey[600] : globalTheme.palette.grey[300]
-                  }}>未出勤</Button>
-                  <Button onClick={() => handleFilterClick(1)} style={{
-                    backgroundColor: selectedFilter === 1 ? globalTheme.palette.primary.main : globalTheme.palette.grey[700],
-                    color: globalTheme.palette.getContrastText(selectedFilter === 1 ? globalTheme.palette.primary.main : globalTheme.palette.background.paper),
-                    borderColor: globalTheme.palette.type === 'dark' ? globalTheme.palette.grey[600] : globalTheme.palette.grey[300]
-                  }}>已出勤</Button>
-                  <Button onClick={() => handleFilterClick(-1)} style={{
-                    backgroundColor: selectedFilter === -1 ? globalTheme.palette.primary.main : globalTheme.palette.grey[700],
-                    color: globalTheme.palette.getContrastText(selectedFilter === -1 ? globalTheme.palette.primary.main : globalTheme.palette.background.paper),
-                    borderColor: globalTheme.palette.type === 'dark' ? globalTheme.palette.grey[600] : globalTheme.palette.grey[300]
-                  }}>全部</Button>
+                  <Button onClick={() => handleFilterClick(0)} style={getStyle(0)}>未出勤</Button>
+                  <Button onClick={() => handleFilterClick(1)} style={getStyle(1)}>已出勤</Button>
+                  <Button onClick={() => handleFilterClick(-1)} style={getStyle(-1)}>全部</Button>
                 </ButtonGroup>
               )
             }

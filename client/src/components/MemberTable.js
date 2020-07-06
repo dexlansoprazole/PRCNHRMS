@@ -1,16 +1,50 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {createMuiTheme, MuiThemeProvider, useTheme} from '@material-ui/core/styles';
-import {useDispatch, useSelector} from 'react-redux';
-import {useWindowResize} from './useWindowResize';
-import MaterialTable from "material-table";
+import { Button, ButtonGroup } from '@material-ui/core';
+import { createMuiTheme, MuiThemeProvider, useTheme } from '@material-ui/core/styles';
+import { useDispatch, useSelector } from 'react-redux';
+import { useWindowResize } from './useWindowResize';
+import MaterialTable, { MTableAction } from "material-table";
 import tableIcons from './tableIcons';
-import {UserX} from 'react-feather';
+import { UserX } from 'react-feather';
 import deepEqual from 'deep-equal';
 import TableEditField from './TableEditField';
 import KickMemberDialog from './team/KickMemberDialog';
 import memberActions from '../actions/member';
 import moment from 'moment';
+
+const memberFilters = {
+  ALL: 'ALL',
+  ACTIVE: 'ACTIVE',
+  LEFT: 'LEFT'
+}
+
+const FilterButtonGroup = props => {
+  const {filter, setFilter} = props;
+  const globalTheme = useTheme();
+
+  const handleFilterClick = (filter) => {
+    setFilter(filter);
+  }
+
+  const getStyle = (targetFilter) => {
+    const backgroundColor = filter === targetFilter ? globalTheme.palette.primary.main : globalTheme.palette.type === 'dark' ? globalTheme.palette.grey[700] : globalTheme.palette.background.default;
+    const borderColor = globalTheme.palette.type === 'dark' ? globalTheme.palette.grey[600] : globalTheme.palette.grey[300];
+    return {
+      backgroundColor: backgroundColor,
+      color: globalTheme.palette.getContrastText(backgroundColor),
+      borderColor: borderColor
+    }
+  }
+
+  return (
+    <ButtonGroup disableElevation variant='contained' style={{ padding: '12px' }}>
+      <Button onClick={() => handleFilterClick(memberFilters.ACTIVE)} style={getStyle(memberFilters.ACTIVE)}>現役成員</Button>
+      <Button onClick={() => handleFilterClick(memberFilters.LEFT)} style={getStyle(memberFilters.LEFT)}>已退出</Button>
+      <Button onClick={() => handleFilterClick(memberFilters.ALL)} style={getStyle(memberFilters.ALL)}>全部成員</Button>
+    </ButtonGroup>
+  );
+}
 
 const MemberTable = props => {
   const loading = useSelector(state => props.loadingOn.some(a => state.loading[a]));
@@ -18,10 +52,11 @@ const MemberTable = props => {
   const addMember = async newMember => dispatch(memberActions.addMember(newMember));
   const patchMember = async (id, memberData) => dispatch(memberActions.patchMember(id, memberData));
   const deleteMember = async id => dispatch(memberActions.deleteMember(id));
-  const {height} = useWindowResize();
+  const { height } = useWindowResize();
   const [memberClicked, setMemberClicked] = React.useState({});
   const [openKickMemberDialog, setOpenKickMemberDialog] = React.useState(false);
   const [loadingKickMember, setLoadingKickMember] = React.useState(false);
+  const [memberFilter, setMemberFilter] = React.useState(memberFilters.ACTIVE);
   const validRef = React.useRef({});
   const globalTheme = useTheme();
   const tableTheme = createMuiTheme(
@@ -40,23 +75,34 @@ const MemberTable = props => {
     globalTheme
   );
 
-  const members = props.members.map((m, i) => {
+  const members = props.members.map(m => {
     let member = {
       _id: m._id,
       id: m.id,
       name: m.name,
       join_date: moment(m.join_date).format('YYYY/MM/DD')
     }
-    if (props.showLeaveDate)
-      member = {...member, leave_date: m.leave_date ? moment(m.leave_date).format('YYYY/MM/DD') : null};
-    if (props.showKickReason)
-      member = {...member, kick_reason: m.kick_reason ? m.kick_reason : null};
+    if (memberFilter !== memberFilters.ACTIVE)
+      member = { ...member, leave_date: m.leave_date ? moment(m.leave_date).format('YYYY/MM/DD') : null };
+    if (memberFilter !== memberFilters.ACTIVE)
+      member = { ...member, kick_reason: m.kick_reason ? m.kick_reason : null };
     return member;
+  }).filter(m => {
+    switch (memberFilter) {
+      case memberFilters.ALL:
+        return true;
+      case memberFilters.ACTIVE:
+        return !m.leave_date && !m.kick_reason;
+      case memberFilters.LEFT:
+        return m.leave_date ? true : false || m.kick_reason ? true : false;
+      default:
+        return true;
+    }
   });
 
   const columns = [
     {
-      title: "#", render: rowData => rowData ? rowData.tableData.id+1 : '', editable: 'never', width: '1%'
+      title: "#", render: rowData => rowData ? rowData.tableData.id + 1 : '', editable: 'never', width: '1%'
     },
     {
       title: "ID", field: "id", editComponent: props =>
@@ -90,7 +136,7 @@ const MemberTable = props => {
         />
     }
   ]
-  if (props.showLeaveDate) columns.push(
+  if (memberFilter !== memberFilters.ACTIVE) columns.push(
     {
       title: "退出日期", field: "leave_date", editComponent: props =>
         <TableEditField
@@ -101,7 +147,7 @@ const MemberTable = props => {
         />
     }
   );
-  if (props.showKickReason) columns.push(
+  if (memberFilter !== memberFilters.ACTIVE) columns.push(
     {
       title: "踢除原因", field: "kick_reason", editComponent: props =>
         <TableEditField
@@ -124,16 +170,22 @@ const MemberTable = props => {
         columns={columns}
         data={members}
         isLoading={loading || loadingKickMember}
-        actions={props.showLeaveDate || props.showKickReason || !(props.role === 'leader' || props.role === 'manager') ? [] : [
-          {
-            icon: () => <UserX />,
-            tooltip: '踢除',
-            onClick: (event, member) => {
-              setMemberClicked(member);
-              setOpenKickMemberDialog(true);
-            }
-          }
-        ]}
+        actions={
+          [{
+            icon: () => null,
+            onClick: () => { },
+            isFreeAction: true
+          }].concat(
+            !(props.role === 'leader' || props.role === 'manager') ? [] :
+              [{
+                icon: () => <UserX />,
+                tooltip: '踢除',
+                onClick: (event, member) => {
+                  setMemberClicked(member);
+                  setOpenKickMemberDialog(true);
+                }
+              }]
+          )}
         editable={{
           isEditHidden: rowData => props.role !== 'leader' && props.role !== 'manager',
           isDeleteHidden: rowData => props.role !== 'leader' && props.role !== 'manager',
@@ -143,7 +195,7 @@ const MemberTable = props => {
                 reject();
                 return;
               }
-              let newMember = {...newData, team: props.team._id}
+              let newMember = { ...newData, team: props.team._id }
               await addMember(newMember);
               validRef.current = {};
               resolve();
@@ -174,7 +226,7 @@ const MemberTable = props => {
           actionsColumnIndex: -1,
           paging: false,
           maxBodyHeight: height - 300,
-          headerStyle: {position: 'sticky', top: 0, whiteSpace: 'nowrap'},
+          headerStyle: { position: 'sticky', top: 0, whiteSpace: 'nowrap' },
           addRowPosition: 'first',
           padding: 'dense'
         }}
@@ -198,6 +250,18 @@ const MemberTable = props => {
             }
           }
         }}
+        components={{
+          Action: props => {
+            if (props.action.isFreeAction) {
+              return <FilterButtonGroup filter={memberFilter} setFilter={setMemberFilter} />
+            }
+            else {
+              return (
+                <MTableAction {...props} />
+              )
+            }
+          }
+        }}
       />
     </MuiThemeProvider>
   );
@@ -207,13 +271,9 @@ MemberTable.propTypes = {
   members: PropTypes.array.isRequired,
   role: PropTypes.string,
   loadingOn: PropTypes.array,
-  showLeaveDate: PropTypes.bool,
-  showKickReason: PropTypes.bool
 };
 
 MemberTable.defaultProps = {
-  showLeaveDate: true,
-  showKickReason: true,
   loadingOn: []
 }
 

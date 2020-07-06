@@ -20,7 +20,7 @@ const TableEditField = props => {
       return (
         <TextField
           autoFocus={props.autoFocus}
-          multiline={props.multiline}
+          multiline={typeof props.multiline === 'undefined' ? true : props.multiline}
           value={props.value ? props.value : ''}
           onChange={(e) => props.onChange(e.target.value)}
           error={!isValid}
@@ -41,6 +41,7 @@ const TableEditField = props => {
           <KeyboardDatePicker
             disableToolbar
             fullWidth
+            multiline={typeof props.multiline === 'undefined' ? true : props.multiline}
             autoOk
             variant="inline"
             format="YYYY/MM/DD"
