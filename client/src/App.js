@@ -1,11 +1,11 @@
 import React from 'react';
 import clsx from 'clsx';
-import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
-import {useSelector, useDispatch} from 'react-redux';
-import {AppBar, Toolbar, IconButton, Typography, Grid, createMuiTheme, MuiThemeProvider} from '@material-ui/core';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppBar, Toolbar, IconButton, Typography, Grid, createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import useStyles from './styles';
-import {useWindowResize} from './components/useWindowResize';
-import {Menu} from 'react-feather';
+import { useWindowResize } from './components/useWindowResize';
+import { Menu } from 'react-feather';
 import MuiAlert from './components/Alert';
 import SelectTeamButton from './components/select_team/SelectTeamButton';
 import Drawer from './components/Drawer';
@@ -18,8 +18,8 @@ import Attendance from './components/clan_battle/Attendance';
 import LoadingOverlay from './components/LoadingOverlay';
 import authActions from './actions/auth';
 import SelectTeamDialog from './components/select_team/SelectTeamDialog';
-import {actionTypes} from './constants';
-import {lightTheme, darkTheme} from './themes';
+import { actionTypes } from './constants';
+import { lightTheme, darkTheme } from './themes';
 import './App.css';
 
 const usePrevious = (value) => {
@@ -31,10 +31,10 @@ const usePrevious = (value) => {
 }
 
 const App = () => {
-  const {width} = useWindowResize();
+  const { width } = useWindowResize();
   const dispatch = useDispatch();
   const signIn = () => dispatch(authActions.signIn());
-  const setIsDarkMode = (value) => dispatch({type: actionTypes.SET_IS_DARK_MODE, value});
+  const setIsDarkMode = (value) => dispatch({ type: actionTypes.SET_IS_DARK_MODE, value });
   const initialized = useSelector(state => state.initialized);
   const loading = useSelector(state => ['LOGIN', 'TRY_LOGIN', 'LOGOUT', 'PATCH_USER'].some(a => state.loading[a]));
   const isSignedIn = useSelector(state => state.auth.isSignedIn);
@@ -130,15 +130,18 @@ const App = () => {
             open={drawerOpen}
             onClose={handleDrawerClose}
           />
-          <div style={{width: '100%', backgroundColor: theme.palette.background.default}}>
+          <div style={{ width: '100%', backgroundColor: theme.palette.background.default }}>
             <LoadingOverlay global loading={loading} className={clsx({
               [classes.loadingOverlayDrawerClose]: !drawerOpen,
               [classes.loadingOverlayDrawerOpen]: drawerOpen,
-            })}/>
-            <main className={clsx({
-              [classes.contentDrawerClose]: !drawerOpen,
-              [classes.contentDrawerOpen]: drawerOpen,
-            })}>
+            })} />
+            <main
+              className={clsx({
+                [classes.contentDrawerClose]: !drawerOpen,
+                [classes.contentDrawerOpen]: drawerOpen,
+              })}
+              style={{overflowX: 'auto', height: '100%'}}
+            >
               <Switch>
                 <Route exact path="/home" component={Home} />
                 {initialized ? isSignedIn ? <Route path="/team/member" component={MemberManagement} /> : null : <Route path="/team/member" />}

@@ -193,7 +193,8 @@ const AttendanceTable = props => {
                 return {
                   backgroundColor: backgroundColor,
                   color: globalTheme.palette.getContrastText(backgroundColor),
-                  borderColor: borderColor
+                  borderColor: borderColor,
+                  whiteSpace: 'nowrap'
                 }
               }
 
