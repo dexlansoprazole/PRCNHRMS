@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Checkbox, Grid, Button, ButtonGroup } from '@material-ui/core';
+import { Checkbox, Button, ButtonGroup } from '@material-ui/core';
 import { createMuiTheme, MuiThemeProvider, useTheme } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { useWindowResize } from './useWindowResize';
@@ -12,6 +12,8 @@ import MonthPicker from './MonthPicker';
 import KickMemberDialog from './team/KickMemberDialog';
 import memberActions from '../actions/member';
 import moment from 'moment';
+import "moment/locale/zh-tw";
+moment.locale("zh-tw");
 
 const AttendanceCheckbox = (props) => {
   const { member, role, date } = props;
@@ -119,7 +121,13 @@ const AttendanceTable = props => {
 
   return (
     <MuiThemeProvider theme={tableTheme}>
-      <KickMemberDialog member={memberClicked} open={openKickMemberDialog} setOpen={setOpenKickMemberDialog} setLoading={setLoadingKickMember} />
+      <KickMemberDialog
+        member={memberClicked}
+        open={openKickMemberDialog}
+        setOpen={setOpenKickMemberDialog}
+        setLoading={setLoadingKickMember}
+        defaultKickReason={!memberClicked.isPresent ? moment(selectedDate).format('YYYY') + '年' + moment(selectedDate).format('M') + '月份戰隊競賽缺勤' : ''}
+      />
       <MaterialTable
         title={
           <MonthPicker

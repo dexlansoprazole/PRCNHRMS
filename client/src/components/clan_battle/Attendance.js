@@ -3,12 +3,6 @@ import {useSelector} from 'react-redux';
 import {Container, Grid} from '@material-ui/core';
 import AttendanceTable from '../AttendanceTable';
 
-const memberFilters = {
-  ALL: 'ALL',
-  ACTIVE: 'ACTIVE',
-  LEFT: 'LEFT'
-}
-
 const getVisibleMembers = (members) => {
  return members.filter(m => (!m.leave_date && !m.kick_reason));
 }

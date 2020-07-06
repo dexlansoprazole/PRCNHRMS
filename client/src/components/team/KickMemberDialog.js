@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
 import {Box, Button, Dialog, DialogTitle, DialogActions, Grid} from '@material-ui/core';
@@ -14,7 +14,7 @@ const KickMemberDialog = (props) => {
   const member = props.member;
 
   const [kickData, setKickData] = useState({
-    kick_reason: "",
+    kick_reason: props.defaultKickReason,
     leave_date: moment().format('YYYY/MM/DD')
   });
 
@@ -29,13 +29,20 @@ const KickMemberDialog = (props) => {
     });
   }
 
+  useEffect(() => {
+    setKickData({
+      kick_reason: props.defaultKickReason,
+      leave_date: moment().format('YYYY/MM/DD')
+    })
+  }, [props.defaultKickReason]);
+
   const handleClose = () => {
     props.setOpen(false);
   };
 
   const handleExited = (evt) => {
     setKickData({
-      kick_reason: "",
+      kick_reason: props.defaultKickReason,
       leave_date: moment().format('YYYY/MM/DD')
     })
   }
@@ -122,7 +129,8 @@ KickMemberDialog.propTypes = {
   member: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
-  setLoading: PropTypes.func
+  setLoading: PropTypes.func,
+  defaultKickReason: PropTypes.string
 }
 
 export default KickMemberDialog;
