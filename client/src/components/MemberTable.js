@@ -176,7 +176,7 @@ const MemberTable = props => {
           maxBodyHeight: height - 300,
           headerStyle: {position: 'sticky', top: 0, whiteSpace: 'nowrap'},
           addRowPosition: 'first',
-          padding: props.padding
+          padding: 'dense'
         }}
         localization={{
           header: {
@@ -208,14 +208,12 @@ MemberTable.propTypes = {
   role: PropTypes.string,
   loadingOn: PropTypes.array,
   showLeaveDate: PropTypes.bool,
-  showKickReason: PropTypes.bool,
-  padding: PropTypes.string
+  showKickReason: PropTypes.bool
 };
 
 MemberTable.defaultProps = {
   showLeaveDate: true,
   showKickReason: true,
-  padding: 'default',
   loadingOn: []
 }
 

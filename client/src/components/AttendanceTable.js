@@ -39,7 +39,8 @@ const AttendanceCheckbox = (props) => {
             patchMember(member._id, {attendance: attendance.filter(d => d !== selectedDate)});
         }
       }}
-      style={{pointerEvents: role === 'leader' || role === 'manager' ? 'all' : 'none'}}
+      size='small'
+      style={{pointerEvents: role === 'leader' || role === 'manager' ? 'all' : 'none', padding: 5}}
     />
   );
 }
@@ -105,7 +106,7 @@ const AttendanceTable = props => {
     {
       title: "出勤", field: "isPresent", width: '1%',
       cellStyle: {
-        padding: '4px',
+        padding: '0px 0px 0px 16px',
       },
       render: rowData => <AttendanceCheckbox member={rowData} role={props.role} date={selectedDate} />
     }
@@ -141,7 +142,7 @@ const AttendanceTable = props => {
           maxBodyHeight: height - 300,
           headerStyle: {position: 'sticky', top: 0, whiteSpace: 'nowrap'},
           addRowPosition: 'first',
-          padding: props.padding,
+          padding: 'dense',
         }}
         localization={{
           header: {
@@ -174,13 +175,11 @@ AttendanceTable.propTypes = {
   loadingOn: PropTypes.array,
   showLeaveDate: PropTypes.bool,
   showKickReason: PropTypes.bool,
-  padding: PropTypes.string,
 };
 
 AttendanceTable.defaultProps = {
   showLeaveDate: true,
   showKickReason: true,
-  padding: 'default',
   loadingOn: []
 }
 
