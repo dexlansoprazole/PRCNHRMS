@@ -75,7 +75,18 @@ const MemberTable = props => {
     globalTheme
   );
 
-  const members = props.members.map(m => {
+  const members = props.members.filter(m => {
+    switch (memberFilter) {
+      case memberFilters.ALL:
+        return true;
+      case memberFilters.ACTIVE:
+        return !m.leave_date && !m.kick_reason;
+      case memberFilters.LEFT:
+        return m.leave_date ? true : false || m.kick_reason ? true : false;
+      default:
+        return true;
+    }
+  }).map(m => {
     let member = {
       _id: m._id,
       id: m.id,
@@ -87,17 +98,6 @@ const MemberTable = props => {
     if (memberFilter !== memberFilters.ACTIVE)
       member = { ...member, kick_reason: m.kick_reason ? m.kick_reason : null };
     return member;
-  }).filter(m => {
-    switch (memberFilter) {
-      case memberFilters.ALL:
-        return true;
-      case memberFilters.ACTIVE:
-        return !m.leave_date && !m.kick_reason;
-      case memberFilters.LEFT:
-        return m.leave_date ? true : false || m.kick_reason ? true : false;
-      default:
-        return true;
-    }
   });
 
   const columns = [
