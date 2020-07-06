@@ -8,6 +8,23 @@ import MomentUtils from '@date-io/moment';
 import "moment/locale/zh-tw";
 moment.locale("zh-tw")
 
+const customTextFieldComponent = (props) => {
+  const {inputRef, value, onClick} = props;
+  return (
+    <Button ref={inputRef} onClick={onClick} style={{padding: 0, whiteSpace: 'nowrap'}}>
+      <Typography variant="h5">
+        <Grid container spacing={1} alignItems='center' wrap='nowrap'>
+          <Grid item>
+            {value}
+          </Grid>
+          <Grid item>
+            <ArrowDropDown display='block' />
+          </Grid>
+        </Grid>
+      </Typography>
+    </Button>
+  );
+}
 
 const MonthPicker = (props) => {
   return (
@@ -17,31 +34,14 @@ const MonthPicker = (props) => {
         variant="inline"
         openTo="month"
         views={["year", "month"]}
-        format="yyyy MMM"
+        format="yyyy年 MMM"
         value={props.value}
         onChange={props.onChange}
-        TextFieldComponent={(TextFieldProps) => {
-          const {inputRef, value, onClick} = TextFieldProps;
-          return (
-            <Button ref={inputRef} onClick={onClick} style={{padding: 0, whiteSpace: 'nowrap'}}>
-              <Typography variant="h5">
-                <Grid container spacing={1} alignItems='center' wrap='nowrap'>
-                  <Grid item>
-                    {value}
-                  </Grid>
-                  <Grid item>
-                    <ArrowDropDown display='block' />
-                  </Grid>
-                </Grid>
-              </Typography>
-            </Button>
-          );
-        }}
+        TextFieldComponent={customTextFieldComponent}
       />
     </MuiPickersUtilsProvider>
   );
 }
-
 
 MonthPicker.propTypes = {
   value: PropTypes.object,
