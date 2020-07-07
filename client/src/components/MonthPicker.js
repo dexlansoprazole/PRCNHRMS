@@ -8,16 +8,25 @@ import MomentUtils from '@date-io/moment';
 import "moment/locale/zh-tw";
 moment.locale("zh-tw")
 
-const customTextFieldComponent = (props) => {
+const CustomTextFieldComponent = (props) => {
   const {inputRef, value, onClick} = props;
+  const btnTextRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const btnText = btnTextRef.current;
+    const hasOverflowingChildren = btnText.offsetHeight < btnText.scrollHeight || btnText.offsetWidth < btnText.scrollWidth;
+    console.log(hasOverflowingChildren);
+    
+  }, [btnTextRef]);
+
   return (
     <Button ref={inputRef} onClick={onClick} style={{padding: 0, whiteSpace: 'nowrap'}}>
       <Typography variant="h5">
         <Grid container spacing={1} alignItems='center' wrap='nowrap'>
-          <Grid item>
+          <Grid item ref={btnTextRef} style={{whiteSpace: 'pre-wrap', wordBreak: 'keep-all'}}>
             {value}
           </Grid>
-          <Grid item>
+          <Grid item style={{display: 'flex'}}>
             <ArrowDropDown display='block' />
           </Grid>
         </Grid>
@@ -37,7 +46,7 @@ const MonthPicker = (props) => {
         format="yyyy年 MMM"
         value={props.value}
         onChange={props.onChange}
-        TextFieldComponent={customTextFieldComponent}
+        TextFieldComponent={CustomTextFieldComponent}
       />
     </MuiPickersUtilsProvider>
   );

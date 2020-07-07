@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, ButtonGroup } from '@material-ui/core';
+import { Button, ButtonGroup, Box } from '@material-ui/core';
 import { createMuiTheme, MuiThemeProvider, useTheme } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { useWindowResize } from './useWindowResize';
-import MaterialTable, { MTableAction } from "material-table";
+import MaterialTable, { MTableAction, MTableToolbar } from "material-table";
 import tableIcons from './tableIcons';
 import { UserX } from 'react-feather';
 import deepEqual from 'deep-equal';
@@ -261,6 +261,9 @@ const MemberTable = props => {
                 <MTableAction {...props} />
               )
             }
+          },
+          Toolbar: props => {
+            return <Box style={{whiteSpace: 'nowrap'}}><MTableToolbar {...props}/></Box>
           }
         }}
       />
