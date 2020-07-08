@@ -10,20 +10,12 @@ moment.locale("zh-tw")
 
 const CustomTextFieldComponent = (props) => {
   const {inputRef, value, onClick} = props;
-  const btnTextRef = React.useRef(null);
-
-  React.useEffect(() => {
-    const btnText = btnTextRef.current;
-    const hasOverflowingChildren = btnText.offsetHeight < btnText.scrollHeight || btnText.offsetWidth < btnText.scrollWidth;
-    console.log(hasOverflowingChildren);
-    
-  }, [btnTextRef]);
 
   return (
     <Button ref={inputRef} onClick={onClick} style={{padding: 0, whiteSpace: 'nowrap'}}>
       <Typography variant="h5">
         <Grid container spacing={1} alignItems='center' wrap='nowrap'>
-          <Grid item ref={btnTextRef} style={{whiteSpace: 'pre-wrap', wordBreak: 'keep-all'}}>
+          <Grid item style={{whiteSpace: 'pre-wrap', wordBreak: 'keep-all'}}>
             {value}
           </Grid>
           <Grid item style={{display: 'flex'}}>

@@ -1,5 +1,3 @@
-import './logrocketSetup';
-import LogRocket from 'logrocket';
 import React from 'react';
 import {render} from 'react-dom';
 import {Provider} from 'react-redux';
@@ -19,7 +17,7 @@ Object.filter = (obj, predicate) =>
     .reduce((res, key) => (res[key] = obj[key], res), {});
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(
-  thunkMiddleware, callAPIMiddleware, LogRocket.reduxMiddleware()
+  thunkMiddleware, callAPIMiddleware
 )))
 
 render(

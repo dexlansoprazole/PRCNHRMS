@@ -16,8 +16,6 @@
     "clsx": "^1.1.1",
     "deep-equal": "^2.0.3",
     "http-proxy-middleware": "^1.0.1",
-    "logrocket": "^1.0.7",
-    "logrocket-react": "^4.0.1",
     "material-table": "^1.62.0",
     "moment": "^2.27.0",
     "prop-types": "^15.7.2",
