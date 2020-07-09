@@ -79,6 +79,7 @@ const KickMemberDialog = (props) => {
             <Grid item>
               <MuiPickersUtilsProvider utils={MomentUtils}>
                 <KeyboardDatePicker
+                  autoOk
                   disableToolbar
                   fullWidth
                   variant="inline"
