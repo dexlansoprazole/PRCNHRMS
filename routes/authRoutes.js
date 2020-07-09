@@ -5,9 +5,11 @@ const Teams = mongoose.model('teams');
 const parse = require('../utils/parse');
 const wrap = require('../utils/wrap');
 
-const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
 const client = new OAuth2Client(CLIENT_ID);
 async function verify(token) {
+  if (!CLIENT_ID)
+    throw Error('google api client id is undefined');
   const ticket = await client.verifyIdToken({
     idToken: token,
     audience: CLIENT_ID,

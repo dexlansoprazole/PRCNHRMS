@@ -20,14 +20,14 @@ mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 mongoose.set('useUnifiedTopology', true);
 mongoose.set('useNewUrlParser', true);
-mongoose.connect(process.env.MONGODB_URI || process.env.MONGODB_URI_TEST);
+mongoose.connect(process.env.MONGODB_URI);
 
 app.use(helmet());
 app.use(bodyParser.json());
 
 let sess = {
   secret: process.env.COOKIE_SECRET,
-  store: new MongoStore({url: process.env.MONGODB_URI || process.env.MONGODB_URI_TEST}),
+  store: new MongoStore({url: process.env.MONGODB_URI}),
   resave: false,
   saveUninitialized: false,
   cookie: {
