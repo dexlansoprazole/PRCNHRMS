@@ -1,4 +1,3 @@
-import LogRocket from 'logrocket';
 import signInService from '../services/authService';
 import {actionTypes} from '../constants';
 
@@ -14,12 +13,6 @@ const signIn = (googleUser) => {
         return;
       }
 
-      if (process.env.NODE_ENV === 'production') {
-        LogRocket.identify(user._id, {
-          name: user.name,
-          email: user.email,
-        });
-      }
       dispatch(success(res));
     } catch (error) {
       console.error(error);
