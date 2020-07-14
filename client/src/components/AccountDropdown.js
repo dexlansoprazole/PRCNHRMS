@@ -5,6 +5,7 @@ import useStyles from '../styles';
 import {useSelector, useDispatch} from 'react-redux';
 import authActions from '../actions/auth';
 import {actionTypes} from '../constants';
+import UserInfo from './UserInfo';
 
 const DarkModeSwitch = () => {
   const dispatch = useDispatch();
@@ -47,6 +48,7 @@ const AccountDropdown = () => {
   const classes = useStyles();
   const user = useSelector(state => state.user);
   const [open, setOpen] = React.useState(false);
+  const [isEditingUserName, setIsEditingUserName] = React.useState(false);
 
   const anchorRef = React.useRef(null);
 
@@ -90,7 +92,7 @@ const AccountDropdown = () => {
         <Avatar src={user.pictureUrl} />
       </IconButton>
 
-      <Popper open={open} anchorEl={anchorRef.current} placement='bottom-end' transition keepMounted>
+      <Popper open={open} anchorEl={anchorRef.current} placement='top-end' transition keepMounted>
         {({TransitionProps}) => (
           <Collapse
             {...TransitionProps}
@@ -102,13 +104,7 @@ const AccountDropdown = () => {
                   <Box p={1.5} className={classes.noOutline}>
                     <Grid container direction='column' spacing={1}>
                       <Grid container item direction='row' justify='center' spacing={1} wrap='nowrap'>
-                        <Grid item>
-                          <img src={user.pictureUrl} style={{verticalAlign: 'middle', width: 40, height: 40, borderRadius: '50%'}} alt='' />
-                        </Grid>
-                        <Grid item>
-                          <Box fontSize={16} fontWeight="fontWeightBold" style={{whiteSpace: 'nowrap'}}>{user.name}</Box>
-                          <Box fontSize={10} color='text.secondary' style={{whiteSpace: 'nowrap'}}>{user.email}</Box>
-                        </Grid>
+                        <UserInfo user={user} isEditing={isEditingUserName} setIsEditing={setIsEditingUserName} />
                       </Grid>
                       <Grid item>
                         <Divider />
