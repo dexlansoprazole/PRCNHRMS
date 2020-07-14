@@ -26,16 +26,16 @@ const JoinedUserTable = (props) => {
   }));
 
   const columns = [
-    {
-      title: "",
-      render: rowData => <Avatar src={rowData.pictureUrl} />,
-      cellStyle: {
-        padding: '12px'
-      },
-      width: '1%'
-    },
-    {title: "名稱", field: "name"},
-    {title: "電子信箱", field: "email"},
+    // {
+    //   title: "",
+    //   render: rowData => <Avatar src={rowData.pictureUrl} />,
+    //   cellStyle: {
+    //     padding: '12px'
+    //   },
+    //   width: '1%'
+    // },
+
+    // {title: "電子信箱", field: "email"},
     {
       title: "職位", field: "role", editable: 'never', width: '1%',
       render: rowData => {
@@ -54,7 +54,8 @@ const JoinedUserTable = (props) => {
         else
           return <Chip label='隊長' size='small' color='secondary' />;
       }
-    }
+    },
+    {title: "名稱", field: "name"},
   ]
 
   return (
