@@ -30,7 +30,7 @@ const DarkModeSwitch = () => {
       <Grid item>
         <Box display='flex' alignItems='center' height='100%'>
           <Brightness2 style={{paddingRight: 5}} />
-          <Typography variant="button">深色主題</Typography>
+          <Typography variant="button" noWrap>深色主題</Typography>
         </Box>
       </Grid>
       <Grid item>
@@ -115,7 +115,7 @@ const AccountDropdown = () => {
                           className={classes.accountMenuButton}
                         >
                           <ExitToApp style={{paddingRight: 5}} />
-                          <Typography variant="button">
+                          <Typography variant="button" noWrap>
                             登出
                           </Typography>
                         </ButtonBase>
