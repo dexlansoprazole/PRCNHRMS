@@ -6,9 +6,10 @@ function teams(state = initialState, action) {
   let teams = state.slice();
   switch (action.type) {
     case actionTypes.LOGIN_SUCCESS:
-      return action.teams.slice();
     case actionTypes.TRY_LOGIN_SUCCESS:
       return action.teams.slice();
+    case actionTypes.PATCH_USER_SUCCESS:
+      return action.res.teams.slice();
     case actionTypes.ADD_TEAM_SUCCESS:
       teams.push(action.res.team);
       return teams;
