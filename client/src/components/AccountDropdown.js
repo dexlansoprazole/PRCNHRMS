@@ -26,7 +26,7 @@ const DarkModeSwitch = () => {
   }
 
   return (
-    <Grid container item direction='row' justify="space-between" style={{padding: '0px 8px 0px 8px', whiteSpace: 'nowrap'}}>
+    <Grid container item direction='row' justify="space-between" style={{padding: '0px 8px 0px 8px'}} wrap='nowrap'>
       <Grid item>
         <Box display='flex' alignItems='center' height='100%'>
           <Brightness2 style={{paddingRight: 5}} />
