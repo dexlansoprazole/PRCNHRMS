@@ -35,7 +35,11 @@ module.exports = (app) => {
       let teams = null;
       if (token) {
         user = await verify(req.body.token);
-        user = await Users.findOneAndUpdate({id: user.id}, user, {upsert: true, new: true, select: '-__v'});
+        let dbUser = await Users.findOne({id: user.id}, '-__v');
+        if(!dbUser)
+          user = await Users.create({...user, teamSelected: null});
+        else
+          user = dbUser;
       }
       else if (req.session.user) {
         user = await Users.findOne({id: req.session.user.id}, '-__v');

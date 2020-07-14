@@ -13,14 +13,15 @@ module.exports = (app) => {
   // });
 
   app.patch(`/api/user/`, async (req, res, next) => {
+    const data = Object.filter(req.body, ['name', 'teamSelected']);
     try {
       if (!req.session.user)
         throw new PermissionError();
       let teams = await Teams.find({$or: [{leader: req.session.user._id}, {managers: {$in: [req.session.user._id]}}, {members: {$in: [req.session.user._id]}}]}, '_id');
-      if (!teams.map(t => t._id).find(id => id.toString() === req.body.teamSelected))
+      if (data.teamSelected && !teams.map(t => t._id).find(id => id.toString() === data.teamSelected))
         throw new PermissionError();
       
-      let user = await Users.findByIdAndUpdate(req.session.user._id, req.body, {new: true, select: '-__v'});
+      let user = await Users.findByIdAndUpdate(req.session.user._id, data, {new: true, select: '-__v'});
       user = await parse.user.requests(user);
       return res.status(200).send({user, teamSelected: user.teamSelected})
     } catch (error) {
