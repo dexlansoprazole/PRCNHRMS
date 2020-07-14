@@ -1,13 +1,15 @@
 import React from 'react';
-import {useDispatch} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {Box, Grid, IconButton} from '@material-ui/core';
 import {Edit, Close, Check} from '@material-ui/icons';
 import {ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import userActions from '../actions/user';
+import LoadingOverlay from './LoadingOverlay';
 
 const UserInfo = props => {
   const {user, isEditing, setIsEditing} = props;
   const [nameFieldValue, setNameFieldValue] = React.useState(user.name);
+  const loading = useSelector(state => state.loading['PATCH_USER']);
   const dispatch = useDispatch();
   const patchUser = async (data) => dispatch(userActions.patchUser(data));
 
@@ -22,6 +24,7 @@ const UserInfo = props => {
     if (isEditing) {
       return (
         <ValidatorForm onSubmit={handleSubmit}>
+          <LoadingOverlay loading={loading} size={16} />
           <TextValidator
             autoFocus
             size='small'
@@ -31,6 +34,7 @@ const UserInfo = props => {
             validators={['required', 'matchRegexp:^.{1,30}$']}
             errorMessages={['必填', '長度必須在1到30之間']}
             style={{width: 168}}
+            disabled={loading}
           />
           <IconButton
             type='submit'

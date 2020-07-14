@@ -27,8 +27,8 @@ const LoadingOverlay = (props) => {
     position: 'absolute',
     zIndex: props.global ? theme.zIndex.drawer - 1 : 1031,
     opacity: 0,
-    background: theme.palette.background.default,
-    borderRadius: props.round ? '4px' : '0px',
+    background: props.global ? theme.palette.background.default : 'rgba(39, 42, 43, 0.3)',
+    borderRadius: props.borderRadius ? props.borderRadius : 0,
     margin: '0 0 0 0',
     boxSizing: 'border-box',
     color: theme.palette.primary.main,
@@ -39,7 +39,7 @@ const LoadingOverlay = (props) => {
     <div ref={overlayRef} style={overlayStyle} className={props.className}>
       <Box>
         <Box display='flex' justifyContent="center" alignItems="center">
-          <CircularProgress color="inherit" />
+          <CircularProgress color="inherit" size={props.size} />
         </Box>
         {props.global ? <Box mt={1} fontSize={24} fontWeight="fontWeightBold">Loading...</Box> : null}
       </Box>
