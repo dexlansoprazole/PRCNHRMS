@@ -36,10 +36,14 @@ module.exports = (app) => {
       if (token) {
         user = await verify(req.body.token);
         let dbUser = await Users.findOne({id: user.id}, '-__v');
-        if(!dbUser)
+        if (!dbUser)
           user = await Users.create({...user, teamSelected: null});
-        else
+        else {
+          dbUser.email = user.email;
+          dbUser.pictureUrl = user.pictureUrl;
+          await dbUser.save();
           user = dbUser;
+        }
       }
       else if (req.session.user) {
         user = await Users.findOne({id: req.session.user.id}, '-__v');
