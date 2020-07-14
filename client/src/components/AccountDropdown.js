@@ -66,20 +66,12 @@ const AccountDropdown = () => {
     setOpen(false);
   };
 
-  const handleListKeyDown = (event) => {
-    if (event.key === 'Tab') {
-      event.preventDefault();
-      setOpen(false);
-    }
-  }
-
   // return focus to the button when we transitioned from !open -> open
   const prevOpen = React.useRef(open);
   React.useEffect(() => {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus();
     }
-
     prevOpen.current = open;
   }, [open]);
 
@@ -97,10 +89,11 @@ const AccountDropdown = () => {
           <Collapse
             {...TransitionProps}
             timeout={150}
+            onExited={() => setIsEditingUserName(false)}
           >
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
-                <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown} className={classes.accountMenuList}>
+                <MenuList id="menu-list-grow" className={classes.accountMenuList}>
                   <Box p={1.5} className={classes.noOutline}>
                     <Grid container direction='column' spacing={1}>
                       <Grid container item direction='row' justify='center' spacing={1} wrap='nowrap'>
