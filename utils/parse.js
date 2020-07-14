@@ -5,16 +5,16 @@ const Players = mongoose.model('players');
 const wrap = require('./wrap');
 
 const parseTeamLeader = async (team) => {
-  return await {...(team.toObject ? team.toObject() : team), leader: await Users.findOne({_id: team.leader}, '_id name email pictureUrl')};
+  return await {...(team.toObject ? team.toObject() : team), leader: await Users.findOne({_id: team.leader}, '_id name pictureUrl')};
 }
 
 const parseTeamRequests = async (team) => {
-  let requests = await Promise.all(team.requests.map(async r => await Users.findById(r, '_id name email pictureUrl')));
+  let requests = await Promise.all(team.requests.map(async r => await Users.findById(r, '_id name pictureUrl')));
   return {...(team.toObject ? team.toObject() : team), requests};
 }
 
 const parseTeamMembers = async (team) => {
-  let members = await Promise.all(team.members.map(async r => await Users.findById(r, '_id name email pictureUrl')));
+  let members = await Promise.all(team.members.map(async r => await Users.findById(r, '_id name pictureUrl')));
   return {...(team.toObject ? team.toObject() : team), members};
 }
 
