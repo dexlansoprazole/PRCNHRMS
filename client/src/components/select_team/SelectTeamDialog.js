@@ -120,6 +120,8 @@ SelectTeamDialog.propTypes = {
 
 SelectTeamDialog.defaultProps = {
   open: true,
+  disableBackdropClick: false,
+  disableEscapeKeyDown: false,
 }
 
 export default SelectTeamDialog;

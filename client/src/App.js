@@ -108,8 +108,6 @@ const App = () => {
                           <SelectTeamDialog
                             open={openSelectTeamDialog}
                             setOpen={setOpenSelectTeamDialog}
-                            disableBackdropClick={teamSelected ? false : true}
-                            disableEscapeKeyDown={teamSelected ? false : true}
                           />
                           <SelectTeamButton
                             onClick={handleSelectTeamButtonOpen}
