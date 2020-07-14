@@ -26,7 +26,7 @@ const DarkModeSwitch = () => {
   }
 
   return (
-    <Grid container item direction='row' justify="space-between" style={{padding: '0px 8px 0px 8px'}}>
+    <Grid container item direction='row' justify="space-between" style={{padding: '0px 8px 0px 8px', whiteSpace: 'nowrap'}}>
       <Grid item>
         <Box display='flex' alignItems='center' height='100%'>
           <Brightness2 style={{paddingRight: 5}} />
@@ -92,7 +92,7 @@ const AccountDropdown = () => {
         <Avatar src={user.pictureUrl} />
       </IconButton>
 
-      <Popper open={open} anchorEl={anchorRef.current} placement='top-end' transition keepMounted>
+      <Popper open={open} anchorEl={anchorRef.current} placement='top-end' transition keepMounted style={{zIndex: 1350}}>
         {({TransitionProps}) => (
           <Collapse
             {...TransitionProps}
