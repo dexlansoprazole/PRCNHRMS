@@ -23,12 +23,13 @@ module.exports = (app) => {
         throw new PermissionError();
       
       let user = await Users.findByIdAndUpdate(req.session.user._id, data, {new: true, select: '-__v'});
-      user = await parse.user.requests(user);
+      let resUser = await parse.user.requests(user);
       teams = await Promise.all(teams.map(async t => await parse.team.leader(t)));
       teams = await Promise.all(teams.map(async t => await parse.team.requests(t)));
       teams = await Promise.all(teams.map(async t => await parse.team.members(t)));
       teams = await Promise.all(teams.map(async t => await wrap.team(t, true)));
-      return res.status(200).send({user, teamSelected: user.teamSelected, teams})
+      req.session.user = user;
+      return res.status(200).send({user: resUser, teamSelected: resUser.teamSelected, teams})
     } catch (error) {
       next(error);
     }
