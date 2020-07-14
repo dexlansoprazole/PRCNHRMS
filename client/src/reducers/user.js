@@ -12,6 +12,7 @@ function user(state = initialState, action) {
     case actionTypes.ADD_JOIN_TEAM_REQUEST_SUCCESS:
     case actionTypes.DELETE_JOIN_TEAM_REQUEST_SUCCESS:
     case actionTypes.PATCH_USER_SUCCESS:
+    case actionTypes.PATCH_TEAM_SELECTED_SUCCESS:
       return Object.assign({}, state, action.res.user);
     default:
       return state;

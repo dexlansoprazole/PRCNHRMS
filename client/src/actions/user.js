@@ -8,6 +8,14 @@ const patchUser = (data) => {
   }
 }
 
+const patchTeamSelected = (team_id) => {
+  return {
+    types: [actionTypes.PATCH_TEAM_SELECTED_REQUEST, actionTypes.PATCH_TEAM_SELECTED_SUCCESS, actionTypes.PATCH_TEAM_SELECTED_FAILURE],
+    callAPI: () => userService.patch({teamSelected: team_id})
+  }
+}
+
 export default {
-  patchUser
+  patchUser,
+  patchTeamSelected
 };

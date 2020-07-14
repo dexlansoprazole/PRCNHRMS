@@ -21,7 +21,7 @@ const MemberManagement = () => {
               team={team}
               members={team.members}
               role={role}
-              loadingOn={['ADD_MEMBER', 'PATCH_USER']}
+              loadingOn={['ADD_MEMBER', 'PATCH_TEAM_SELECTED']}
             />
           </Grid>
         </Grid>

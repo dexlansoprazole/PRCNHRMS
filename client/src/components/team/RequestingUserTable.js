@@ -47,7 +47,7 @@ const RequestingUserTable = (props) => {
     <UserTable
       data={data}
       columns={columns}
-      loadingOn={['ADD_TEAM_MEMBER', 'PATCH_USER']}
+      loadingOn={['ADD_TEAM_MEMBER', 'PATCH_TEAM_SELECTED']}
       actions={[actionConfirm]}
       editable={{
         isDeleteHidden: rowData => role !== 'leader' && role !== 'manager',

@@ -10,6 +10,7 @@ function teamSelected(state = initialState, action) {
         return initialState;
       return action.teamSelected;
     case actionTypes.PATCH_USER_SUCCESS:
+    case actionTypes.PATCH_TEAM_SELECTED_SUCCESS:
     case actionTypes.ADD_TEAM_SUCCESS:
     case actionTypes.DELETE_TEAM_SUCCESS:
     case actionTypes.LEAVE_TEAM_SUCCESS:

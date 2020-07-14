@@ -25,7 +25,7 @@ const Attendance = () => {
               team={team}
               members={getVisibleMembers(team.members)}
               role={role}
-              loadingOn={['PATCH_USER', 'ADD_MEMBER', 'PATCH_MEMBER', 'DELETE_MEMBER']}
+              loadingOn={['PATCH_TEAM_SELECTED', 'ADD_MEMBER', 'PATCH_MEMBER', 'DELETE_MEMBER']}
               showLeaveDate={false}
               showKickReason={false}
             />

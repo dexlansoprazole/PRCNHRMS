@@ -15,7 +15,7 @@ const SelectTeamDialog = props => {
   const [tabSelected, setTabSelected] = React.useState(0);
   const [teamSelected, setTeamSelected] = React.useState(null);
   const dispatch = useDispatch();
-  const patchUser = (data) => dispatch(userActions.patchUser(data));
+  const patchTeamSelected = (team_id) => dispatch(userActions.patchTeamSelected(team_id));
 
   React.useEffect(() => {
     setTeamSelected(team);
@@ -37,14 +37,14 @@ const SelectTeamDialog = props => {
   const handleSelect = () => {
     if (teamSelected && teamSelected._id) {
       handleClose();
-      patchUser({teamSelected: teamSelected._id});
+      patchTeamSelected(teamSelected._id);
     }
   };
 
   const handleLinkClick = (teamData) => {
     if (teamData) {
       handleClose();
-      patchUser({teamSelected: teamData._id});
+      patchTeamSelected(teamData._id);
     }
   }
 
