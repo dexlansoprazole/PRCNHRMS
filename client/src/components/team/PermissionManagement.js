@@ -1,7 +1,8 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
-import {Container, Grid, Tab, Tabs, Paper} from '@material-ui/core';
-import {withStyles} from '@material-ui/styles';
+import { useHistory } from "react-router-dom";
+import { useSelector } from 'react-redux';
+import { Container, Grid, Tab, Tabs, Paper } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import JoinedUserTable from './JoinedUserTable';
 import RequestingUserTable from './RequestingUserTable';
 
@@ -15,15 +16,18 @@ const StyledTabs = withStyles(theme => ({
       backgroundColor: theme.palette.primary.main,
     },
   },
-}))((props) => <Tabs {...props} TabIndicatorProps={{children: <span />}} />);
+}))((props) => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />);
 
 const PermissionManagement = () => {
+  const history = useHistory();
   const [tabSelected, setTabSelected] = React.useState(0);
   const user = useSelector(state => state.user);
   const teamSelected = useSelector(state => state.teamSelected);
   const team = useSelector(state => state.teams).find(t => t._id === teamSelected);
-  if (!team)
+  if (!team) {
+    history.push('/home');
     return null;
+  }
   const role = team.users.leader._id === user._id ? 'leader' : team.users.managers.find(m => m._id === user._id) ? 'manager' : team.users.members.find(m => m._id === user._id) ? 'member' : null;
 
   const handleTabChange = (event, newValue) => {
