@@ -11,7 +11,7 @@ const SelectTeamButton = props => {
     <Box>
       <Button size='large' color='inherit' onClick={props.onClick} style={{textTransform: 'none'}}>
         <Grid container spacing={1} alignItems='center' wrap='nowrap'>
-          <Grid item>
+          <Grid item style={{whiteSpace: 'nowrap'}}>
             {team ? team.name : '選擇戰隊'}
           </Grid>
           <Grid item>
