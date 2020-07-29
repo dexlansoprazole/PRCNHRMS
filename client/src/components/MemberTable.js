@@ -177,7 +177,7 @@ const MemberTable = props => {
             onClick: () => { },
             isFreeAction: true
           }].concat(
-            !(props.role === 'leader' || props.role === 'manager') ? [] :
+            !(props.role === 'leader' || props.role === 'manager') || memberFilter === memberFilters.LEFT ? [] :
               [{
                 icon: () => <UserX />,
                 tooltip: '踢除',
