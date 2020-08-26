@@ -72,6 +72,11 @@ const App = () => {
     if (typeof prevOpenSelectTeamDialog !== 'undefined' && !teamSelected) setOpenSelectTeamDialog(true);
   }, [teamSelected]);
 
+  React.useEffect(() => {
+    if (width > theme.breakpoints.values.md)
+      setDrawerOpen(!loading && isSignedIn && teamSelected);
+  }, [width, loading, isSignedIn, teamSelected]);
+
   React.useLayoutEffect(() => {
     setDrawerOpen(width > theme.breakpoints.values.md ? true : false);
   }, [width]);
