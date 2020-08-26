@@ -1,8 +1,8 @@
 import React from 'react';
-import { useHistory } from "react-router-dom";
-import { useSelector } from 'react-redux';
-import { Container, Grid, Tab, Tabs, Paper } from '@material-ui/core';
-import { withStyles } from '@material-ui/styles';
+import {useHistory} from "react-router-dom";
+import {useSelector} from 'react-redux';
+import {Container, Grid, Tab, Tabs, Paper, Badge, Box} from '@material-ui/core';
+import {withStyles} from '@material-ui/styles';
 import JoinedUserTable from './JoinedUserTable';
 import RequestingUserTable from './RequestingUserTable';
 
@@ -16,7 +16,16 @@ const StyledTabs = withStyles(theme => ({
       backgroundColor: theme.palette.primary.main,
     },
   },
-}))((props) => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />);
+}))((props) => <Tabs {...props} TabIndicatorProps={{children: <span />}} />);
+
+const StyledBadge = withStyles(theme => ({
+  badge: {
+    right: '-12px',
+    top: '50%',
+    padding: '0px 4px',
+    backgroundColor: theme.palette.primary.main
+  },
+}))(Badge);
 
 const PermissionManagement = () => {
   const history = useHistory();
@@ -52,7 +61,13 @@ const PermissionManagement = () => {
           <Paper>
             <StyledTabs value={tabSelected} onChange={handleTabChange} variant="fullWidth">
               <Tab label="已加入" />
-              <Tab label="申請中" />
+              <Tab
+                label={
+                  <StyledBadge color="primary" badgeContent={team.users.requests.length} >
+                      <Box>申請中</Box>
+                  </StyledBadge>
+                }
+              />
             </StyledTabs>
           </Paper>
         </Grid>

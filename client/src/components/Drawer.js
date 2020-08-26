@@ -1,23 +1,24 @@
 import React from 'react';
 import clsx from 'clsx';
-import { Link, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { useTheme } from '@material-ui/core/styles'
-import { Drawer as MuiDrawer, List, ListItem, ListItemText, Collapse, Backdrop, Tooltip } from '@material-ui/core';
-import { ChevronDown, ChevronUp } from 'react-feather';
-import { useWindowResize } from './useWindowResize';
+import {Link, useLocation} from 'react-router-dom';
+import {useSelector} from 'react-redux';
+import {useTheme} from '@material-ui/core/styles'
+import {Drawer as MuiDrawer, List, ListItem, ListItemText, Collapse, Backdrop, Tooltip, Badge} from '@material-ui/core';
+import {ChevronDown, ChevronUp} from 'react-feather';
+import {useWindowResize} from './useWindowResize';
 import useStyles from '../styles';
-import { routeNameMap } from '../constants'
+import {routeNameMap} from '../constants';
 
 const Drawer = (props) => {
   const open = props.open;
   const handleClose = props.onClose;
-  const { width } = useWindowResize();
+  const {width} = useWindowResize();
   const theme = useTheme();
   const classes = useStyles();
   const location = useLocation();
   const isSignedIn = useSelector(state => state.auth.isSignedIn);
   const teamSelected = useSelector(state => state.teamSelected);
+  const team = useSelector(state => state.teams).find(t => t._id === teamSelected);
   const [teamCollapseOpen, setTeamCollapseOpen] = React.useState(true);
   const [clanBattleCollapseOpen, setClanBattleCollapseOpen] = React.useState(true);
 
@@ -35,7 +36,7 @@ const Drawer = (props) => {
   }
 
   const ListItemLink = (props) => {
-    const { to, disabled, ...other } = props;
+    const {to, disabled, showBadge, ...other} = props;
     const primary = routeNameMap[to];
 
     return (
@@ -57,7 +58,9 @@ const Drawer = (props) => {
             disabled={disabled}
             {...other}
           >
-            <ListItemText primary={primary} />
+            <Badge color="primary" variant="dot" invisible={!showBadge} >
+              <ListItemText primary={primary} style={{paddingRight: 4}} />
+            </Badge>
           </ListItem>
         </div>
       </Tooltip>
@@ -106,6 +109,7 @@ const Drawer = (props) => {
                 selected: classes.drawerListItemSelected
               }}
               disabled={!isSignedIn || !teamSelected}
+              showBadge={team ? team.users.requests.length > 0 : false}
             />
           </Collapse>
           <ListItem button onClick={handleClanBattleCollapseClick}>
