@@ -90,7 +90,7 @@ const AttendanceTable = props => {
     if (props.showKickReason)
       member = { ...member, kick_reason: m.kick_reason ? m.kick_reason : null };
     return member;
-  }).filter(m => selectedFilter >= 0 ? selectedFilter ? m.isPresent : !m.isPresent : true);
+  }).filter(m => moment(m.join_date).month() <= moment(selectedDate).month() && (selectedFilter >= 0 ? selectedFilter ? m.isPresent : !m.isPresent : true));
 
   const columns = [
     { title: "#", render: rowData => rowData ? rowData.tableData.id + 1 : '', editable: 'never', width: '1%' },
@@ -126,7 +126,7 @@ const AttendanceTable = props => {
         open={openKickMemberDialog}
         setOpen={setOpenKickMemberDialog}
         setLoading={setLoadingKickMember}
-        defaultKickReason={!memberClicked.isPresent ? moment(selectedDate).format('YYYY') + '年' + moment(selectedDate).format('M') + '月份戰隊競賽缺勤' : ''}
+        defaultKickReason={!memberClicked.isPresent ? moment(selectedDate).format('YYYY年M月份戰隊競賽缺勤') : ''}
       />
       <MaterialTable
         title={
