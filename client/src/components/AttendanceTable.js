@@ -90,7 +90,7 @@ const AttendanceTable = props => {
     if (props.showKickReason)
       member = { ...member, kick_reason: m.kick_reason ? m.kick_reason : null };
     return member;
-  }).filter(m => moment(m.join_date).year() <= moment(selectedDate).year() && moment(m.join_date).month() <= moment(selectedDate).month() && (selectedFilter >= 0 ? selectedFilter ? m.isPresent : !m.isPresent : true));
+  }).filter(m => moment(m.join_date).isSameOrBefore(moment(selectedDate).endOf('month').format('YYYY/MM/DD')) && (selectedFilter >= 0 ? selectedFilter ? m.isPresent : !m.isPresent : true));
 
   const columns = [
     { title: "#", render: rowData => rowData ? rowData.tableData.id + 1 : '', editable: 'never', width: '1%' },
