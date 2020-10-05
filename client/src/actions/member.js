@@ -18,7 +18,14 @@ const addMember = (newMember) => {
 const patchMember = (id, data) => {
   return {
     types: [actionTypes.PATCH_MEMBER_REQUEST, actionTypes.PATCH_MEMBER_SUCCESS, actionTypes.PATCH_MEMBER_FAILURE],
-    callAPI: () => memberService.patch(id, data)
+    callAPI: () => memberService.patchOne(id, data)
+  }
+}
+
+const patchMembers = (members) => {
+  return {
+    types: [actionTypes.PATCH_MEMBERS_REQUEST, actionTypes.PATCH_MEMBERS_SUCCESS, actionTypes.PATCH_MEMBERS_FAILURE],
+    callAPI: () => memberService.patch(members)
   }
 }
 
@@ -33,5 +40,6 @@ export default {
   getMembers,
   addMember,
   deleteMember,
-  patchMember
+  patchMember,
+  patchMembers
 };

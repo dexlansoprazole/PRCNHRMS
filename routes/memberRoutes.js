@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { PermissionError } = require('../utils/error');
+const {PermissionError} = require('../utils/error');
 const Players = mongoose.model('players');
 const permission = require('../utils/permission');
 
@@ -34,6 +34,27 @@ module.exports = (app) => {
       await permission.checkIsLeader(req.session.user, player.team.toString());
       player = await Players.findByIdAndUpdate(player_id, data, {new: true, select: '-__v'});
       return res.status(200).send({member: player});
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.patch(`/api/member`, async (req, res, next) => {
+    const datas = req.body.map(d => Object.filter(d, ['_id', 'id', 'name', 'join_date', 'leave_date', 'kick_reason', 'attendance']));
+    try {
+      let players = await Players.find({_id: {$in: datas.map(d => d._id)}});
+      players.forEach(async player => {
+        await permission.checkIsLeader(req.session.user, player.team.toString());
+      });
+      let result = await Players.bulkWrite(
+        datas.map(data => ({
+          updateOne: {
+            filter: {_id: data._id},
+            update: {$set: data}
+          }
+        }))
+      );
+      return res.status(200).send({result: result.result});
     } catch (error) {
       next(error);
     }

@@ -29,9 +29,18 @@ export default {
       return handleResponse(err.response);
     }
   },
-  patch: async (id, data) => {
+  patchOne: async (id, data) => {
     try {
       const res = await axios.patch(`/api/member/` + id, data);
+      return handleResponse(res);
+    }
+    catch (err) {
+      return handleResponse(err.response);
+    }
+  },
+  patch: async (members) => {
+    try {
+      const res = await axios.patch(`/api/member`, members);
       return handleResponse(res);
     }
     catch (err) {
