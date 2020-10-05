@@ -26,14 +26,16 @@
 3. 執行 `cd PRCNHRMS` 然後執行 `npm install`
 4. 執行 `cd client` 然後執行 `npm install`
 5. 建立 /.env
-
-        PORT = <port for api server>
-        MONGODB_URI = <mongodb connect uri>
-        REACT_APP_CLIENT_ID = <google api client id>
-        COOKIE_SECRET = <secret for express session>
+    ```
+    PORT = <port for api server>
+    MONGODB_URI = <mongodb connect uri>
+    REACT_APP_CLIENT_ID = <google api client id>
+    COOKIE_SECRET = <secret for express session>
+    ```
 6. 建立 /client/.env
-
-        REACT_APP_CLIENT_ID = <google api client id>
+    ```
+    REACT_APP_CLIENT_ID = <google api client id>
+    ```
 7. 執行 `npm run server` 啟動 api server
 8. 執行 `npm run client` 啟動 client server
 
