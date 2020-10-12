@@ -36,10 +36,26 @@ const deleteMember = (id) => {
   }
 }
 
+const patch_upvote_attendance = (id, data) => {
+  return {
+    types: [actionTypes.PATCH_MEMBER_REQUEST, actionTypes.PATCH_MEMBER_SUCCESS, actionTypes.PATCH_MEMBER_FAILURE],
+    callAPI: () => memberService.patch_upvote_attendance(id, data)
+  }
+}
+
+const patch_downvote_attendance = (id, data) => {
+  return {
+    types: [actionTypes.PATCH_MEMBER_REQUEST, actionTypes.PATCH_MEMBER_SUCCESS, actionTypes.PATCH_MEMBER_FAILURE],
+    callAPI: () => memberService.patch_downvote_attendance(id, data)
+  }
+}
+
 export default {
   getMembers,
   addMember,
   deleteMember,
   patchMember,
-  patchMembers
+  patchMembers,
+  patch_upvote_attendance,
+  patch_downvote_attendance
 };

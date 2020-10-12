@@ -8,7 +8,9 @@ const playerSchema = new Schema({
   join_date: Date,
   leave_date: Date,
   kick_reason: String,
-  attendance: [Date]
+  attendance: [Date],
+  upvote_attendance: [Object],
+  downvote_attendance: [Object]
 })
 
 mongoose.model('players', playerSchema);

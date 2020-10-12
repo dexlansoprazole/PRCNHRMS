@@ -55,5 +55,23 @@ export default {
     catch (err) {
       return handleResponse(err.response);
     }
-  }
+  },
+  patch_upvote_attendance: async (id, data) => {
+    try {
+      const res = await axios.patch(`/api/member/upvote_attendance/` + id, data);
+      return handleResponse(res);
+    }
+    catch (err) {
+      return handleResponse(err.response);
+    }
+  },
+  patch_downvote_attendance: async (id, data) => {
+    try {
+      const res = await axios.patch(`/api/member/downvote_attendance/` + id, data);
+      return handleResponse(res);
+    }
+    catch (err) {
+      return handleResponse(err.response);
+    }
+  },
 }
