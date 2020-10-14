@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Checkbox, Button, ButtonGroup, Grid, Box} from '@material-ui/core';
-import {Autorenew, CloudDoneOutlined, CloudOffOutlined, ThumbUpOutlined, ThumbDownOutlined} from '@material-ui/icons';
+import {Autorenew, CloudDoneOutlined, CloudOffOutlined} from '@material-ui/icons';
 import {createMuiTheme, MuiThemeProvider, useTheme} from '@material-ui/core/styles';
 import {useDispatch, useSelector} from 'react-redux';
 import {useWindowResize} from './useWindowResize';
@@ -10,6 +10,7 @@ import tableIcons from './tableIcons';
 import {UserX} from 'react-feather';
 import deepEqual from 'deep-equal';
 import MonthPicker from './MonthPicker';
+import AttendanceVote from './AttendanceVote';
 import KickMemberDialog from './team/KickMemberDialog';
 import memberActions from '../actions/member';
 import moment from 'moment';
@@ -60,107 +61,9 @@ const AttendanceCheckbox = (props) => {
   );
 }
 
-const BtnUpvote = (props) => {
-  const {member, role, date, members, setMembers, prevMembers, setPrevMembers} = props;
-  const theme = useTheme();
-  const user = useSelector(state => state.user);
-  const upvoted = member.upvote_attendance.find(v => v.user_id === user._id && moment(v.date).isSame(date)) != null;
-  const downvoted = member.downvote_attendance.find(v => v.user_id === user._id && moment(v.date).isSame(date)) != null;
-  const [checked, setChecked] = React.useState(upvoted);
-  const dispatch = useDispatch();
-  const upvoteMember = async (id, data) => dispatch(memberActions.patch_upvote_attendance(id, data));
-  const downvoteMember = async (id, data) => dispatch(memberActions.patch_downvote_attendance(id, data));
-
-  React.useEffect(() => {
-    setChecked(upvoted);
-  }, [member, upvoted]);
-
-  return (
-    <Checkbox
-      checked={checked}
-      onClick={() => setChecked(!checked)}
-      onChange={(event) => {
-        if (role === 'leader' || role === 'manager' || role === 'member') {
-          setPrevMembers(prevMembers);
-          setMembers(
-            members.map(m => {
-              if (m._id === member._id)
-                if (event.target.checked && !upvoted) {
-                  m = {...m, upvote_attendance: [...m.upvote_attendance, {user_id: user._id, date: date}]}
-                  if (downvoted)
-                    m = {...m, downvote_attendance: m.downvote_attendance.filter(v => !(v.user_id === user._id && moment(v.date).isSame(date)))}
-                }
-                else
-                  m = {...m, upvote_attendance: m.upvote_attendance.filter(v => !(v.user_id === user._id && moment(v.date).isSame(date)))}
-              return m
-            })
-          );
-          upvoteMember(member._id, {date: date});
-          if (event.target.checked && downvoted)
-            downvoteMember(member._id, {date: date});
-        }
-      }}
-      style={{padding: 5}}
-      size='small'
-      icon={<ThumbUpOutlined htmlColor={theme.palette.common.white} />}
-      checkedIcon={<ThumbUpOutlined htmlColor={theme.palette.primary.main} />}
-    >
-    </Checkbox>
-  );
-}
-
-const BtnDownvote = (props) => {
-  const {member, role, date, members, setMembers, prevMembers, setPrevMembers} = props;
-  const theme = useTheme();
-  const user = useSelector(state => state.user);
-  const downvoted = member.downvote_attendance.find(v => v.user_id === user._id && moment(v.date).isSame(date)) != null;
-  const upvoted = member.upvote_attendance.find(v => v.user_id === user._id && moment(v.date).isSame(date)) != null;
-  const [checked, setChecked] = React.useState(downvoted);
-  const dispatch = useDispatch();
-  const upvoteMember = async (id, data) => dispatch(memberActions.patch_upvote_attendance(id, data));
-  const downvoteMember = async (id, data) => dispatch(memberActions.patch_downvote_attendance(id, data));
-
-  React.useEffect(() => {
-    setChecked(downvoted);
-  }, [member, downvoted]);
-
-  return (
-    <Checkbox
-      checked={checked}
-      onClick={() => setChecked(!checked)}
-      onChange={(event) => {
-        if (role === 'leader' || role === 'manager' || role === 'member') {
-          setPrevMembers(prevMembers);
-          setMembers(
-            members.map(m => {
-              if (m._id === member._id)
-                if (event.target.checked && !downvoted) {
-                  m = {...m, downvote_attendance: [...m.downvote_attendance, {user_id: user._id, date: date}]}
-                  if (upvoted)
-                    m = {...m, upvote_attendance: m.upvote_attendance.filter(u => !(u.user_id === user._id && moment(u.date).isSame(date)))}
-                }
-                else
-                  m = {...m, downvote_attendance: m.downvote_attendance.filter(d => !(d.user_id === user._id && moment(d.date).isSame(date)))}
-              return m
-            })
-          );
-          downvoteMember(member._id, {date: date});
-          if (event.target.checked && upvoted)
-            upvoteMember(member._id, {date: date});
-        }
-      }}
-      style={{padding: 5}}
-      size='small'
-      icon={<ThumbDownOutlined htmlColor={theme.palette.common.white} />}
-      checkedIcon={<ThumbDownOutlined htmlColor={theme.palette.primary.main} />}
-    >
-    </Checkbox>
-  );
-}
-
 const AttendanceTable = props => {
   const loading = useSelector(state => props.loadingOn.some(a => state.loading[a]));
-  const saving = useSelector(state => state.loading['PATCH_MEMBER'] === true);
+  const saving = useSelector(state => state.loading['PATCH_MEMBER'] > 0);
   const alert = useSelector(state => state.notification.alert);
   const {height} = useWindowResize();
   const [memberClicked, setMemberClicked] = React.useState({});
@@ -169,7 +72,7 @@ const AttendanceTable = props => {
   const [selectedDate, handleDateChange] = React.useState(new Date());
   const [selectedFilter, setSelectedFilter] = React.useState(0);
   const [showSaveDoneMsg, setShowSaveDoneMsg] = React.useState(false);
-  const [showSaveDoneMsgTimer, setShowSaveDoneMsgTimer] = React.useState(null);
+  const showSaveDoneMsgTimer = React.useRef(null);
 
   const usePrevious = (value) => {
     const ref = React.useRef();
@@ -224,14 +127,21 @@ const AttendanceTable = props => {
   }).filter(m => moment(m.join_date).isSameOrBefore(moment(selectedDate).endOf('month').format('YYYY/MM/DD')) && (selectedFilter >= 0 ? selectedFilter ? m.isPresent : !m.isPresent : true));
 
   React.useEffect(() => {
+    if(!saving)
+      setMembers(props.members);
+  }, [props.members]);
+
+  React.useEffect(() => {
     if (prevSaving && !saving) {
       setShowSaveDoneMsg(true);
-      clearTimeout(showSaveDoneMsgTimer);
-      setShowSaveDoneMsgTimer(
-        setTimeout(() => {
-          setShowSaveDoneMsg(false);
-        }, 2000)
-      );
+      clearTimeout(showSaveDoneMsgTimer.current);
+      showSaveDoneMsgTimer.current = setTimeout(() => {
+        setShowSaveDoneMsg(false);
+      }, 2000)
+    }
+
+    return () => {
+      clearTimeout(showSaveDoneMsgTimer.current);
     }
   }, [saving]);
 
@@ -266,10 +176,15 @@ const AttendanceTable = props => {
     {
       width: '1%',
       render: rowData =>
-        <Grid container direction='row' spacing={2} wrap='nowrap' alignItems='center' justify='center'>
-          <Grid><BtnUpvote member={rowData} role={props.role} date={moment(selectedDate).startOf('month')} members={members} setMembers={setMembers} prevMembers={prevMembers} setPrevMembers={setPrevMembers} /></Grid>
-          <Grid><BtnDownvote member={rowData} role={props.role} date={moment(selectedDate).startOf('month')} members={members} setMembers={setMembers} prevMembers={prevMembers} setPrevMembers={setPrevMembers} /></Grid>
-        </Grid>
+        <AttendanceVote
+          member={rowData}
+          role={props.role}
+          date={moment(selectedDate).startOf('month')}
+          members={members}
+          setMembers={setMembers}
+          prevMembers={prevMembers}
+          setPrevMembers={setPrevMembers}
+        />
     }
   );
 
@@ -425,4 +340,4 @@ AttendanceTable.defaultProps = {
   loadingOn: []
 }
 
-export default React.memo(AttendanceTable, (prevProps, nextProps) => true);
+export default React.memo(AttendanceTable, (prevProps, nextProps) => deepEqual(prevProps, nextProps));

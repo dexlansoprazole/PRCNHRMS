@@ -9,7 +9,7 @@ function loading(state = initialState, action) {
   const [, requestName, requestState] = matches;
   return {
     ...state,
-    [requestName]: requestState === 'REQUEST',
+    [requestName]: (state[requestName] == null ? 0 : state[requestName]) + (requestState === 'REQUEST' ? 1 : -1),
   };
 }
 

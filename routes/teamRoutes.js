@@ -123,11 +123,17 @@ module.exports = (app) => {
         throw new PermissionError();
       if (req.session.user._id !== user_id)
         await permission.checkIsLeader(req.session.user, team_id);
+      
+      // Remove user from team member
       let team = await Teams.findByIdAndUpdate(team_id, {$pull: {members: user_id}}, {new: true, session});
+      // Remove votes by deleted user
+      await Players.updateMany({team: team_id}, {$pull: {upvote_attendance: {user_id}, downvote_attendance: {user_id}}}, {new: true, session});
+
+      // Parse team
       team = await parse.team.leader(team);
       team = await parse.team.members(team);
       team = await parse.team.requests(team);
-      team = await wrap.team(team, true);
+      team = await wrap.team(team, true, session);
 
       // Update teamSelected if deleted
       let user = await Users.findById(user_id).session(session);
