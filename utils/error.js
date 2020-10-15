@@ -26,8 +26,8 @@ const handleError = (err, res, next) => {
     name,
     message
   });
-  if (name !== 'PermissionError')
-    next(err)
+  // if (name !== 'PermissionError')
+  //   next(err)
 };
 
 module.exports = {

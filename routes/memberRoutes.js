@@ -49,6 +49,11 @@ module.exports = (app) => {
     } catch (error) {
       await session.abortTransaction();
       session.endSession();
+
+      // Handle write conflict
+      if (error.name === 'MongoError' && error.code === 112) {
+        return res.status(204).send();
+      }
       next(error);
     }
   })

@@ -36,10 +36,11 @@ function teams(state = initialState, action) {
       });
       return teams;
     case actionTypes.PATCH_MEMBER_SUCCESS:  
-      teams.forEach(team => {
-        if (team._id === action.res.member.team)
-          team.members = team.members.map(m => (m._id === action.res.member._id) ? action.res.member : m);
-      });
+      if (action.res != null)
+        teams.forEach(team => {
+          if (team._id === action.res.member.team)
+            team.members = team.members.map(m => (m._id === action.res.member._id) ? action.res.member : m);
+        });
       return teams;
     case actionTypes.LOGOUT_SUCCESS:
       return initialState;
