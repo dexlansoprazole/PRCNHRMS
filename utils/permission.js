@@ -4,15 +4,31 @@ const {PermissionError} = require('./error');
 
 const checkIsLeader = async (user, team_id) => {
   if (user) {
-    const teams = await Teams.find({leader: user._id}).catch(async err => {
+    try {
+      const team = await Teams.find({_id: team_id, leader: user._id});
+      if (team != null && team.length > 0)
+        return true;
+    } catch (error) {
       await Promise.reject(err);
-    });
-    if (teams.find(t => t._id.toString() === team_id))
-      return true;
+    }
+  }
+  await Promise.reject(new PermissionError());
+}
+
+const checkIsMember = async (user, team_id) => {
+  if (user) {
+    try {
+      const team = await Teams.find({_id: team_id, $or: [{leader: user._id}, {members: {$in: [user._id]}}]});
+      if (team != null && team.length > 0)
+        return true;
+    } catch (error) {
+      await Promise.reject(err);
+    }
   }
   await Promise.reject(new PermissionError());
 }
 
 module.exports = {
-  checkIsLeader
+  checkIsLeader,
+  checkIsMember
 }

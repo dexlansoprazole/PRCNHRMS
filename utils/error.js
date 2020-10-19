@@ -26,6 +26,7 @@ const handleError = (err, res, next) => {
     name,
     message
   });
+  console.error(err.toString());
   // if (name !== 'PermissionError')
   //   next(err)
 };

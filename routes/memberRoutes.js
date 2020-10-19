@@ -35,6 +35,7 @@ module.exports = (app) => {
       let user = req.session.user;
       if (!user)
         throw new PermissionError();
+      await permission.checkIsMember(user, (await Players.findById(player_id).session(session)).team);
       const data = {user_id: user._id, date: date};
       let player = null;
       if (vote) {
@@ -67,20 +68,26 @@ module.exports = (app) => {
       let user = req.session.user;
       if (!user)
         throw new PermissionError();
+      await permission.checkIsMember(user, (await Players.findById(player_id).session(session)).team);
       const data = {user_id: user._id, date: date};
       let player = null;
       if (vote) {
-        player = await Players.findByIdAndUpdate(player_id, {$addToSet: {downvote_attendance: data}}, {new: true, select: '-__v'});
+        player = await Players.findByIdAndUpdate(player_id, {$addToSet: {downvote_attendance: data}}, {new: true, select: '-__v', session});
         player = await Players.findByIdAndUpdate(player_id, {$pull: {upvote_attendance: data}}, {new: true, select: '-__v', session});
       }
       else
-        player = await Players.findByIdAndUpdate(player_id, {$pull: {downvote_attendance: data}}, {new: true, select: '-__v'})
+        player = await Players.findByIdAndUpdate(player_id, {$pull: {downvote_attendance: data}}, {new: true, select: '-__v', session})
       await session.commitTransaction();
       session.endSession();
       return res.status(200).send({member: player});
     } catch (error) {
       await session.abortTransaction();
       session.endSession();
+
+      // Handle write conflict
+      if (error.name === 'MongoError' && error.code === 112) {
+        return res.status(204).send();
+      }
       next(error);
     }
   })
