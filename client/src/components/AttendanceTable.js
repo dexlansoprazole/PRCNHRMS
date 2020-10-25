@@ -115,8 +115,8 @@ const AttendanceTable = props => {
       attendance: m.attendance.map(a => moment(a).format('YYYY/MM')),
       isPresent: m.attendance.map(a => moment(a).format('YYYY/MM')).some(a => a === moment(selectedDate).format('YYYY/MM')),
       join_date: moment(m.join_date).format('YYYY/MM/DD'),
-      upvote_attendance: m.upvote_attendance.filter(u => moment(u.date).isSame(moment(selectedDate).startOf('month'))),
-      downvote_attendance: m.downvote_attendance.filter(d => moment(d.date).isSame(moment(selectedDate).startOf('month'))),
+      upvote_attendance: m.vote_attendance.filter(v => moment(v.date).isSame(moment(selectedDate).startOf('month')) && v.vote === 1),
+      downvote_attendance: m.vote_attendance.filter(v => moment(v.date).isSame(moment(selectedDate).startOf('month')) && v.vote === -1),
     }
     member = {...member, vote: member.upvote_attendance.length - member.downvote_attendance.length};
     if (props.showLeaveDate)

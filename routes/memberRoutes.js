@@ -26,7 +26,7 @@ module.exports = (app) => {
     }
   })
 
-  app.patch(`/api/member/upvote_attendance/:id`, async (req, res, next) => {
+  app.patch(`/api/member/vote_attendance/:id`, async (req, res, next) => {
     const player_id = req.params.id;
     const {date, vote} = req.body;
     const session = await Players.startSession();
@@ -35,48 +35,23 @@ module.exports = (app) => {
       let user = req.session.user;
       if (!user)
         throw new PermissionError();
-      await permission.checkIsMember(user, (await Players.findById(player_id).session(session)).team);
-      const data = {user_id: user._id, date: date};
-      let player = null;
-      if (vote) {
-        player = await Players.findByIdAndUpdate(player_id, {$addToSet: {upvote_attendance: data}}, {new: true, select: '-__v', session});
-        player = await Players.findByIdAndUpdate(player_id, {$pull: {downvote_attendance: data}}, {new: true, select: '-__v', session});
+
+      const data = {user_id: user._id, date, vote};
+      let player = await Players.findById(player_id).session(session);
+      await permission.checkIsMember(user, player.team);
+
+      if (data.vote != 0) {
+        player = await Players.findOneAndUpdate(
+          {_id: player_id, vote_attendance: {$elemMatch: {user_id: data.user_id, date: data.date}}},
+          {$set: {'vote_attendance.$.vote': data.vote}},
+          {new: true, session}
+        );
+        if (player == null)
+          player = await Players.findByIdAndUpdate(player_id, {$addToSet: {vote_attendance: data}}, {new: true, session});
       }
       else
-        player = await Players.findByIdAndUpdate(player_id, {$pull: {upvote_attendance: data}}, {new: true, select: '-__v', session})
-      await session.commitTransaction();
-      session.endSession();
-      return res.status(200).send({member: player});
-    } catch (error) {
-      await session.abortTransaction();
-      session.endSession();
+        player = await Players.findByIdAndUpdate(player_id, {$pull: {vote_attendance: {user_id: data.user_id, date: data.date}}}, {new: true, session});
 
-      // Handle write conflict
-      if (error.name === 'MongoError' && error.code === 112) {
-        return res.status(204).send();
-      }
-      next(error);
-    }
-  })
-
-  app.patch(`/api/member/downvote_attendance/:id`, async (req, res, next) => {
-    const player_id = req.params.id;
-    const {date, vote} = req.body;
-    const session = await Players.startSession();
-    session.startTransaction();
-    try {
-      let user = req.session.user;
-      if (!user)
-        throw new PermissionError();
-      await permission.checkIsMember(user, (await Players.findById(player_id).session(session)).team);
-      const data = {user_id: user._id, date: date};
-      let player = null;
-      if (vote) {
-        player = await Players.findByIdAndUpdate(player_id, {$addToSet: {downvote_attendance: data}}, {new: true, select: '-__v', session});
-        player = await Players.findByIdAndUpdate(player_id, {$pull: {upvote_attendance: data}}, {new: true, select: '-__v', session});
-      }
-      else
-        player = await Players.findByIdAndUpdate(player_id, {$pull: {downvote_attendance: data}}, {new: true, select: '-__v', session})
       await session.commitTransaction();
       session.endSession();
       return res.status(200).send({member: player});

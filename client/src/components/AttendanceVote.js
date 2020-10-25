@@ -33,8 +33,7 @@ const AttendanceVote = (props) => {
   const [upvoted, setUpvoted] = React.useState(member.upvote_attendance.find(v => v.user_id === user._id && moment(v.date).isSame(date)) != null);
   const [downvoted, setDownvoted] = React.useState(member.downvote_attendance.find(v => v.user_id === user._id && moment(v.date).isSame(date)) != null);
   const dispatch = useDispatch();
-  const upvoteMember = (id, data) => dispatch(memberActions.patch_upvote_attendance(id, data));
-  const downvoteMember = async (id, data) => dispatch(memberActions.patch_downvote_attendance(id, data));
+  const voteMember = (id, data) => dispatch(memberActions.patch_vote_attendance(id, data));
 
   React.useEffect(() => {
     setUpvoted(member.upvote_attendance.find(v => v.user_id === user._id && moment(v.date).isSame(date)) != null);
@@ -54,18 +53,15 @@ const AttendanceVote = (props) => {
               setMembers(
                 members.map(m => {
                   if (m._id === member._id) {
-                    if (event.target.checked) {
-                      m = {...m, upvote_attendance: [...m.upvote_attendance, {user_id: user._id, date: date}]}
-                      if (downvoted)
-                        m = {...m, downvote_attendance: m.downvote_attendance.filter(v => !(v.user_id === user._id && moment(v.date).isSame(date)))}
-                    }
+                    if (event.target.checked)
+                      m = {...m, vote_attendance: m.vote_attendance.map(v => v.user_id === user._id && user._id && moment(v.date).isSame(date) ? {...v, vote: 1} : v)}
                     else
-                      m = {...m, upvote_attendance: m.upvote_attendance.filter(v => !(v.user_id === user._id && moment(v.date).isSame(date)))}
+                      m = {...m, vote_attendance: m.vote_attendance.map(v => v.user_id === user._id && user._id && moment(v.date).isSame(date) ? {...v, vote: 0} : v)}
                   }
                   return m
                 })
               );
-              upvoteMember(member._id, {date, vote: event.target.checked});
+              voteMember(member._id, {date, vote: event.target.checked ? 1 : 0});
             }
           }}
         />
@@ -81,18 +77,15 @@ const AttendanceVote = (props) => {
               setMembers(
                 members.map(m => {
                   if (m._id === member._id) {
-                    if (event.target.checked) {
-                      m = {...m, downvote_attendance: [...m.downvote_attendance, {user_id: user._id, date: date}]}
-                      if (upvoted)
-                        m = {...m, upvote_attendance: m.upvote_attendance.filter(v => !(v.user_id === user._id && moment(v.date).isSame(date)))}
-                    }
+                    if (event.target.checked)
+                      m = {...m, vote_attendance: m.vote_attendance.map(v => v.user_id === user._id && user._id && moment(v.date).isSame(date) ? {...v, vote: -1} : v)}
                     else
-                      m = {...m, downvote_attendance: m.downvote_attendance.filter(v => !(v.user_id === user._id && moment(v.date).isSame(date)))}
+                      m = {...m, vote_attendance: m.vote_attendance.map(v => v.user_id === user._id && user._id && moment(v.date).isSame(date) ? {...v, vote: 0} : v)}
                   }
                   return m
                 })
               );
-              downvoteMember(member._id, {date, vote: event.target.checked});
+              voteMember(member._id, {date, vote: event.target.checked ? -1 : 0});
             }
           }}
         />
