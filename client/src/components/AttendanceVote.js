@@ -53,8 +53,11 @@ const AttendanceVote = (props) => {
               setMembers(
                 members.map(m => {
                   if (m._id === member._id) {
-                    if (event.target.checked)
+                    if (event.target.checked) {
                       m = {...m, vote_attendance: m.vote_attendance.map(v => v.user_id === user._id && user._id && moment(v.date).isSame(date) ? {...v, vote: 1} : v)}
+                      if (m.vote_attendance.find(v => v.user_id === user._id && user._id && moment(v.date).isSame(date)) == null)
+                        m.vote_attendance.push({user_id: user._id, date, vote: 1});
+                    }
                     else
                       m = {...m, vote_attendance: m.vote_attendance.map(v => v.user_id === user._id && user._id && moment(v.date).isSame(date) ? {...v, vote: 0} : v)}
                   }
@@ -77,8 +80,11 @@ const AttendanceVote = (props) => {
               setMembers(
                 members.map(m => {
                   if (m._id === member._id) {
-                    if (event.target.checked)
+                    if (event.target.checked) {
                       m = {...m, vote_attendance: m.vote_attendance.map(v => v.user_id === user._id && user._id && moment(v.date).isSame(date) ? {...v, vote: -1} : v)}
+                      if (m.vote_attendance.find(v => v.user_id === user._id && user._id && moment(v.date).isSame(date)) == null)
+                        m.vote_attendance.push({user_id: user._id, date, vote: -1});
+                    }
                     else
                       m = {...m, vote_attendance: m.vote_attendance.map(v => v.user_id === user._id && user._id && moment(v.date).isSame(date) ? {...v, vote: 0} : v)}
                   }
