@@ -127,7 +127,7 @@ module.exports = (app) => {
       // Remove user from team member
       let team = await Teams.findByIdAndUpdate(team_id, {$pull: {members: user_id}}, {new: true, session});
       // Remove votes by deleted user
-      await Players.updateMany({team: team_id}, {$pull: {upvote_attendance: {user_id}, downvote_attendance: {user_id}}}, {new: true, session});
+      await Players.updateMany({team: team_id}, {$pull: {vote_attendance: {user_id}}}, {new: true, session});
 
       // Parse team
       team = await parse.team.leader(team);
