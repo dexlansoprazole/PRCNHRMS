@@ -20,7 +20,7 @@ const BtnVote = (props) => {
       onChange={onChange}
       style={{padding: 5}}
       size='small'
-      icon={<Icon htmlColor={theme.palette.common.white} />}
+      icon={<Icon htmlColor={theme.palette.text.secondary} />}
       checkedIcon={<Icon htmlColor={theme.palette.primary.main} />}
     >
     </Checkbox>
